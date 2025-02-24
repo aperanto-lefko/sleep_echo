@@ -9,6 +9,29 @@
     <Window.Background>
         <ImageBrush ImageSource="pack://application:,,,/Resources/background.png" Stretch="UniformToFill"/>
     </Window.Background>
+    <Window.Resources>
+        <!-- Стиль для заголовков -->
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+
+        <!-- Стиль для основного текста -->
+        <Style x:Key="BodyTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <!-- Стиль для подчеркнутых заголовков -->
+        <Style x:Key="UnderlinedHeaderTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextStyle}">
+            <Setter Property="TextDecorations" Value="Underline"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Grid.Row="1" HorizontalAlignment="Center" Width="800">
         
         <TabControl Background="Transparent">
@@ -36,36 +59,31 @@
                         </Grid.ColumnDefinitions>
                     </Grid>
                     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,10,0"  Grid.Row="0">
-                        <TextBlock Text="Приложение предоставляет инструменты для сбора и анализа данных о сне, его влиянии на продуктивность, настроение и уровень стресса. С помощью данного интерфейса вы можете вносить свои данные, отслеживать изменения и получать аналитические отчеты.
-                                   Приложение предназначено для научных исследований и личного использования, помогая улучшить качество сна и жизни."
-   FontSize ="15"
-   FontWeight="ExtraBlack"
-   HorizontalAlignment="Center"
-   Margin="10,10,0,10"
-   TextWrapping="Wrap"/>
+                        <TextBlock Text="Приложение предоставляет инструменты для сбора и анализа данных о сне, его влиянии на продуктивность, настроение и уровень стресса. Вы также можете вносить свои данные, отслеживать изменения и получать аналитические отчеты. Приложение предназначено для научных исследований и личного использования, помогая улучшить качество сна и жизни. На текущий момент база данных содержит информацию более чем о 5000 респондентах"
+                        Style="{StaticResource HeaderTextStyle}"/>
                     </StackPanel >
                     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,10,10,10" Grid.Row="1" Width="400" >
-                        <TextBlock Text="Получение данных в зависимости от:" FontSize ="13" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock Text="Получение данных в зависимости от:" Style="{StaticResource UnderlinedHeaderTextStyle}"/>
                         <TextBlock Text=" "/>
-                        <TextBlock Text=" - пола" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - возраста" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - начала времени сна (24-часовой формат)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - окончания времени сна (24-часовой формат)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - общего количества сна (часы)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - самооценки качества сна (шкала от 1 до 10)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - времени, затраченного на спортивные упражнения (минуты)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - количества потребляемого кофеина (мг)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - времени, проведенного за использованием экранов перед сном (минуты)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - общего количества рабочих часов в день (часы)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - пола" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - возраста" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - начала времени сна (24-часовой формат)" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - окончания времени сна (24-часовой формат)" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - общего количества сна (часы)" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - самооценки качества сна (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - времени, затраченного на спортивные упражнения (минуты)" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - количества потребляемого кофеина (мг)" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - времени, проведенного за использованием экранов перед сном (минуты)" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - общего количества рабочих часов в день (часы)" Style="{StaticResource BodyTextStyle}"/>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="30,10,0,0" Grid.Row="1" Width="400">
-                        <TextBlock Text="Предлагаемые данные:" FontSize ="13" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock Text="Предлагаемые данные:"  Style="{StaticResource UnderlinedHeaderTextStyle}"/>
                         <TextBlock Text=" "/>
-                        <TextBlock Text=" - самооценка производительности (шкала от 1 до 10)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - самооценка настроения (шкала от 1 до 10)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
-                        <TextBlock Text=" - самооценка уровня стресса (шкала от 1 до 10)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - самооценка производительности (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - самооценка настроения (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - самооценка уровня стресса (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" "/>
-                        <TextBlock Text="Возможность сохранения новых данных в таблицу" FontSize ="13" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock Text="Возможность сохранения новых данных в таблицу"  Style="{StaticResource UnderlinedHeaderTextStyle}"/>
                      </StackPanel>
 
                 </Grid>
