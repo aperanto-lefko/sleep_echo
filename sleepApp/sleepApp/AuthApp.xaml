@@ -5,17 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sleepApp"
         mc:Ignorable="d"
-        Title="Авторизация" Height="340" Width="500" ResizeMode="NoResize">
+        Title="SleepEcho" Height="340" Width="500" ResizeMode="NoResize">
+    
     <!--
-              - Height и Width: Размеры окна.
+         - Height и Width: Размеры окна.
         - ResizeMode="NoResize": Запрет изменения размеров окна.
     -->
-
-    <Grid HorizontalAlignment="Center" Width="500">
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Resources/background.png" Stretch="UniformToFill"/>
+    </Window.Background>
+    
+        <Grid Grid.Row="1" HorizontalAlignment="Center" Width="500">
         <Grid.RowDefinitions>
             <RowDefinition Height="109*"/>
             <RowDefinition Height="325*"/>
         </Grid.RowDefinitions>
+            
+            
         <!--
             Grid — контейнер для размещения элементов.
             Используется для организации интерфейса.

@@ -5,8 +5,72 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sleepApp"
         mc:Ignorable="d"
-        Title="DashboardWindow" Height="450" Width="800" ResizeMode="NoResize">
-    <Grid>
+        Title="SleepEcho" Height="450" Width="800" ResizeMode="NoResize">
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Resources/background.png" Stretch="UniformToFill"/>
+    </Window.Background>
+    <Grid Grid.Row="1" HorizontalAlignment="Center" Width="800">
         
+        <TabControl Background="Transparent">
+            
+            <TabItem Header="Получение данных">
+                <Grid Background="Transparent">
+                    
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="Добавление данных">
+                <Grid Background="Transparent">
+                </Grid>
+            </TabItem>
+            <TabItem Header="Справка">
+                <Grid Background="Transparent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="150*"/>
+                        <RowDefinition Height="325*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="500"/>
+                            <ColumnDefinition Width="300"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,10,0"  Grid.Row="0">
+                        <TextBlock Text="Приложение предоставляет инструменты для сбора и анализа данных о сне, его влиянии на продуктивность, настроение и уровень стресса. С помощью данного интерфейса вы можете вносить свои данные, отслеживать изменения и получать аналитические отчеты.
+                                   Приложение предназначено для научных исследований и личного использования, помогая улучшить качество сна и жизни."
+   FontSize ="15"
+   FontWeight="ExtraBlack"
+   HorizontalAlignment="Center"
+   Margin="10,10,0,10"
+   TextWrapping="Wrap"/>
+                    </StackPanel >
+                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,10,10,10" Grid.Row="1" Width="400" >
+                        <TextBlock Text="Получение данных в зависимости от:" FontSize ="13" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock Text=" "/>
+                        <TextBlock Text=" - пола" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - возраста" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - начала времени сна (24-часовой формат)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - окончания времени сна (24-часовой формат)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - общего количества сна (часы)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - самооценки качества сна (шкала от 1 до 10)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - времени, затраченного на спортивные упражнения (минуты)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - количества потребляемого кофеина (мг)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - времени, проведенного за использованием экранов перед сном (минуты)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - общего количества рабочих часов в день (часы)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="30,10,0,0" Grid.Row="1" Width="400">
+                        <TextBlock Text="Предлагаемые данные:" FontSize ="13" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock Text=" "/>
+                        <TextBlock Text=" - самооценка производительности (шкала от 1 до 10)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - самооценка настроения (шкала от 1 до 10)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" - самооценка уровня стресса (шкала от 1 до 10)" FontSize ="13" FontWeight="Bold" TextWrapping="Wrap"/>
+                        <TextBlock Text=" "/>
+                        <TextBlock Text="Возможность сохранения новых данных в таблицу" FontSize ="13" FontWeight="Bold" TextDecorations="Underline"/>
+                     </StackPanel>
+
+                </Grid>
+
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
