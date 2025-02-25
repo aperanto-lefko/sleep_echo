@@ -1,4 +1,5 @@
-﻿using System;
+﻿using sleepApp.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,10 +31,29 @@ namespace sleepApp
 
             if (login == "app_user" && password == "753214")
             {
-
-                DashboardWindow dashBoardWindow = new DashboardWindow();
-                dashBoardWindow.Show();
-                this.Close();
+                using (var context = new AppDbContext(login, password))
+                {
+                    try
+                    {
+                        // Проверяем подключение к базе данных
+                        bool isConnect = context.Database.CanConnect();
+                        if (isConnect)
+                        {
+                            // Если подключение успешно, открываем DashboardWindow
+                            DashboardWindow dashBoardWindow = new DashboardWindow(login, password);
+                            dashBoardWindow.Show();
+                            this.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Не удалось подключиться к базе данных");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка подключения к базе данных: {ex.Message}");
+                    }
+                }
             }
             else
             {
@@ -41,7 +61,8 @@ namespace sleepApp
                 HighlightIfError(PasswordBox, password != "753214");
                 HighlightIfError(VisiblePasswordBox, password != "753214");
             }
-        }
+            }
+        
         private void HighlightIfError(Control control, bool isError) //подсветка в случае ошибки
         {
             control.BorderBrush = isError ? Brushes.Red : SystemColors.ControlDarkBrush; //цвет рамки

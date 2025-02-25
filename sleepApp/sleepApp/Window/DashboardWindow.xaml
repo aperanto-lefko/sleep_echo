@@ -36,10 +36,17 @@
         
         <TabControl Background="Transparent">
             
-            <TabItem Header="Получение данных">
-                <Grid Background="Transparent">
-                    
-                </Grid>
+            <TabItem Header="  Получение данных">
+                <StackPanel Orientation="Vertical">
+                    <Button x:Name="GetUsersButton" Content="Получить всех пользователей" Click="GetAllUsersButton_Click" Margin="10"/>
+                    <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="True" Background="Transparent" Margin="10" Height="100" Width="772"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                        <Button Content="Предыдущая" Click="PreviousPage_Click" Margin="5"/>
+                        <TextBlock x:Name="PageNumberText" Text="Страница 1" VerticalAlignment="Center" Margin="5"/>
+                        <Button Content="Следующая" Click="NextPage_Click" Margin="5"/>
+                    </StackPanel>
+                </StackPanel>
+
 
             </TabItem>
             <TabItem Header="Добавление данных">
