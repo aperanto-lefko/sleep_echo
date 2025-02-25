@@ -33,13 +33,19 @@
     </Window.Resources>
 
     <Grid Grid.Row="1" HorizontalAlignment="Center" Width="800">
-        
+
         <TabControl Background="Transparent">
-            
-            <TabItem Header="  Получение данных">
+
+            <TabItem Header="  Работа с пользователями">
                 <StackPanel Orientation="Vertical">
-                    <Button x:Name="GetUsersButton" Content="Получить всех пользователей" Click="GetAllUsersButton_Click" Margin="10"/>
-                    <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="True" Background="Transparent" Margin="10" Height="100" Width="772"/>
+                    <Grid>
+                        <Button x:Name="GetUsersButton" Content="Показать всех пользователей" Click="GetAllUsersButton_Click" Margin="20,10,20,0" Width="250"  HorizontalAlignment="Left"/>
+                        <Button x:Name="GetUserByNameButton" Content="Поиск пользователя" Click="GetUserByName_Click" Margin="387,10,0,0" Width="190"  HorizontalAlignment="Left"/>
+                        <TextBlock Text="Фамилия:" FontSize="14" Margin="590,12,132,-2"/>
+                        <TextBox x:Name="RespondentLastNameTextBox" FontSize="16" Height="25" Margin="667,10,20,0"/>
+
+                    </Grid>
+                    <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="True" Background="Transparent" Height="120" Margin="20,10,20,0"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                         <Button Content="Предыдущая" Click="PreviousPage_Click" Margin="5"/>
                         <TextBlock x:Name="PageNumberText" Text="Страница 1" VerticalAlignment="Center" Margin="5"/>
@@ -49,27 +55,34 @@
 
 
             </TabItem>
-            <TabItem Header="Добавление данных">
+            <TabItem Header="Работа с данными">
                 <Grid Background="Transparent">
                 </Grid>
             </TabItem>
             <TabItem Header="Справка">
                 <Grid Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="47*"/>
+                        <ColumnDefinition Width="20*"/>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="15*"/>
+                        <ColumnDefinition Width="662*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="150*"/>
                         <RowDefinition Height="325*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.ColumnSpan="5" Margin="0,128,0,0" Grid.RowSpan="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="500"/>
                             <ColumnDefinition Width="300"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
-                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,10,0"  Grid.Row="0">
+                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7,10,0,0"  Grid.Row="0" Grid.ColumnSpan="5" Grid.RowSpan="2">
                         <TextBlock Text="Приложение предоставляет инструменты для сбора и анализа данных о сне, его влиянии на продуктивность, настроение и уровень стресса. Вы также можете вносить свои данные, отслеживать изменения и получать аналитические отчеты. Приложение предназначено для научных исследований и личного использования, помогая улучшить качество сна и жизни. На текущий момент база данных содержит информацию более чем о 5000 респондентах"
                         Style="{StaticResource HeaderTextStyle}"/>
                     </StackPanel >
-                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,10,10,10" Grid.Row="1" Width="400" >
+                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,10,0,0" Grid.Row="1" Width="400" Grid.ColumnSpan="5" >
                         <TextBlock Text="Получение данных в зависимости от:" Style="{StaticResource UnderlinedHeaderTextStyle}"/>
                         <TextBlock Text=" "/>
                         <TextBlock Text=" - пола" Style="{StaticResource BodyTextStyle}"/>
@@ -83,7 +96,7 @@
                         <TextBlock Text=" - времени, проведенного за использованием экранов перед сном (минуты)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - общего количества рабочих часов в день (часы)" Style="{StaticResource BodyTextStyle}"/>
                     </StackPanel>
-                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="30,10,0,0" Grid.Row="1" Width="400">
+                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="1" Width="400" Grid.Column="4">
                         <TextBlock Text="Предлагаемые данные:"  Style="{StaticResource UnderlinedHeaderTextStyle}"/>
                         <TextBlock Text=" "/>
                         <TextBlock Text=" - самооценка производительности (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
@@ -91,7 +104,7 @@
                         <TextBlock Text=" - самооценка уровня стресса (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" "/>
                         <TextBlock Text="Возможность сохранения новых данных в таблицу"  Style="{StaticResource UnderlinedHeaderTextStyle}"/>
-                     </StackPanel>
+                    </StackPanel>
 
                 </Grid>
 

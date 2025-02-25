@@ -1,4 +1,5 @@
 ﻿using sleepApp.Model;
+using sleepApp.Repository;
 using sleepApp.Service;
 using System;
 using System.Collections.Generic;
@@ -19,42 +20,46 @@ namespace sleepApp
 
     public partial class DashboardWindow : Window
     {
-        private readonly string login;
-        private readonly string password;
-        public DashboardWindow(string login, string password)
-        {
-            this.login = login;
-            this.password = password;
-            InitializeComponent();
-        }
-
-        private List<Respondent> _allUsers; //все пользователи из базы данных
+        private List<Respondent> _allRespondents; //все пользователи из базы данных
         private int _currentPage = 1; //текущая страница
         private int _pageSize = 10; //количество записей на странице
+        private readonly RespondentRepository _respondentRepository;
 
 
-        private List<Respondent> GetUsersFromDataBase()
+        public DashboardWindow(string login, string password)
         {
-            using (var context = new AppDbContext(login, password))
-            {
-
-                //return context.respondents.ToList();
-                var users = context.Respondents.OrderBy(r=> r.Id).ToList();
-                MessageBox.Show($"Загружено {users.Count} пользователей."); // Отладочное сообщение
-                return users;
-            }
+             InitializeComponent();
+            _respondentRepository = new RespondentRepository(login, password);
         }
-        private void GetAllUsersButton_Click(object sender, RoutedEventArgs e)
+
+                
+        private void GetAllUsersButton_Click(object sender, RoutedEventArgs e) //поиск всех пользователей
         {
-            _allUsers = GetUsersFromDataBase();
+            _currentPage = 1;
+            _allRespondents = _respondentRepository.GetAllRespondents();
             LoadPage(_currentPage); //загружаем первую страницу
+        }
+
+        private void GetUserByName_Click(object sender, RoutedEventArgs e)
+        {
+            string name = RespondentLastNameTextBox.Text;
+            if (name != null)
+            {
+                _allRespondents = _respondentRepository.GetRespondentByLastName(name);
+                _currentPage = 1;
+                LoadPage(_currentPage);
+            } else
+            {
+                RespondentLastNameTextBox.BorderBrush=Brushes.Red;
+                RespondentLastNameTextBox.BorderThickness = new Thickness(2);
+            }
         }
 
         private void LoadPage(int page)
         {
-            var usersToDisplay = _allUsers
-            .Skip((page - 1) * _pageSize)
-            .Take(_pageSize)
+            var usersToDisplay = _allRespondents
+            .Skip((page - 1) * _pageSize) //Пропускает указанное количество элементов
+            .Take(_pageSize) //Берет следующее количество элементов
             .ToList();
 
             UserDataGrid.ItemsSource = usersToDisplay;
@@ -72,7 +77,7 @@ namespace sleepApp
 
         private void NextPage_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentPage < (_allUsers.Count / _pageSize) + 1)
+            if (_currentPage < (_allRespondents.Count / _pageSize) + 1)
             {
                 _currentPage++;
                 LoadPage(_currentPage);
