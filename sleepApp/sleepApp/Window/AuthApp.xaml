@@ -87,6 +87,7 @@
                         Click="TogglePasswordButton_Click"
                         Grid.Column="0"
                         Margin="265,0,0,20"
+                        GotFocus="ResetHighlight"
                         Height="25"/>
             </Grid>
 

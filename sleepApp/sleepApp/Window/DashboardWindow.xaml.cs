@@ -37,6 +37,7 @@ namespace sleepApp
         {
             _currentPage = 1;
             _allRespondents = _respondentRepository.GetAllRespondents();
+            MessageBox.Show($"Загружено {_allRespondents.Count} пользователей."); // Отладочное сообщение
             LoadPage(_currentPage); //загружаем первую страницу
         }
 
@@ -46,6 +47,7 @@ namespace sleepApp
             if (name != null)
             {
                 _allRespondents = _respondentRepository.GetRespondentByLastName(name);
+                MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.");
                 _currentPage = 1;
                 LoadPage(_currentPage);
             } else
@@ -54,6 +56,17 @@ namespace sleepApp
                 RespondentLastNameTextBox.BorderThickness = new Thickness(2);
             }
         }
+
+        private void AddRespondent_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteRespondent_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
 
         private void LoadPage(int page)
         {

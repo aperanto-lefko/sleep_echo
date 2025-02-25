@@ -25,7 +25,6 @@ namespace sleepApp.Repository
             using (var context = new AppDbContext(_login, _password))
             {
                 var respondents = context.Respondents.OrderBy(r => r.Id).ToList();
-                MessageBox.Show($"Загружено {respondents.Count} пользователей."); // Отладочное сообщение
                 return respondents;
             }
         }
@@ -37,7 +36,6 @@ namespace sleepApp.Repository
                 var respondents = context.Respondents
                     .Where(r => r.LastName.ToLower().StartsWith(lastName.ToLower()))
                     .ToList();
-                MessageBox.Show($"Найдено {respondents.Count} пользователей."); // Отладочное сообщение
                 return respondents;
             }
         }

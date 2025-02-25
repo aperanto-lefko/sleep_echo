@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace sleepApp
@@ -29,8 +30,7 @@ namespace sleepApp
             string login = LoginTextBox.Text; //логин из textBox
             string password = PasswordBox.Visibility == Visibility.Visible ? PasswordBox.Password : VisiblePasswordBox.Text; //пароль из PasswordBox
 
-            if (login == "app_user" && password == "753214")
-            {
+            
                 using (var context = new AppDbContext(login, password))
                 {
                     try
@@ -46,7 +46,10 @@ namespace sleepApp
                         }
                         else
                         {
-                            MessageBox.Show($"Не удалось подключиться к базе данных");
+                            HighlightIfError(LoginTextBox, true);
+                            HighlightIfError(PasswordBox, true);
+                            HighlightIfError(VisiblePasswordBox, true);
+                            MessageBox.Show($"Неверная пара логин/пароль");
                         }
                     }
                     catch (Exception ex)
@@ -55,14 +58,7 @@ namespace sleepApp
                     }
                 }
             }
-            else
-            {
-                HighlightIfError(LoginTextBox, login != "app_user");
-                HighlightIfError(PasswordBox, password != "753214");
-                HighlightIfError(VisiblePasswordBox, password != "753214");
-            }
-            }
-        
+                      
         private void HighlightIfError(Control control, bool isError) //подсветка в случае ошибки
         {
             control.BorderBrush = isError ? Brushes.Red : SystemColors.ControlDarkBrush; //цвет рамки
@@ -80,6 +76,8 @@ namespace sleepApp
         }
         private void TogglePasswordButton_Click(object sender, RoutedEventArgs e)
         {
+            HighlightIfError(PasswordBox, false);
+            HighlightIfError(VisiblePasswordBox, false);
             // Переключаем видимость пароля
             // Проверяем, видимо ли поле PasswordBox
             if (PasswordBox.Visibility == Visibility.Visible)

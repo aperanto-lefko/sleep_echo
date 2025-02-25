@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sleepApp"
         mc:Ignorable="d"
-        Title="SleepEcho" Height="450" Width="800" ResizeMode="NoResize">
+        Title="SleepEcho" Height="580" Width="800" ResizeMode="NoResize">
     <Window.Background>
         <ImageBrush ImageSource="pack://application:,,,/Resources/background.png" Stretch="UniformToFill"/>
     </Window.Background>
@@ -42,15 +42,54 @@
                         <Button x:Name="GetUsersButton" Content="Показать всех пользователей" Click="GetAllUsersButton_Click" Margin="20,10,20,0" Width="250"  HorizontalAlignment="Left"/>
                         <Button x:Name="GetUserByNameButton" Content="Поиск пользователя" Click="GetUserByName_Click" Margin="387,10,0,0" Width="190"  HorizontalAlignment="Left"/>
                         <TextBlock Text="Фамилия:" FontSize="14" Margin="590,12,132,-2"/>
-                        <TextBox x:Name="RespondentLastNameTextBox" FontSize="16" Height="25" Margin="667,10,20,0"/>
+                        <TextBox x:Name="RespondentLastNameTextBox" FontSize="16" Height="25" Margin="667,10,20,0" VerticalContentAlignment="Center"/>
 
                     </Grid>
-                    <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="True" Background="Transparent" Height="120" Margin="20,10,20,0"/>
+                    <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="True" Background="Transparent" Height="150" Margin="20,10,20,0"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                         <Button Content="Предыдущая" Click="PreviousPage_Click" Margin="5"/>
                         <TextBlock x:Name="PageNumberText" Text="Страница 1" VerticalAlignment="Center" Margin="5"/>
                         <Button Content="Следующая" Click="NextPage_Click" Margin="5"/>
                     </StackPanel>
+                    <Grid Height="264">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="400"/>
+                            <ColumnDefinition Width="400"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Добавление нового пользователя" 
+                                   FontSize="13" 
+                                   Margin="54,5,0,240" 
+                                   Grid.Column="0"  
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource HeaderTextStyle}"/>
+                        <TextBlock Text="Имя" FontSize="13"  Margin="24,30,0,200" HorizontalAlignment="Left" Width="Auto" Height="20"/>
+                        <TextBox x:Name="NewRespondentFirstNameTextBox" FontSize="16" Margin="90,30,120,200" Height="25" VerticalContentAlignment="Center"/>
+                        <TextBlock Text="Фамилия" FontSize="13"  Margin="20,70,0,170" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
+                        <TextBox x:Name="NewRespondentLastNameTextBox" FontSize="16" Margin="90,67,120,172"  Height="25" VerticalContentAlignment="Center"/>
+                        <TextBlock Text="email" FontSize="13"  Margin="20,100,0,130" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
+                        <TextBox x:Name="NewRespondentEmailTextBox" FontSize="16" Margin="90,104,120,134"  Height="25" VerticalContentAlignment="Center"/>
+                        <TextBlock Text="Пол" FontSize="13"  Margin="20,140,0,90" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
+                        <TextBox x:Name="NewRespondentGenderTextBox" FontSize="16" Margin="90,144,120,94"  Height="25" VerticalContentAlignment="Center"/>
+                        <TextBlock Text="Возраст" FontSize="13"  Margin="20,180,0,50"  HorizontalAlignment="Left"  Height="20" Width="Auto"/>
+                        <TextBox x:Name="NewRespondentAgeTextBox" FontSize="16" Margin="90,184,120,54" Height="25" VerticalContentAlignment="Center"/>
+                        <TextBlock Text="Страна" FontSize="13"  Margin="20,220,0,10" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
+                        <TextBox x:Name="NewRespondentCountryTextBox" FontSize="16" Margin="90,224,120,14"  Height="25" VerticalContentAlignment="Center"/>
+                        <Button Content="Добавить" Click="AddRespondent_Click" Margin="296,247,292,-24" Grid.ColumnSpan="2">
+                            <Button.RenderTransform>
+                                <RotateTransform Angle="-90"/>
+                            </Button.RenderTransform>
+                        </Button>
+                        <TextBlock Text="Удаление пользователя" 
+                                    FontSize="13"
+                                    Style="{StaticResource HeaderTextStyle}" 
+                                   RenderTransformOrigin="2.734,0.296"
+                                   Grid.Column="1" 
+                                   HorizontalAlignment="Left" 
+                                   Margin="106,5,0,241"/>
+                        <TextBlock Text="ID респондента" FontSize="13"  Margin="102,40,0,204" HorizontalAlignment="Left" Width="93" Height="20" Grid.Column="1"/>
+                        <TextBox x:Name="DeletedRespondentIdTextBox" FontSize="16" Margin="200,37,140,202" Height="25" VerticalContentAlignment="Center" Grid.Column="1"/>
+                        <Button Content="Удалить" Click="DeleteRespondent_Click" Margin="106,82,140,155" Grid.Column="1"/>
+                    </Grid>
                 </StackPanel>
 
 
@@ -61,28 +100,21 @@
             </TabItem>
             <TabItem Header="Справка">
                 <Grid Background="Transparent">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="47*"/>
-                        <ColumnDefinition Width="20*"/>
-                        <ColumnDefinition Width="50*"/>
-                        <ColumnDefinition Width="15*"/>
-                        <ColumnDefinition Width="662*"/>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="150*"/>
                         <RowDefinition Height="325*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.ColumnSpan="5" Margin="0,128,0,0" Grid.RowSpan="2">
+                    <Grid Margin="0,128,0,0" Grid.RowSpan="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="500"/>
                             <ColumnDefinition Width="300"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
-                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7,10,0,0"  Grid.Row="0" Grid.ColumnSpan="5" Grid.RowSpan="2">
+                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7,10,0,0"  Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
                         <TextBlock Text="Приложение предоставляет инструменты для сбора и анализа данных о сне, его влиянии на продуктивность, настроение и уровень стресса. Вы также можете вносить свои данные, отслеживать изменения и получать аналитические отчеты. Приложение предназначено для научных исследований и личного использования, помогая улучшить качество сна и жизни. На текущий момент база данных содержит информацию более чем о 5000 респондентах"
                         Style="{StaticResource HeaderTextStyle}"/>
                     </StackPanel >
-                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,10,0,0" Grid.Row="1" Width="400" Grid.ColumnSpan="5" >
+                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,10,0,0" Grid.Row="1" Width="400" Grid.ColumnSpan="2" >
                         <TextBlock Text="Получение данных в зависимости от:" Style="{StaticResource UnderlinedHeaderTextStyle}"/>
                         <TextBlock Text=" "/>
                         <TextBlock Text=" - пола" Style="{StaticResource BodyTextStyle}"/>
@@ -96,7 +128,7 @@
                         <TextBlock Text=" - времени, проведенного за использованием экранов перед сном (минуты)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - общего количества рабочих часов в день (часы)" Style="{StaticResource BodyTextStyle}"/>
                     </StackPanel>
-                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="1" Width="400" Grid.Column="4">
+                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="1" Width="400" Grid.Column="1">
                         <TextBlock Text="Предлагаемые данные:"  Style="{StaticResource UnderlinedHeaderTextStyle}"/>
                         <TextBlock Text=" "/>
                         <TextBlock Text=" - самооценка производительности (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
