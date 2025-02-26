@@ -96,18 +96,6 @@ namespace sleepApp
             }
 
         }
-
-        private void LoadPage(int page)
-        {
-            var usersToDisplay = _allRespondents
-            .Skip((page - 1) * _pageSize) //Пропускает указанное количество элементов
-            .Take(_pageSize) //Берет следующее количество элементов
-            .ToList();
-
-            UserDataGrid.ItemsSource = usersToDisplay;
-            PageNumberText.Text = $"Страница {page}";
-
-        }
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
         {
             if (_currentPage > 1)
@@ -125,21 +113,28 @@ namespace sleepApp
                 LoadPage(_currentPage);
             }
         }
+
+        private void DashBoardTabControl_SelectionChanged(object sender,SelectionChangedEventArgs e)
+        {
+            this.Width = DashBoardTabControl.SelectedIndex == 1 ? 1000 : 800;
+            this.Height = DashBoardTabControl.SelectedIndex == 1 ? 800 : 580;
+        }
+
+        private void LoadPage(int page)
+        {
+            var usersToDisplay = _allRespondents
+            .Skip((page - 1) * _pageSize) //Пропускает указанное количество элементов
+            .Take(_pageSize) //Берет следующее количество элементов
+            .ToList();
+
+            UserDataGrid.ItemsSource = usersToDisplay;
+            PageNumberText.Text = $"Страница {page}";
+
+        }
+        
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            // e.Handled указывает, было ли событие обработано
-            // Если условие == false (введен недопустимый символ), 
-            // то e.Handled = true, и событие считается обработанным (ввод не будет отображен в TextBox)
-            // Если условие == true (введен допустимый символ), 
-            // то e.Handled = false, и событие передается дальше (ввод отображается в TextBox)
-            e.Handled = !int.TryParse(e.Text, out _);
-
-            //int.TryParse пытается преобразовать e.Text в число.
-            //Если преобразование успешно, метод возвращает true, и результат преобразования
-            //записывается в переменную out.
-
-            //Но поскольку нам не нужно само число(нам важно только, можно ли его
-            //преобразовать), мы используем _, чтобы игнорировать результат.
-        }
+             e.Handled = !int.TryParse(e.Text, out _);
+         }
     }
 }

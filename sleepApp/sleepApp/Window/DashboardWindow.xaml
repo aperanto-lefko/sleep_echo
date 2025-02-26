@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:sleepApp"
         mc:Ignorable="d"
         Title="SleepEcho" Height="580" Width="800" ResizeMode="NoResize">
+    <!-- Height="580" Width="800" -->
+
     <Window.Background>
         <ImageBrush ImageSource="pack://application:,,,/Resources/background.png" Stretch="UniformToFill"/>
     </Window.Background>
@@ -32,17 +34,21 @@
         </Style>
     </Window.Resources>
 
-    <Grid Grid.Row="1" HorizontalAlignment="Center" Width="800">
+    <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-        <TabControl Background="Transparent">
+        <TabControl x:Name="DashBoardTabControl" Background="Transparent" SelectionChanged="DashBoardTabControl_SelectionChanged" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
 
             <TabItem Header="  Работа с пользователями">
                 <StackPanel Orientation="Vertical">
                     <Grid>
-                        <Button x:Name="GetUsersButton" Content="Показать всех пользователей" Click="GetAllUsersButton_Click" Margin="20,10,20,0" Width="250"  HorizontalAlignment="Left"/>
-                        <Button x:Name="GetUserByNameButton" Content="Поиск пользователя" Click="GetUserByName_Click" Margin="387,10,0,0" Width="190"  HorizontalAlignment="Left"/>
-                        <TextBlock Text="Фамилия:" FontSize="14" Margin="590,12,132,-2"/>
-                        <TextBox x:Name="RespondentLastNameTextBox" FontSize="16" Height="25" Margin="667,10,20,0" VerticalContentAlignment="Center"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="297*"/>
+                            <ColumnDefinition Width="497*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="GetUsersButton" Content="Показать всех пользователей" Click="GetAllUsersButton_Click" Margin="20,10,0,0" Width="250"  HorizontalAlignment="Left"/>
+                        <Button x:Name="GetUserByNameButton" Content="Поиск пользователя" Click="GetUserByName_Click" Margin="90,10,0,0" Width="190"  HorizontalAlignment="Left" Grid.Column="1"/>
+                        <TextBlock Text="Фамилия:" FontSize="14" Margin="293,12,132,-2" Grid.Column="1"/>
+                        <TextBox x:Name="RespondentLastNameTextBox" FontSize="16" Height="25" Margin="370,10,20,0" VerticalContentAlignment="Center" Grid.Column="1"/>
 
                     </Grid>
                     <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="True" Background="Transparent" Height="150" Margin="20,10,20,0"/>
@@ -70,7 +76,7 @@
                         <TextBox x:Name="NewRespondentEmailTextBox" FontSize="16" Margin="90,104,120,134"  Height="25" VerticalContentAlignment="Center"/>
                         <TextBlock Text="Пол" FontSize="13"  Margin="20,140,0,90" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
                         <ComboBox x:Name="NewRespondentGenderComboBox" FontSize="15" Margin="90,144,120,94"  Height="25" VerticalContentAlignment="Center">
-                            <ComboBoxItem>Male </ComboBoxItem>
+                            <ComboBoxItem>Male</ComboBoxItem>
                             <ComboBoxItem>Female</ComboBoxItem>
                         </ComboBox>
                         <TextBlock Text="Возраст" FontSize="13"  Margin="20,180,0,50"  HorizontalAlignment="Left"  Height="20" Width="Auto"/>
@@ -97,8 +103,8 @@
 
 
             </TabItem>
-            <TabItem Header="Работа с данными">
-                <Grid Background="Transparent">
+            <TabItem Header="Работа с данными" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <Grid Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 </Grid>
             </TabItem>
             <TabItem Header="Справка">

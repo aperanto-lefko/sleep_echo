@@ -13,6 +13,10 @@
     <None Remove="Resources\background.jpg" />
     <None Remove="Resources\background.png" />
     <None Remove="Resources\background2.jpg" />
+    <None Remove="Resources\background_2.png" />
+    <None Remove="Resources\birds.png" />
+    <None Remove="Resources\cubes.png" />
+    <None Remove="Resources\cubes_2.png" />
     <None Remove="Resources\tile_background.png" />
   </ItemGroup>
 

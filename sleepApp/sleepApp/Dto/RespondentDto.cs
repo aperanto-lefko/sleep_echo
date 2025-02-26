@@ -25,7 +25,7 @@ namespace sleepApp.Dto
         public string Gender { get; set; }
         [Required(ErrorMessage = "Поле \"Страна\" не должно быть пустым")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Название страны должно содержать только латинские буквы")]
-        [StringLength(20, ErrorMessage = "Название страны не должно превышать 20 символов")]
+        [StringLength(30, ErrorMessage = "Название страны не должно превышать 30 символов")]
         public string Country { get; set; }
         [Required(ErrorMessage = "Поле \"Возраст\" не должно быть пустым")]
         [Range(18, 80, ErrorMessage = "Возраст должен быть в диапазоне от 18 до 18 лет")]
