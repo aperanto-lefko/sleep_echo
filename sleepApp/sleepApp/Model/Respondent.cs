@@ -31,7 +31,7 @@ namespace sleepApp.Model
 
         public override string ToString()
         {
-            return $"ID: {Id}, first name: {FirstName}, last name: {LastName}, age: {Age},  email: {Email}, gender: {Gender}, country: {Country}";
+            return $"ID: {Id}, first name: {FirstName}, last name: {LastName}";
         }
     }
 

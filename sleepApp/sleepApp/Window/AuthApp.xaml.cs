@@ -49,12 +49,12 @@ namespace sleepApp
                             HighlightIfError(LoginTextBox, true);
                             HighlightIfError(PasswordBox, true);
                             HighlightIfError(VisiblePasswordBox, true);
-                            MessageBox.Show($"Неверная пара логин/пароль");
+                            MessageBox.Show($"Неверная пара логин/пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Ошибка подключения к базе данных: {ex.Message}");
+                        MessageBox.Show($"Ошибка подключения к базе данных: {ex.Message}","Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
@@ -83,9 +83,7 @@ namespace sleepApp
             if (PasswordBox.Visibility == Visibility.Visible)
             {
                 // Если PasswordBox видимо, значит, пароль сейчас скрыт.
-                // Мы хотим показать пароль.
                 // Копируем текст из PasswordBox в VisiblePasswordBox.
-                // PasswordBox.Password содержит введённый пароль.
                 VisiblePasswordBox.Text = PasswordBox.Password;
                 // Делаем VisiblePasswordBox видимым, чтобы показать пароль.
                 VisiblePasswordBox.Visibility = Visibility.Visible;
@@ -97,7 +95,6 @@ namespace sleepApp
                 // Если PasswordBox не видимо, значит, пароль сейчас показан в VisiblePasswordBox.
                 // Мы хотим скрыть пароль.
                 // Копируем текст из VisiblePasswordBox обратно в PasswordBox.
-                // Это нужно, чтобы сохранить введённый пароль.
                 PasswordBox.Password = VisiblePasswordBox.Text;
                 // Делаем PasswordBox видимым, чтобы снова скрыть пароль.
                 PasswordBox.Visibility = Visibility.Visible;

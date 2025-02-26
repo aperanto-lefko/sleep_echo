@@ -1,5 +1,6 @@
 ﻿using sleepApp.Model;
 using sleepApp.Service;
+using sleepApp.ExceptionType;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,11 +43,26 @@ namespace sleepApp.Repository
 
         public Respondent AddRespondent(Respondent respondent)
         {
-           using (var context = new AppDbContext(_login, _password))
+            using (var context = new AppDbContext(_login, _password))
             {
                 context.Respondents.Add(respondent);
                 context.SaveChanges();
                 return respondent;
+            }
+        }
+        public int RemoveRespondent(Respondent respondent)
+        {
+            using (var context = new AppDbContext(_login, _password))
+            {
+                context.Respondents.Remove(respondent);
+                return context.SaveChanges();
+            }
+        }
+        public Respondent? FindById(int id)
+        {
+            using (var context = new AppDbContext(_login, _password))
+            {
+                return context.Respondents.Find(id);
             }
         }
     }

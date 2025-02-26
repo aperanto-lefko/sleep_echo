@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AutoMapper;
+using sleepApp.ExceptionType;
 
 namespace sleepApp
 {
@@ -26,25 +27,22 @@ namespace sleepApp
         private List<Respondent> _allRespondents; //все пользователи из базы данных
         private int _currentPage = 1; //текущая страница
         private int _pageSize = 10; //количество записей на странице
-        private readonly RespondentRepository _respondentRepository;
-        private readonly IMapper _mapper;
+        private readonly RespodentService _rService;
 
 
 
         public DashboardWindow(string login, string password)
         {
             InitializeComponent();
-            _respondentRepository = new RespondentRepository(login, password);
-            var config = new MapperConfiguration(config => config.AddProfile<MappingProfile>());
-            _mapper = config.CreateMapper();
+            _rService = new RespodentService(login, password);
         }
 
 
         private void GetAllUsersButton_Click(object sender, RoutedEventArgs e) //поиск всех пользователей
         {
             _currentPage = 1;
-            _allRespondents = _respondentRepository.GetAllRespondents();
-            MessageBox.Show($"Загружено {_allRespondents.Count} пользователей."); // Отладочное сообщение
+            _allRespondents = _rService.GetAllRespondents();
+            MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
             LoadPage(_currentPage); //загружаем первую страницу
         }
 
@@ -53,7 +51,7 @@ namespace sleepApp
             string name = RespondentLastNameTextBox.Text;
             if (name != null)
             {
-                _allRespondents = _respondentRepository.GetRespondentByLastName(name);
+                _allRespondents = _rService.GetRespondentByLastName(name);
                 MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.");
                 _currentPage = 1;
                 LoadPage(_currentPage);
@@ -67,68 +65,36 @@ namespace sleepApp
 
         private void AddRespondent_Click(object sender, RoutedEventArgs e)
         {
-            RespondentDto resp = GetNewRespondent();
-            if (resp != null)
-            {
-                Respondent newResp = _mapper.Map<Respondent>(resp);
-                newResp = _respondentRepository.AddRespondent(newResp);
-                MessageBox.Show($"Добавлен новый респондент {newResp}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        }
-        private void CheckNewUser()
-        {
-
-        }
-
-
-
-        private void DeleteRespondent_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private RespondentDto GetNewRespondent()
-        {
-            try
-            {
-                return new RespondentDto(NewRespondentFirstNameTextBox.Text,
+            Respondent newResp = _rService.AddRespondent(
+                    NewRespondentFirstNameTextBox.Text,
                     NewRespondentLastNameTextBox.Text,
                     NewRespondentEmailTextBox.Text,
                     NewRespondentGenderComboBox.Text,
                     NewRespondentCountryTextBox.Text,
                     int.Parse(NewRespondentAgeTextBox.Text));
-            }
-            catch (ValidationException e)
+            if (newResp != null)
             {
-                MessageBox.Show(e.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
-            catch (FormatException)
-            {
-                MessageBox.Show("Неверный формат возраста", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
-            catch (ArgumentException)
-            {
-                MessageBox.Show("Неверный формат возраста", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                MessageBox.Show($"Добавлен новый респондент {newResp}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private void ValidationTextFields(params string[] fields)
+
+        private void DeleteRespondent_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var field in fields)
+            try
             {
-                if (ContainsDigit(field))
+                int id = int.Parse(DeletedRespondentIdTextBox.Text);
+                int result = _rService.RemoveRespondentById(id);
+                if (result > 0)
                 {
-                    throw new ArgumentException("Текстовые поля не должны содержать цифр");
+                    MessageBox.Show($"Пользователь с id={id} удален", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-        }
+            catch (NotFoundException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
-        private bool ContainsDigit(string field)
-        {
-            return field.Any(char.IsDigit); //проверка содержит ли цифры
         }
 
         private void LoadPage(int page)
@@ -158,6 +124,22 @@ namespace sleepApp
                 _currentPage++;
                 LoadPage(_currentPage);
             }
+        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            // e.Handled указывает, было ли событие обработано
+            // Если условие == false (введен недопустимый символ), 
+            // то e.Handled = true, и событие считается обработанным (ввод не будет отображен в TextBox)
+            // Если условие == true (введен допустимый символ), 
+            // то e.Handled = false, и событие передается дальше (ввод отображается в TextBox)
+            e.Handled = !int.TryParse(e.Text, out _);
+
+            //int.TryParse пытается преобразовать e.Text в число.
+            //Если преобразование успешно, метод возвращает true, и результат преобразования
+            //записывается в переменную out.
+
+            //Но поскольку нам не нужно само число(нам важно только, можно ли его
+            //преобразовать), мы используем _, чтобы игнорировать результат.
         }
     }
 }

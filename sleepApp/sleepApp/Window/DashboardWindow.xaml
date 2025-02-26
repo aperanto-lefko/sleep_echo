@@ -63,7 +63,7 @@
                                    HorizontalAlignment="Left"
                                    Style="{StaticResource HeaderTextStyle}"/>
                         <TextBlock Text="Имя" FontSize="13"  Margin="24,30,0,200" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                        <TextBox x:Name="NewRespondentFirstNameTextBox" FontSize="16" Margin="90,30,120,200" Height="25" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="NewRespondentFirstNameTextBox" FontSize="16" Margin="90,30,120,200" Height="25" VerticalContentAlignment="Center" />
                         <TextBlock Text="Фамилия" FontSize="13"  Margin="20,70,0,170" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
                         <TextBox x:Name="NewRespondentLastNameTextBox" FontSize="16" Margin="90,67,120,172"  Height="25" VerticalContentAlignment="Center"/>
                         <TextBlock Text="email" FontSize="13"  Margin="20,100,0,130" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
@@ -74,7 +74,7 @@
                             <ComboBoxItem>Female</ComboBoxItem>
                         </ComboBox>
                         <TextBlock Text="Возраст" FontSize="13"  Margin="20,180,0,50"  HorizontalAlignment="Left"  Height="20" Width="Auto"/>
-                        <TextBox x:Name="NewRespondentAgeTextBox" FontSize="16" Margin="90,184,120,54" Height="25" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="NewRespondentAgeTextBox" FontSize="16" Margin="90,184,120,54" Height="25" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
                         <TextBlock Text="Страна" FontSize="13"  Margin="20,220,0,10" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
                         <TextBox x:Name="NewRespondentCountryTextBox" FontSize="16" Margin="90,224,120,14"  Height="25" VerticalContentAlignment="Center"/>
                         <Button Content="Добавить" Click="AddRespondent_Click" Margin="296,247,292,-24" Grid.ColumnSpan="2">
@@ -90,7 +90,7 @@
                                    HorizontalAlignment="Left" 
                                    Margin="106,5,0,241"/>
                         <TextBlock Text="ID респондента" FontSize="13"  Margin="102,40,0,204" HorizontalAlignment="Left" Width="93" Height="20" Grid.Column="1"/>
-                        <TextBox x:Name="DeletedRespondentIdTextBox" FontSize="16" Margin="200,37,140,202" Height="25" VerticalContentAlignment="Center" Grid.Column="1"/>
+                        <TextBox x:Name="DeletedRespondentIdTextBox" FontSize="16" Margin="200,37,140,202" Height="25" VerticalContentAlignment="Center" Grid.Column="1" PreviewTextInput="NumberValidationTextBox"/>
                         <Button Content="Удалить" Click="DeleteRespondent_Click" Margin="106,82,140,155" Grid.Column="1"/>
                     </Grid>
                 </StackPanel>

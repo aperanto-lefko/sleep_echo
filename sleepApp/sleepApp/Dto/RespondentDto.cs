@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace sleepApp.Dto
 {
-    class RespondentDto
+    public class RespondentDto
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Поле \"Имя\" не должно быть пустым")]
@@ -42,11 +42,7 @@ namespace sleepApp.Dto
             Validate();
         }
 
-        public override string ToString()
-        {
-            return $"ID: {Id}, first name: {FirstName}, last name: {LastName}, age: {Age},  email: {Email}, gender: {Gender}, country: {Country}";
-        }
-
+        
         private void Validate()
         {
             var context = new ValidationContext(this);
