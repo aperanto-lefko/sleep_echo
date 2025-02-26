@@ -24,45 +24,25 @@ namespace sleepApp.Service
             //Используется для настройки параметров подключения к базе данных. В данном случае, используется метод
             //UseNpgsql, который указывает, что приложение будет работать с базой данных PostgreSQL.
         }
-
+        /*
         protected override void OnModelCreating(ModelBuilder modelBuilder) //// Настройка первичного ключа
         {
-            modelBuilder.Entity<Respondent>()
-                   .ToTable("respondents", "sleep") //указание имени таблицы и схемы в базе данных
-                   .HasKey(r => r.Id);
+           modelBuilder.Entity<Respondent>(entity =>
+            {
+                entity.ToTable("respondents", "sleep");
+                entity.HasKey(r => r.Id);
+                entity.Property(r => r.Id).HasColumnName("id");
+                entity.Property(r => r.Age).HasColumnName("age");
+                entity.Property(r => r.FirstName).HasColumnName("first_name");
+                entity.Property(r => r.LastName).HasColumnName("last_name");
+                entity.Property(r => r.Email).HasColumnName("email");
+                entity.Property(r => r.Email).HasColumnName("email");
+                entity.Property(r => r.Gender).HasColumnName("gender");
+                entity.Property(r => r.Country).HasColumnName("country");
 
-            modelBuilder.Entity<Respondent>() //т.к. в таблице столбец с маленькой буквы
-                .Property(r => r.Id)
-                .HasColumnName("id");
-
-            modelBuilder.Entity<Respondent>() 
-                .Property(r => r.Age)
-                .HasColumnName("age");
-
-            modelBuilder.Entity<Respondent>()
-                .Property(r => r.Age)
-                .HasColumnName("age");
-
-            modelBuilder.Entity<Respondent>()
-                .Property(r => r.FirstName)
-                .HasColumnName("first_name");
-
-            modelBuilder.Entity<Respondent>()
-               .Property(r => r.LastName)
-               .HasColumnName("last_name");
-
-            modelBuilder.Entity<Respondent>()
-               .Property(r => r.Email)
-               .HasColumnName("email");
-
-            modelBuilder.Entity<Respondent>()
-               .Property(r => r.Gender)
-               .HasColumnName("gender");
-
-            modelBuilder.Entity<Respondent>()
-               .Property(r => r.Country)
-               .HasColumnName("country");
-        }
+            });
+        
+        }*/
     }
 }
 

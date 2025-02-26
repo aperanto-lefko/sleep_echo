@@ -69,7 +69,10 @@
                         <TextBlock Text="email" FontSize="13"  Margin="20,100,0,130" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
                         <TextBox x:Name="NewRespondentEmailTextBox" FontSize="16" Margin="90,104,120,134"  Height="25" VerticalContentAlignment="Center"/>
                         <TextBlock Text="Пол" FontSize="13"  Margin="20,140,0,90" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
-                        <TextBox x:Name="NewRespondentGenderTextBox" FontSize="16" Margin="90,144,120,94"  Height="25" VerticalContentAlignment="Center"/>
+                        <ComboBox x:Name="NewRespondentGenderComboBox" FontSize="15" Margin="90,144,120,94"  Height="25" VerticalContentAlignment="Center">
+                            <ComboBoxItem>Male </ComboBoxItem>
+                            <ComboBoxItem>Female</ComboBoxItem>
+                        </ComboBox>
                         <TextBlock Text="Возраст" FontSize="13"  Margin="20,180,0,50"  HorizontalAlignment="Left"  Height="20" Width="Auto"/>
                         <TextBox x:Name="NewRespondentAgeTextBox" FontSize="16" Margin="90,184,120,54" Height="25" VerticalContentAlignment="Center"/>
                         <TextBlock Text="Страна" FontSize="13"  Margin="20,220,0,10" HorizontalAlignment="Left"  Height="20" Width="Auto"/>

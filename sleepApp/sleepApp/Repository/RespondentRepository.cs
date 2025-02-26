@@ -39,6 +39,16 @@ namespace sleepApp.Repository
                 return respondents;
             }
         }
+
+        public Respondent AddRespondent(Respondent respondent)
+        {
+           using (var context = new AppDbContext(_login, _password))
+            {
+                context.Respondents.Add(respondent);
+                context.SaveChanges();
+                return respondent;
+            }
+        }
     }
 }
 

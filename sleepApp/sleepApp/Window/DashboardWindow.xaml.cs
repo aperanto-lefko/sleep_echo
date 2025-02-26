@@ -1,8 +1,10 @@
 ﻿using sleepApp.Model;
+using sleepApp.Dto;
 using sleepApp.Repository;
 using sleepApp.Service;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using AutoMapper;
 
 namespace sleepApp
 {
@@ -24,15 +27,19 @@ namespace sleepApp
         private int _currentPage = 1; //текущая страница
         private int _pageSize = 10; //количество записей на странице
         private readonly RespondentRepository _respondentRepository;
+        private readonly IMapper _mapper;
+
 
 
         public DashboardWindow(string login, string password)
         {
-             InitializeComponent();
+            InitializeComponent();
             _respondentRepository = new RespondentRepository(login, password);
+            var config = new MapperConfiguration(config => config.AddProfile<MappingProfile>());
+            _mapper = config.CreateMapper();
         }
 
-                
+
         private void GetAllUsersButton_Click(object sender, RoutedEventArgs e) //поиск всех пользователей
         {
             _currentPage = 1;
@@ -50,23 +57,79 @@ namespace sleepApp
                 MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.");
                 _currentPage = 1;
                 LoadPage(_currentPage);
-            } else
+            }
+            else
             {
-                RespondentLastNameTextBox.BorderBrush=Brushes.Red;
+                RespondentLastNameTextBox.BorderBrush = Brushes.Red;
                 RespondentLastNameTextBox.BorderThickness = new Thickness(2);
             }
         }
 
         private void AddRespondent_Click(object sender, RoutedEventArgs e)
         {
+            RespondentDto resp = GetNewRespondent();
+            if (resp != null)
+            {
+                Respondent newResp = _mapper.Map<Respondent>(resp);
+                newResp = _respondentRepository.AddRespondent(newResp);
+                MessageBox.Show($"Добавлен новый респондент {newResp}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+        private void CheckNewUser()
+        {
 
         }
+
+
 
         private void DeleteRespondent_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
+        private RespondentDto GetNewRespondent()
+        {
+            try
+            {
+                return new RespondentDto(NewRespondentFirstNameTextBox.Text,
+                    NewRespondentLastNameTextBox.Text,
+                    NewRespondentEmailTextBox.Text,
+                    NewRespondentGenderComboBox.Text,
+                    NewRespondentCountryTextBox.Text,
+                    int.Parse(NewRespondentAgeTextBox.Text));
+            }
+            catch (ValidationException e)
+            {
+                MessageBox.Show(e.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Неверный формат возраста", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+            catch (ArgumentException)
+            {
+                MessageBox.Show("Неверный формат возраста", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+        }
+
+        private void ValidationTextFields(params string[] fields)
+        {
+            foreach (var field in fields)
+            {
+                if (ContainsDigit(field))
+                {
+                    throw new ArgumentException("Текстовые поля не должны содержать цифр");
+                }
+            }
+        }
+
+        private bool ContainsDigit(string field)
+        {
+            return field.Any(char.IsDigit); //проверка содержит ли цифры
+        }
 
         private void LoadPage(int page)
         {
