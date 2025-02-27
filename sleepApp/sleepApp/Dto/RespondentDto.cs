@@ -18,7 +18,7 @@ namespace sleepApp.Dto
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Фамилия должна содержать только латинские буквы")]
         [StringLength(30, ErrorMessage = "Фамилия не должна превышать 30 символов")]
         public string LastName { get; set; }
-        [EmailAddress(ErrorMessage = "Неверный формат электронной почты")]
+        [RegularExpression("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", ErrorMessage = "Неверный формат электронной почты")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Поле \"Пол\" не должно быть пустым")]
         [StringLength(10, ErrorMessage = "Пол не должен превышать 10 символов")]

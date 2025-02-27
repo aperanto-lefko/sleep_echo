@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using AutoMapper;
 using sleepApp.ExceptionType;
+using System.Text.RegularExpressions;
 
 namespace sleepApp
 {
@@ -159,7 +160,17 @@ namespace sleepApp
 
         private void CommaValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-           e.Handled = e.Text.Contains(",");         
+            var textBox = sender as TextBox;
+            string newText = textBox.Text + e.Text; //суммирует то, что уже есть в строке, с тем, что вводится
+            Regex regex = new Regex(@"^[0-9]*\.?[0-9]*$");
+           e.Handled = !regex.IsMatch(e.Text) || (newText.Count(c => c == '.') > 1);   //дополнительно ограничение количества точек      
         }
+        private void NumberOneTenValidation(object sender, TextCompositionEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            string newText = textBox.Text + e.Text;
+            e.Handled = !int.TryParse(newText, out int number) || number < 1 || number>10;
+        }
+
     }
 }
