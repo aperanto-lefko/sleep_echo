@@ -297,7 +297,7 @@
                          Style="{StaticResource HeaderTextStyle}" 
                           Margin="224,516,0,305" Width="219" HorizontalAlignment="Left" Height="25"/>
                     <TextBlock Text="ID респондента" FontSize="13"  Margin="35,549,0,276" HorizontalAlignment="Left" Width="Auto" Height="21"/>
-                    <TextBox x:Name="NewRespondentIDTextBox" HorizontalAlignment="Left" Width="115" Margin="188,547,0,0" ToolTip="ID номер респондента" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top" />
+                    <TextBox x:Name="NewRespondentIDTextBox" HorizontalAlignment="Left" Width="115" Margin="188,547,0,0" ToolTip="ID номер респондента" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top"  PreviewTextInput="NumberValidationTextBox"/>
                     <TextBlock Text="Время отхода ко сну" FontSize="13"  Margin="35,583,0,243" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
                     <TextBox x:Name="NewSlStartTimeTextBox" HorizontalAlignment="Left" Width="115" Margin="188,581,0,0" ToolTip="Время в 24-часовом формате HH.MM" Height="25" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top"   PreviewTextInput="CommaValidationTextBox"/>
                     <TextBlock Text="Время пробуждения" FontSize="13"  Margin="35,618,0,208" HorizontalAlignment="Left" Width="Auto"/>
@@ -305,21 +305,21 @@
                     <TextBlock Text="Общее время сна" FontSize="13"  Margin="35,653,0,173" HorizontalAlignment="Left" Width="Auto" Height="20"/>
                     <TextBox x:Name="NewSlTotalTimeTextBox" HorizontalAlignment="Left" Width="115" Margin="189,650,0,0" ToolTip="Время в формате HH.MM" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top"  PreviewTextInput="CommaValidationTextBox"/>
                     <TextBlock Text="Качество сна (1...10)" FontSize="13"  Margin="37,688,0,138" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                    <TextBox x:Name="NewSlQualityTextBox" HorizontalAlignment="Left" Width="115" Margin="189,685,0,0" ToolTip="Самооценка качества сна 1...10" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top" />
+                    <TextBox x:Name="NewSlQualityTextBox" HorizontalAlignment="Left" Width="115" Margin="189,685,0,0" ToolTip="Самооценка качества сна 1...10" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top" PreviewTextInput="NumberOneTenValidation"  />
                     <TextBlock Text="Время для спорта, мин" FontSize="13"  Margin="37,723,0,103" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                    <TextBox x:Name="NewExercciseTextBox" HorizontalAlignment="Left" Width="115" Margin="189,720,0,0" ToolTip="Время для спорта, мин" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top" />
+                    <TextBox x:Name="NewExercciseTextBox" HorizontalAlignment="Left" Width="115" Margin="189,720,0,0" ToolTip="Время для спорта, мин" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top" PreviewTextInput="NumberValidationTextBox"/>
                     <TextBlock Text="Кофеин, мг" FontSize="13"  Margin="334,549,0,277" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                    <TextBox x:Name="NewCoffeeTextBox" HorizontalAlignment="Left" Width="115" Margin="512,546,0,275" ToolTip="Количество кофеина, мг. В среднем в одной чашке кофе 200 мл содержится 80-90 мг кофеина, в чашке эспрессо 30 мл около 65 мг кофеина" Style="{StaticResource TextBoxStyle}" />
+                    <TextBox x:Name="NewCoffeeTextBox" HorizontalAlignment="Left" Width="115" Margin="512,546,0,275" ToolTip="Количество кофеина, мг. В среднем в одной чашке кофе 200 мл содержится 80-90 мг кофеина, в чашке эспрессо 30 мл около 65 мг кофеина" Style="{StaticResource TextBoxStyle}" PreviewTextInput="NumberValidationTextBox" />
                     <TextBlock Text="Время у экрана, мин " FontSize="13"  Margin="334,582,0,244" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                    <TextBox x:Name="NewScreenTimeTextBox" HorizontalAlignment="Left" Width="115" Margin="512,580,0,241" ToolTip="Время, проведенное у экранов телевизоров, телефонов перед сном, мин" Style="{StaticResource TextBoxStyle}" />
+                    <TextBox x:Name="NewScreenTimeTextBox" HorizontalAlignment="Left" Width="115" Margin="512,580,0,241" ToolTip="Время, проведенное у экранов телевизоров, телефонов перед сном, мин" Style="{StaticResource TextBoxStyle}"  PreviewTextInput="NumberValidationTextBox" />
                     <TextBlock Text="Рабочее время" FontSize="13"  Margin="335,618,0,209" HorizontalAlignment="Left" Width="Auto" Height="20"/>
                     <TextBox x:Name="NewWorkTimeTextBox" HorizontalAlignment="Left" Width="115" Margin="512,614,0,207" ToolTip="Время в формате HH.MM" Style="{StaticResource TextBoxStyle}"  PreviewTextInput="CommaValidationTextBox" />
                     <TextBlock Text="Производительность(1...10)" FontSize="13"  Margin="631,76,0,750" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                    <TextBox x:Name="NewProductivityTextBox" HorizontalAlignment="Left" Width="115"  Margin="512,648,0,173" ToolTip="Самооценка производительности 1...10" Style="{StaticResource TextBoxStyle}" />
+                    <TextBox x:Name="NewProductivityTextBox" HorizontalAlignment="Left" Width="115"  Margin="512,648,0,173" ToolTip="Самооценка производительности 1...10" Style="{StaticResource TextBoxStyle}" PreviewTextInput="NumberOneTenValidation" />
                     <TextBlock Text="Настроение(1...10)" FontSize="13"  Margin="335,689,0,138" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                    <TextBox x:Name="NewMoodTextBox" HorizontalAlignment="Left" Width="115" Margin="512,683,0,138" ToolTip="Самооценка настроения 1...10" Style="{StaticResource TextBoxStyle}" />
+                    <TextBox x:Name="NewMoodTextBox" HorizontalAlignment="Left" Width="115" Margin="512,683,0,138" ToolTip="Самооценка настроения 1...10" Style="{StaticResource TextBoxStyle}" PreviewTextInput="NumberOneTenValidation"  />
                     <TextBlock Text="Уровень стресса(1...10)" FontSize="13"  Margin="335,721,0,106" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                    <TextBox x:Name="NewStressTextBox" HorizontalAlignment="Left" Width="115" Margin="512,718,0,103" ToolTip="Самооценка уровня стресса 1...10"  Style="{StaticResource TextBoxStyle}"/>
+                    <TextBox x:Name="NewStressTextBox" HorizontalAlignment="Left" Width="115" Margin="512,718,0,103" ToolTip="Самооценка уровня стресса 1...10"  Style="{StaticResource TextBoxStyle}" PreviewTextInput="NumberOneTenValidation" />
                     <Button x:Name="DataCreate" Margin="224,776,528,31" Click="CreateDataButton_Click" Content="Создать запись" Style="{StaticResource ButtonStyle}" Height="40" />
                     <TextBlock Text="Удаление записи" 
              FontSize="13"
@@ -327,7 +327,7 @@
             HorizontalAlignment="Left" 
             Margin="731,686,0,131"/>
                     <TextBlock Text="ID записи" Margin="692,721,0,105" HorizontalAlignment="Left" Style="{StaticResource TextStyle}"/>
-                    <TextBox x:Name="DeletedDataIdTextBox" HorizontalAlignment="Left" Width="115" Margin="772,718,0,0" PreviewTextInput="NumberValidationTextBox" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top"/>
+                    <TextBox x:Name="DeletedDataIdTextBox" HorizontalAlignment="Left" Width="115" Margin="772,718,0,0" PreviewTextInput="NumberValidationTextBox" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top" />
                     <Button Content="Удалить" Click="DeleteData_Click" Margin="733,764,149,45" Style="{StaticResource ButtonStyle}" Height="37"/>
                     <TextBlock Text="Обновление записи" 
                             FontSize="13"
