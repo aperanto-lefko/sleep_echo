@@ -8,6 +8,33 @@
     
         Foreground="#FFFFFFFF"
         Title="SleepEcho" Height="340" Width="500" ResizeMode="NoResize">
+    
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4A90E2"/>
+            <Setter Property="Foreground" Value="#FFFFFFFF"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="Border" 
+                 Background="{TemplateBinding Background}" 
+                 BorderBrush="{TemplateBinding BorderBrush}" 
+                 BorderThickness="{TemplateBinding BorderThickness}" 
+                 CornerRadius="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Триггер при наведении -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3E7AC5"/>
+                                <!-- Темнее основной цвет -->
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
     <!--Background="#2D2D2D" -->
     <Window.Background>
@@ -92,12 +119,10 @@
                         Margin="265,0,0,20"
                         GotFocus="ResetHighlight"
                         Height="25" 
-                        Background="#4A90E2" 
-                        Foreground="#FFFFFFFF"
-                        />
+                        Style="{StaticResource ButtonStyle}"/>
             </Grid>
 
-            <Button x:Name="LoginButton" Content="Войти" FontSize="16" Padding="2.5" Click="LoginButton_Click" Margin="0,0,0,10" Height="35" Background="#4A90E2" Foreground="#FFFFFFFF"/>
+            <Button x:Name="LoginButton" Content="Войти" FontSize="16" Padding="2.5" Click="LoginButton_Click" Margin="0,0,0,10" Height="35" Style="{StaticResource ButtonStyle}"/>
             <!--
      - Content: Текст на кнопке.
     - FontSize: Размер шрифта.
