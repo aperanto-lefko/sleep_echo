@@ -5,17 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sleepApp"
         mc:Ignorable="d"
+    
+        Foreground="#FFFFFFFF"
         Title="SleepEcho" Height="340" Width="500" ResizeMode="NoResize">
-    
-    <!--
-         - Height и Width: Размеры окна.
-        - ResizeMode="NoResize": Запрет изменения размеров окна.
-    -->
+
+    <!--Background="#2D2D2D" -->
     <Window.Background>
-        <ImageBrush ImageSource="pack://application:,,,/Resources/background.png" Stretch="UniformToFill"/>
+        <ImageBrush ImageSource="pack://application:,,,/Resources/axiom.png" Stretch="UniformToFill"/>
     </Window.Background>
-    
-        <Grid Grid.Row="1" HorizontalAlignment="Center" Width="500">
+
+    <Grid Grid.Row="1" HorizontalAlignment="Center" Width="500">
         <Grid.RowDefinitions>
             <RowDefinition Height="109*"/>
             <RowDefinition Height="325*"/>
@@ -46,14 +45,14 @@
                - Margin: Отступы (верх, право, низ, лево).
             -->
 
-            <TextBox x:Name="LoginTextBox" FontSize="16" Height="25" Margin="0,0,0,5" GotFocus="ResetHighlight"/>
+            <TextBox x:Name="LoginTextBox" FontSize="16" Height="25" Margin="0,0,0,5" GotFocus="ResetHighlight" Background="#3E3E3E" Foreground="#FFFFFFFF"/>
             <!--
                 TextBox: Поле для ввода текста (логина).
                 - x:Name: Имя элемента для обращения в коде.
                 - FontSize: Размер шрифта.
                 - GotFocus обработчик событий нужен для сброса красного цвета
             -->
-            <TextBlock Text="Пароль:" FontSize="16"  Margin="0,0,0,5"/>
+            <TextBlock Text="Пароль:" FontSize="16"  Margin="0,0,0,5" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -69,7 +68,9 @@
                              GotFocus="ResetHighlight" 
                              HorizontalAlignment="Left"
                              Grid.Column="0"
-                             Height="25"/>
+                             Height="25"
+                             Background="#3E3E3E"
+                             Foreground="#FFFFFFFF"/>
 
 
                 <!-- TextBox для отображения пароля -->
@@ -81,17 +82,22 @@
                       GotFocus="ResetHighlight" 
                       Grid.Column="0" 
                          Width="265"
-                         Height="25"/>
+                         Height="25"
+                          Background="#3E3E3E"
+                         Foreground="#FFFFFFFF"/>
                 <Button x:Name="TogglePasswordButton" 
                         Content="👁️" 
                         Click="TogglePasswordButton_Click"
                         Grid.Column="0"
                         Margin="265,0,0,20"
                         GotFocus="ResetHighlight"
-                        Height="25"/>
+                        Height="25" 
+                        Background="#4A90E2" 
+                        Foreground="#FFFFFFFF"
+                        />
             </Grid>
 
-            <Button x:Name="LoginButton" Content="Войти" FontSize="16" Padding="2.5" Click="LoginButton_Click" Margin="0,0,0,10" Height="35"/>
+            <Button x:Name="LoginButton" Content="Войти" FontSize="16" Padding="2.5" Click="LoginButton_Click" Margin="0,0,0,10" Height="35" Background="#4A90E2" Foreground="#FFFFFFFF"/>
             <!--
      - Content: Текст на кнопке.
     - FontSize: Размер шрифта.

@@ -52,7 +52,7 @@ namespace sleepApp
             if (name != null)
             {
                 _allRespondents = _rService.GetRespondentByLastName(name);
-                MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.");
+                MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.","Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 _currentPage = 1;
                 LoadPage(_currentPage);
             }
@@ -142,5 +142,10 @@ namespace sleepApp
         {
              e.Handled = !int.TryParse(e.Text, out _);
          }
+
+        private void ComboBoxItem_Selected(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

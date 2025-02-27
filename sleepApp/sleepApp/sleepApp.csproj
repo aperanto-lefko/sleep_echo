@@ -10,10 +10,13 @@
 
   <ItemGroup>
     <None Remove="2024-09-24_17-22-59.png" />
+    <None Remove="Resources\axiom.png" />
+    <None Remove="Resources\back.png" />
     <None Remove="Resources\background.jpg" />
     <None Remove="Resources\background.png" />
     <None Remove="Resources\background2.jpg" />
     <None Remove="Resources\background_2.png" />
+    <None Remove="Resources\back_2.png" />
     <None Remove="Resources\birds.png" />
     <None Remove="Resources\cubes.png" />
     <None Remove="Resources\cubes_2.png" />
@@ -27,6 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\axiom.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

@@ -5,32 +5,137 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sleepApp"
         mc:Ignorable="d"
-        Title="SleepEcho" Height="800" Width="1000" ResizeMode="NoResize">
+        Title="SleepEcho" Height="800" Width="1000" ResizeMode="NoResize"
+       
+        Foreground="#FFFFFFFF">
     <!-- Height="580" Width="800" -->
 
+    <!--Background="#2D2D2D" -->
     <Window.Background>
-        <ImageBrush ImageSource="pack://application:,,,/Resources/background.png" Stretch="UniformToFill"/>
+        <ImageBrush ImageSource="pack://application:,,,/Resources/axiom.png" Stretch="UniformToFill"/>
     </Window.Background>
+    
     <Window.Resources>
+        
+        <Style x:Key="TabItemStyle" TargetType="TabItem">
+            <Setter Property="Background" Value="#2D2D2D"/>
+            <!-- Цвет фона -->
+            <Setter Property="Foreground" Value="#FFFFFFFF"/>
+            <!-- Цвет текста -->
+            <Setter Property="BorderThickness" Value="1"/>
+            <!-- Толщина рамки -->
+            <Setter Property="Padding" Value="10,5"/>
+            <!-- Отступы внутри TabItem -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Border" 
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            CornerRadius="2">
+                            <ContentPresenter x:Name="ContentSite"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          ContentSource="Header"
+                                          Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Изменение цвета при выборе -->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#3E3E3E"/>
+                                <!-- Цвет фона выбранной закладки -->
+                                <Setter Property="Foreground" Value="#FFFFFFFF"/>
+                                <!-- Цвет текста выбранной закладки -->
+                            </Trigger>
+                           
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="#3E3E3E"/>
+            <!-- Цвет фона -->
+            <Setter Property="Foreground" Value="#FFFFFFFF"/>
+            <!-- Цвет текста -->
+            <Setter Property="BorderBrush" Value="#FF4A90E2"/>
+            <!-- Цвет рамки -->
+            <Setter Property="BorderThickness" Value="0.8"/>
+            <!-- Толщина рамки -->
+            <Setter Property="RowBackground" Value="#3E3E3E"/>
+            <!-- Цвет фона строк -->
+            <Setter Property="AlternatingRowBackground" Value="#2D2D2D"/>
+            <!-- Цвет фона чередующихся строк -->
+            <Setter Property="GridLinesVisibility" Value="Vertical"/>
+            <!-- Скрыть линии сетки -->
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <!-- Показать только заголовки столбцов -->
+            <Setter Property="HorizontalGridLinesBrush" Value="#FF4A90E2"/>
+            <!-- Цвет горизонтальных линий -->
+            <Setter Property="VerticalGridLinesBrush" Value="#FF4A90E2"/>
+            <!-- Цвет вертикальных линий -->
+            <Setter Property="ColumnWidth" Value="*"/>
+            <!-- Авторастягивание столб -->
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#2D2D2D"/>
+                        <!-- Цвет фона заголовков столбцов -->
+                        <Setter Property="Foreground" Value="#FFFFFFFF"/>
+                        <!-- Цвет текста заголовков столбцов -->
+                        <Setter Property="BorderBrush" Value="#FF4A90E2"/>
+                        <!-- Цвет рамки заголовков столбцов -->
+                        <Setter Property="BorderThickness" Value="0.8"/>
+                        <!-- Толщина рамки заголовков столбцов -->
+                        <Setter Property="Padding" Value="10,5"/>
+                        <!-- Отступы внутри заголовков столбцов -->
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Стиль для заголовков -->
         <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="15"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="10"/>
+            <Setter Property="Foreground" Value="#FFFFFFFF"/>
         </Style>
 
         <!-- Стиль для основного текста -->
         <Style x:Key="BodyTextStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            
             <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Foreground" Value="#FFFFFFFF"/>
+        </Style>
+        
+        <Style x:Key="TextStyle" TargetType="TextBlock">
+           <Setter Property="Foreground" Value="#FFFFFFFF"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="20"/>
         </Style>
 
-        <!-- Стиль для подчеркнутых заголовков -->
+
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#3E3E3E"/>
+            <Setter Property="Foreground" Value="#FFFFFFFF"/>
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4A90E2"/>
+            <Setter Property="Foreground" Value="#FFFFFFFF"/>
+        </Style>
+
+
+                <!-- Стиль для подчеркнутых заголовков -->
         <Style x:Key="UnderlinedHeaderTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextStyle}">
             <Setter Property="TextDecorations" Value="Underline"/>
+            <Setter Property="Foreground" Value="#FFFFFFFF"/>
         </Style>
     </Window.Resources>
 
@@ -38,24 +143,24 @@
 
         <TabControl x:Name="DashBoardTabControl" Background="Transparent" SelectionChanged="DashBoardTabControl_SelectionChanged" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
 
-            <TabItem Header="  Работа с пользователями">
+            <TabItem Header="  Работа с пользователями" Style="{StaticResource TabItemStyle}">
                 <StackPanel Orientation="Vertical">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="297*"/>
                             <ColumnDefinition Width="497*"/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="GetUsersButton" Content="Показать всех пользователей" Click="GetAllUsersButton_Click" Margin="20,10,0,0" Width="250"  HorizontalAlignment="Left"/>
-                        <Button x:Name="GetUserByNameButton" Content="Поиск пользователя" Click="GetUserByName_Click" Margin="90,10,0,0" Width="190"  HorizontalAlignment="Left" Grid.Column="1"/>
+                        <Button x:Name="GetUsersButton" Content="Показать всех пользователей" Click="GetAllUsersButton_Click" Margin="20,10,0,0" Width="250"  HorizontalAlignment="Left" Style="{StaticResource ButtonStyle}"/>
+                        <Button x:Name="GetUserByNameButton" Content="Поиск пользователя" Click="GetUserByName_Click" Margin="90,10,0,0" Width="190"  HorizontalAlignment="Left" Grid.Column="1" Style="{StaticResource ButtonStyle}"/>
                         <TextBlock Text="Фамилия:" FontSize="14" Margin="293,12,132,-2" Grid.Column="1"/>
-                        <TextBox x:Name="RespondentLastNameTextBox" FontSize="16" Height="25" Margin="370,10,20,0" VerticalContentAlignment="Center" Grid.Column="1"/>
+                        <TextBox x:Name="RespondentLastNameTextBox" FontSize="16" Height="25" Margin="370,10,20,0" VerticalContentAlignment="Center" Grid.Column="1"  Style="{StaticResource TextBoxStyle}"/>
 
                     </Grid>
-                    <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="True" Background="Transparent" Height="150" Margin="20,10,20,0"/>
+                    <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="True" Background="Transparent" Height="150" Margin="20,10,20,0"  Style="{StaticResource DataGridStyle}"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                        <Button Content="Предыдущая" Click="PreviousPage_Click" Margin="5"/>
-                        <TextBlock x:Name="PageNumberText" Text="Страница 1" VerticalAlignment="Center" Margin="5"/>
-                        <Button Content="Следующая" Click="NextPage_Click" Margin="5"/>
+                        <Button Content="Предыдущая" Click="PreviousPage_Click" Margin="5" Style="{StaticResource ButtonStyle}"/>
+                        <TextBlock x:Name="PageNumberText" Text="Страница 1" VerticalAlignment="Center" Margin="5" Foreground="#FFFFFFFF"/>
+                        <Button Content="Следующая" Click="NextPage_Click" Margin="5" Style="{StaticResource ButtonStyle}"/>
                     </StackPanel>
                     <Grid Height="264">
                         <Grid.ColumnDefinitions>
@@ -68,22 +173,22 @@
                                    Grid.Column="0"  
                                    HorizontalAlignment="Left"
                                    Style="{StaticResource HeaderTextStyle}"/>
-                        <TextBlock Text="Имя" FontSize="13"  Margin="24,30,0,200" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                        <TextBox x:Name="NewRespondentFirstNameTextBox" FontSize="16" Margin="90,30,120,200" Height="25" VerticalContentAlignment="Center" />
-                        <TextBlock Text="Фамилия" FontSize="13"  Margin="20,70,0,170" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
-                        <TextBox x:Name="NewRespondentLastNameTextBox" FontSize="16" Margin="90,67,120,172"  Height="25" VerticalContentAlignment="Center"/>
-                        <TextBlock Text="email" FontSize="13"  Margin="20,100,0,130" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
-                        <TextBox x:Name="NewRespondentEmailTextBox" FontSize="16" Margin="90,104,120,134"  Height="25" VerticalContentAlignment="Center"/>
-                        <TextBlock Text="Пол" FontSize="13"  Margin="20,140,0,90" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
+                        <TextBlock Text="Имя" Margin="24,30,0,200" HorizontalAlignment="Left" Style="{StaticResource TextStyle}"/>
+                        <TextBox x:Name="NewRespondentFirstNameTextBox" FontSize="16" Margin="90,30,120,200" Height="25" VerticalContentAlignment="Center" Style="{StaticResource TextBoxStyle}" />
+                        <TextBlock Text="Фамилия" Margin="20,70,0,170" HorizontalAlignment="Left" Style="{StaticResource TextStyle}"/>
+                        <TextBox x:Name="NewRespondentLastNameTextBox" FontSize="16" Margin="90,67,120,172"  Height="25" VerticalContentAlignment="Center" Style="{StaticResource TextBoxStyle}"/>
+                        <TextBlock Text="email" Margin="20,100,0,130" HorizontalAlignment="Left" Style="{StaticResource TextStyle}"/>
+                        <TextBox x:Name="NewRespondentEmailTextBox" FontSize="16" Margin="90,104,120,134"  Height="25" VerticalContentAlignment="Center" Style="{StaticResource TextBoxStyle}"/>
+                        <TextBlock Text="Пол" Margin="20,140,0,90" HorizontalAlignment="Left" Style="{StaticResource TextStyle}"/>
                         <ComboBox x:Name="NewRespondentGenderComboBox" FontSize="15" Margin="90,144,120,94"  Height="25" VerticalContentAlignment="Center">
                             <ComboBoxItem>Male</ComboBoxItem>
                             <ComboBoxItem>Female</ComboBoxItem>
                         </ComboBox>
-                        <TextBlock Text="Возраст" FontSize="13"  Margin="20,180,0,50"  HorizontalAlignment="Left"  Height="20" Width="Auto"/>
-                        <TextBox x:Name="NewRespondentAgeTextBox" FontSize="16" Margin="90,184,120,54" Height="25" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
-                        <TextBlock Text="Страна" FontSize="13"  Margin="20,220,0,10" HorizontalAlignment="Left"  Height="20" Width="Auto"/>
-                        <TextBox x:Name="NewRespondentCountryTextBox" FontSize="16" Margin="90,224,120,14"  Height="25" VerticalContentAlignment="Center"/>
-                        <Button Content="Добавить" Click="AddRespondent_Click" Margin="296,247,292,-24" Grid.ColumnSpan="2">
+                        <TextBlock Text="Возраст" Margin="20,180,0,50"  HorizontalAlignment="Left" Style="{StaticResource TextStyle}"/>
+                        <TextBox x:Name="NewRespondentAgeTextBox" FontSize="16" Margin="90,184,120,54" Height="25" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox" Style="{StaticResource TextBoxStyle}"/>
+                        <TextBlock Text="Страна" Margin="20,220,0,10" HorizontalAlignment="Left" Style="{StaticResource TextStyle}"/>
+                        <TextBox x:Name="NewRespondentCountryTextBox" FontSize="16" Margin="90,224,120,14"  Height="25" VerticalContentAlignment="Center" Style="{StaticResource TextBoxStyle}"/>
+                        <Button Content="Добавить" Click="AddRespondent_Click" Margin="296,247,292,-24" Grid.ColumnSpan="2" Style="{StaticResource ButtonStyle}">
                             <Button.RenderTransform>
                                 <RotateTransform Angle="-90"/>
                             </Button.RenderTransform>
@@ -94,20 +199,20 @@
                                    Grid.Column="1" 
                                    HorizontalAlignment="Left" 
                                    Margin="106,5,0,241"/>
-                        <TextBlock Text="ID респондента" FontSize="13"  Margin="102,40,0,204" HorizontalAlignment="Left" Width="93" Height="20" Grid.Column="1"/>
-                        <TextBox x:Name="DeletedRespondentIdTextBox" FontSize="16" Margin="200,37,140,202" Height="25" VerticalContentAlignment="Center" Grid.Column="1" PreviewTextInput="NumberValidationTextBox"/>
-                        <Button Content="Удалить" Click="DeleteRespondent_Click" Margin="106,82,140,155" Grid.Column="1"/>
+                        <TextBlock Text="ID респондента" Margin="102,40,0,204" HorizontalAlignment="Left" Style="{StaticResource TextStyle}" Grid.Column="1"/>
+                        <TextBox x:Name="DeletedRespondentIdTextBox" FontSize="16" Margin="200,37,140,202" Height="25" VerticalContentAlignment="Center" Grid.Column="1" PreviewTextInput="NumberValidationTextBox" Style="{StaticResource TextBoxStyle}"/>
+                        <Button Content="Удалить" Click="DeleteRespondent_Click" Margin="106,82,140,155" Grid.Column="1" Style="{StaticResource ButtonStyle}"/>
                     </Grid>
                 </StackPanel>
 
 
             </TabItem>
-            <TabItem Header="Работа с данными" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <TabItem Header="Работа с данными" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"  Style="{StaticResource TabItemStyle}">
                 <StackPanel Orientation="Vertical">
                     <Grid Background="Transparent">
 
 
-                        <Button x:Name="GetAllDataButton" Grid.Row="0" Content="Показать данные" Click="GetAllDataButton_Click" Margin="132,214,0,454" HorizontalAlignment="Left" Width="760" RenderTransformOrigin="0.5,0.5">
+                        <Button x:Name="GetAllDataButton" Grid.Row="0" Content="Показать данные" Click="GetAllDataButton_Click" Margin="132,214,0,454" HorizontalAlignment="Left" Width="760" Style="{StaticResource ButtonStyle}">
                             <Button.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -130,14 +235,14 @@
                         <TextBlock Text="Общее время сна" FontSize="13"  Margin="20,164,0,513" HorizontalAlignment="Left" Width="Auto"/>
                         <TextBox x:Name="SlTotalTimeTextBox" FontSize="16" Margin="152,164,727,508" VerticalContentAlignment="Center" ToolTip="Время в формате HH.MM" />
                         <TextBlock Text="Качество сна (1...10)" FontSize="13"  Margin="312,32,0,645" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                        <TextBox x:Name="SlQualityTextBox" FontSize="16" Margin="455,32,423,640" Height="25" VerticalContentAlignment="Center" ToolTip="Самооценка качества сна 1...10" />
-                        <TextBlock Text="Время для спорта" FontSize="13"  Margin="318,79,0,598" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                        <TextBox x:Name="ExercciseTextBox" FontSize="16" Margin="455,76,423,596" Height="25" VerticalContentAlignment="Center" ToolTip="Время на спорт, мин" />
-                        <TextBlock Text="Кол-во кофе" FontSize="13"  Margin="318,123,0,555" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                        <TextBox x:Name="CoffeeTextBox" FontSize="16" Margin="455,123,423,549" Height="25" VerticalContentAlignment="Center" ToolTip="Количество кофе, мг" />
-                        <TextBlock Text="Время у экрана " FontSize="13"  Margin="317,164,0,513" HorizontalAlignment="Left" Width="Auto" Height="20"/>
-                        <TextBox x:Name="ScreenTimeTextBox" FontSize="16" Margin="455,164,423,508" Height="25" VerticalContentAlignment="Center" ToolTip="Время у экрана, мин" />
-                        <TextBlock Text="Рабочее время " FontSize="13"  Margin="628,34,0,644" HorizontalAlignment="Left" Width="Auto" Height="20"/>
+                        <TextBox x:Name="SlQualityTextBox" FontSize="16" Margin="467,34,411,639" Height="25" VerticalContentAlignment="Center" ToolTip="Самооценка качества сна 1...10" />
+                        <TextBlock Text="Время для спорта, мин" FontSize="13"  Margin="318,79,0,598" HorizontalAlignment="Left" Width="Auto" Height="20"/>
+                        <TextBox x:Name="ExercciseTextBox" FontSize="16" Margin="467,78,411,595" Height="25" VerticalContentAlignment="Center" ToolTip="Время для спорта, мин" />
+                        <TextBlock Text="Кофеин, мг" FontSize="13"  Margin="318,123,0,555" HorizontalAlignment="Left" Width="Auto" Height="20"/>
+                        <TextBox x:Name="CoffeeTextBox" FontSize="16" Margin="467,125,411,548" Height="25" VerticalContentAlignment="Center" ToolTip="Количество кофеина, мг. В среднем в одной чашке кофе 200 мл содержится 80-90 мг кофеина, в чашке эспрессо 30 мл около 65 мг кофеина" />
+                        <TextBlock Text="Время у экрана, мин " FontSize="13"  Margin="317,164,0,513" HorizontalAlignment="Left" Width="Auto" Height="20"/>
+                        <TextBox x:Name="ScreenTimeTextBox" FontSize="16" Margin="467,166,411,507" Height="25" VerticalContentAlignment="Center" ToolTip="Время, проведенное у экранов телевизоров, телефонов перед сном, мин" />
+                        <TextBlock Text="Рабочее время" FontSize="13"  Margin="628,34,0,644" HorizontalAlignment="Left" Width="Auto" Height="20"/>
                         <TextBox x:Name="WorkTimeTextBox" FontSize="16" Margin="812,34,66,639" Height="25" VerticalContentAlignment="Center" ToolTip="Время в формате HH.MM" />
                         <TextBlock Text="Производительность(1...10)" FontSize="13"  Margin="628,76,0,602" HorizontalAlignment="Left" Width="Auto" Height="20"/>
                         <TextBox x:Name="ProductivityTextBox" FontSize="16" Margin="812,73,66,600" Height="25" VerticalContentAlignment="Center" ToolTip="Самооценка производительности 1...10" />
@@ -152,7 +257,7 @@
                 </StackPanel>
             </TabItem>
 
-            <TabItem Header="Справка">
+            <TabItem Header="Справка"  Style="{StaticResource TabItemStyle}">
                 <Grid Background="Transparent">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="150*"/>
