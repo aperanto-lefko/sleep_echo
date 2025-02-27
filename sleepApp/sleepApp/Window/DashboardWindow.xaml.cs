@@ -102,6 +102,20 @@ namespace sleepApp
 
         }
 
+        private void CreateDataButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteData_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void FindDataForUpdate_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
         {
             if (_currentPage > 1)
@@ -123,7 +137,7 @@ namespace sleepApp
         private void DashBoardTabControl_SelectionChanged(object sender,SelectionChangedEventArgs e) //изменение размера окна при переходе на закладку
         {
             this.Width = DashBoardTabControl.SelectedIndex == 1 ? 1000 : 800;
-            this.Height = DashBoardTabControl.SelectedIndex == 1 ? 800 : 580;
+            this.Height = DashBoardTabControl.SelectedIndex == 1 ? 900 : 580;
         }
 
         private void LoadPage(int page)
