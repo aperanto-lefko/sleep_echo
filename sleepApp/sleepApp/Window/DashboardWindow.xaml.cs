@@ -157,9 +157,9 @@ namespace sleepApp
              e.Handled = !int.TryParse(e.Text, out _);
          }
 
-        private void ComboBoxItem_Selected(object sender, RoutedEventArgs e)
+        private void CommaValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-
+           e.Handled = e.Text.Contains(",");         
         }
     }
 }
