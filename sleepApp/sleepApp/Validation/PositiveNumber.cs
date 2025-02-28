@@ -11,14 +11,31 @@ namespace sleepApp.Validation
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            return value switch
+            if (value is int intValue)
             {
-                int intValue when intValue > 0 => ValidationResult.Success,
-                int _ => new ValidationResult(ErrorMessage ?? "Число должно быть положительным"),
-                double doubleValue when doubleValue > 0 => ValidationResult.Success,
-                double _ => new ValidationResult(ErrorMessage ??  "Число должно быть положительным"),
-                _ => new ValidationResult("Недопустимый тип данных")
-            };
-           }
+                if (intValue > 0)
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult(ErrorMessage ?? "Число должно быть положительным");
+                }
+            }
+            else if (value is double doubleValue)
+            {
+                if (doubleValue > 0)
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult(ErrorMessage ?? "Число должно быть положительным");
+                }
+            }
+
+            // Если тип данных не int или double
+            return new ValidationResult("Недопустимый тип данных");
+        }
     }
 }

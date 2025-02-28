@@ -17,7 +17,7 @@ namespace sleepApp.Model
         [Column("id")]
         public int Id { get; set; }
         [Column("date")]
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         [Column("person_id")]
         public int PersonId { get; set; }
         [ForeignKey(nameof(PersonId)) ] //навигационное свойство, связывание с сущностью

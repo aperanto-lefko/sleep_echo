@@ -209,7 +209,7 @@ namespace sleepApp
                     MessageBox.Show($"Добавлена запись {newSleepData}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
-            } catch (DbUpdateException ex)
+            } catch (FormatException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -269,9 +269,10 @@ namespace sleepApp
         {
             var textBox = sender as TextBox;
             string newText = textBox.Text + e.Text; //суммирует то, что уже есть в строке, с тем, что вводится
-            Regex regex = new Regex(@"^[0-9]*\.?[0-9]*$");
-           e.Handled = !regex.IsMatch(e.Text) || (newText.Count(c => c == '.') > 1);   //дополнительно ограничение количества точек      
+            Regex regex = new Regex(@"^([01]?[0-9]|2[0-3])(\.[0-5]?[0-9]?)?$");
+           e.Handled = !regex.IsMatch(newText) || (newText.Count(c => c == '.') > 1);   //дополнительно ограничение количества точек      
         }
+        
         private void NumberOneTenValidation(object sender, TextCompositionEventArgs e)
         {
             var textBox = sender as TextBox;
