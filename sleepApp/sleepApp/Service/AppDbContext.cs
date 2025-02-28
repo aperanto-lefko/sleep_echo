@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using sleepApp.Model;
+using System.Configuration;
 
 namespace sleepApp.Service
 {
@@ -17,7 +18,11 @@ namespace sleepApp.Service
         private readonly string _connectionString;
         public AppDbContext(string userName, string password)
         {
-            _connectionString = $"Host = localhost; Port=5432; database = sleep_productivity; UserName = {userName}; password = {password}";
+           // _connectionString = $"Host = localhost; Port=5432; database = sleep_productivity; UserName = {userName}; password = {password}";
+           var connectionStringTemp = ConfigurationManager.ConnectionStrings["SleepProductivityDB"].ConnectionString;
+            _connectionString = connectionStringTemp
+                .Replace("{username}", userName)
+                .Replace("{password}", password);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
