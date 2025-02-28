@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Npgsql;
 
 namespace sleepApp.Repository
 {
@@ -23,11 +24,13 @@ namespace sleepApp.Repository
 
         public List<Respondent> GetAllRespondents()
         {
-            using (var context = new AppDbContext(_login, _password))
-            {
-                var respondents = context.Respondents.OrderBy(r => r.Id).ToList();
-                return respondents;
-            }
+            
+                using (var context = new AppDbContext(_login, _password))
+                {
+                    var respondents = context.Respondents.OrderBy(r => r.Id).ToList();
+                    return respondents;
+                }
+            
         }
 
         public List<Respondent> GetRespondentByLastName(string lastName)
@@ -40,7 +43,7 @@ namespace sleepApp.Repository
                 return respondents;
             }
         }
-
+       
         public Respondent AddRespondent(Respondent respondent)
         {
             using (var context = new AppDbContext(_login, _password))

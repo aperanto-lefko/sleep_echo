@@ -18,8 +18,7 @@ namespace sleepApp.Service
         private readonly string _connectionString;
         public AppDbContext(string userName, string password)
         {
-           // _connectionString = $"Host = localhost; Port=5432; database = sleep_productivity; UserName = {userName}; password = {password}";
-           var connectionStringTemp = ConfigurationManager.ConnectionStrings["SleepProductivityDB"].ConnectionString;
+            var connectionStringTemp = ConfigurationManager.ConnectionStrings["SleepProductivityDB"].ConnectionString;
             _connectionString = connectionStringTemp
                 .Replace("{username}", userName)
                 .Replace("{password}", password);

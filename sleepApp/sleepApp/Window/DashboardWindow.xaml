@@ -316,7 +316,7 @@
                     <TextBox x:Name="NewWorkTimeTextBox" HorizontalAlignment="Left" Width="115" Margin="512,614,0,207" ToolTip="Время в формате HH.MM" Style="{StaticResource TextBoxStyle}"  PreviewTextInput="CommaValidationTextBox" />
                     <TextBlock Text="Производительность(1...10)" FontSize="13"  Margin="631,76,0,750" HorizontalAlignment="Left" Width="Auto" Height="20"/>
                     <TextBox x:Name="NewProductivityTextBox" HorizontalAlignment="Left" Width="115"  Margin="512,648,0,173" ToolTip="Самооценка производительности 1...10" Style="{StaticResource TextBoxStyle}" PreviewTextInput="NumberOneTenValidation" />
-                    <TextBlock Text="Настроение(1...10)" FontSize="13"  Margin="335,689,0,138" HorizontalAlignment="Left" Width="Auto" Height="20"/>
+                    <TextBlock Text="Настроение(1...10)" FontSize="13"  Margin="335,686,0,140" HorizontalAlignment="Left" Width="Auto" Height="20"/>
                     <TextBox x:Name="NewMoodTextBox" HorizontalAlignment="Left" Width="115" Margin="512,683,0,138" ToolTip="Самооценка настроения 1...10" Style="{StaticResource TextBoxStyle}" PreviewTextInput="NumberOneTenValidation"  />
                     <TextBlock Text="Уровень стресса(1...10)" FontSize="13"  Margin="335,721,0,106" HorizontalAlignment="Left" Width="Auto" Height="20"/>
                     <TextBox x:Name="NewStressTextBox" HorizontalAlignment="Left" Width="115" Margin="512,718,0,103" ToolTip="Самооценка уровня стресса 1...10"  Style="{StaticResource TextBoxStyle}" PreviewTextInput="NumberOneTenValidation" />
@@ -343,6 +343,10 @@
                             HorizontalAlignment="Left" 
                             Margin="692,605,0,219"/>
                     <Button Content="Обновить" Click="FindDataForUpdate_Click" Margin="733,634,149,175" Style="{StaticResource ButtonStyle}" Height="37"/>
+                    <TextBlock Text="формат: HH.MM (24 часа)" FontSize="8"  Margin="50,603,0,223" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
+                    <TextBlock Text="формат: HH.MM (24 часа)" FontSize="8"  Margin="50,638,0,188" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
+                    <TextBlock Text="формат: HH.MM " FontSize="8"  Margin="62,673,0,153" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
+                    <TextBlock Text="формат: HH.MM " FontSize="8"  Margin="352,636,0,190" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
 
 
 

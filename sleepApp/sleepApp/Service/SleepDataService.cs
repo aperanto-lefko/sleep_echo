@@ -11,6 +11,7 @@ using sleepApp.Dto;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
 using sleepApp.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace sleepApp.Service
 {
@@ -63,6 +64,11 @@ namespace sleepApp.Service
             catch (ArgumentException e)
             {
                 MessageBox.Show(e.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
 
