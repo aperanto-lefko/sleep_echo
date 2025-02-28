@@ -36,13 +36,14 @@ namespace sleepApp.Service
             return _respondentRepository.GetRespondentByLastName(name);
         }
 
-        public Respondent AddRespondent(string firstName,
+        public RespondentDto AddRespondent(string firstName,
                                                   string lastName,
                                                   string email,
                                                   string gender,
                                                   string country,
                                                   int age)
         {
+
             RespondentDto resp = GetNewRespondentDto(firstName,
                                                       lastName,
                                                       email,
@@ -52,9 +53,8 @@ namespace sleepApp.Service
             if (resp != null)
             {
                 Respondent newResp = _mapper.Map<Respondent>(resp);
-                return _respondentRepository.AddRespondent(newResp);
-
-            }
+                return _mapper.Map<RespondentDto>(_respondentRepository.AddRespondent(newResp));
+             }
             else
             {
                 return null;

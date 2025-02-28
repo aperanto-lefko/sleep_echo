@@ -12,6 +12,7 @@ namespace sleepApp.Service
     //Этот класс является основой для работы с базой данных в приложении, использующем Entity Framework Core и PostgreSQL.
     {
         public DbSet<Respondent> Respondents { get; set; }
+        public DbSet<SleepData> SleepData { get; set; }
         //DbSet<T> — это коллекция сущностей (записей) в контексте базы данных. Он представляет таблицу в базе данных.
         private readonly string _connectionString;
         public AppDbContext(string userName, string password)

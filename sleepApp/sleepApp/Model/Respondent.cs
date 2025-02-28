@@ -29,10 +29,7 @@ namespace sleepApp.Model
         [Column("age")]
         public int Age { get; set; }
 
-        public override string ToString()
-        {
-            return $"ID: {Id}, first name: {FirstName}, last name: {LastName}";
-        }
+       
     }
 
 

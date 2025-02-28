@@ -13,6 +13,10 @@ namespace sleepApp.Dto
         public MappingProfile() {
             CreateMap<RespondentDto, Respondent>();
             CreateMap<Respondent, RespondentDto>();
+
+            CreateMap<SleepDataDto, SleepData>()
+                .ForMember(dest => dest.respondent, opt => opt.Ignore()); //не маппим respondent
+            CreateMap<SleepData, SleepDataDto>();
         }
     }
 }

@@ -19,6 +19,8 @@ using System.Windows.Shapes;
 using AutoMapper;
 using sleepApp.ExceptionType;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace sleepApp
 {
@@ -29,6 +31,7 @@ namespace sleepApp
         private int _currentPage = 1; //текущая страница
         private int _pageSize = 10; //количество записей на странице
         private readonly RespodentService _rService;
+        private readonly SleepDataService _slService;
 
 
 
@@ -36,6 +39,7 @@ namespace sleepApp
         {
             InitializeComponent();
             _rService = new RespodentService(login, password);
+            _slService = new SleepDataService(login, password);
         }
 
 
@@ -66,16 +70,22 @@ namespace sleepApp
 
         private void AddRespondent_Click(object sender, RoutedEventArgs e)
         {
-            Respondent newResp = _rService.AddRespondent(
-                    NewRespondentFirstNameTextBox.Text,
-                    NewRespondentLastNameTextBox.Text,
-                    NewRespondentEmailTextBox.Text,
-                    NewRespondentGenderComboBox.Text,
-                    NewRespondentCountryTextBox.Text,
-                    int.Parse(NewRespondentAgeTextBox.Text));
-            if (newResp != null)
+            try
             {
-                MessageBox.Show($"Добавлен новый респондент {newResp}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                RespondentDto newResp = _rService.AddRespondent(
+                        NewRespondentFirstNameTextBox.Text,
+                        NewRespondentLastNameTextBox.Text,
+                        NewRespondentEmailTextBox.Text,
+                        NewRespondentGenderComboBox.Text,
+                        NewRespondentCountryTextBox.Text,
+                        int.Parse(NewRespondentAgeTextBox.Text));
+                if (newResp != null)
+                {
+                    MessageBox.Show($"Добавлен новый респондент {newResp}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            } catch (DbUpdateException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -95,6 +105,10 @@ namespace sleepApp
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
         }
 
@@ -105,8 +119,101 @@ namespace sleepApp
 
         private void CreateDataButton_Click(object sender, RoutedEventArgs e)
         {
+            try {
+                if (!int.TryParse(NewRespondentIDTextBox.Text,out int respondentId)) 
+                {
+                    MessageBox.Show("Неверный формат ID респондента, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
 
-        }
+                if (!double.TryParse(NewSlStartTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double sleepStartTime)) //NumberStyles.Any, CultureInfo.InvariantCulture чтобы читал точку
+                {
+                    MessageBox.Show("Неверный формат времени начала сна, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!double.TryParse(NewSlEndTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double sleepEndTime))
+                {
+                    MessageBox.Show("Неверный формат времени окончания сна, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!double.TryParse(NewSlTotalTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double totalSleepHours))
+                {
+                    MessageBox.Show("Неверный формат общего времени сна, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!int.TryParse(NewSlQualityTextBox.Text, out int sleepQuality))
+                {
+                    MessageBox.Show("Неверный формат качества сна, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!int.TryParse(NewExercciseTextBox.Text, out int exerciseMinutes))
+                {
+                    MessageBox.Show("Неверный формат времени упражнений, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!int.TryParse(NewCoffeeTextBox.Text,out int caffeineIntakeMg))
+                {
+                    MessageBox.Show("Неверный формат потребления кофеина, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!int.TryParse(NewScreenTimeTextBox.Text, out int screenTime))
+                {
+                    MessageBox.Show("Неверный формат экранного времени, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!double.TryParse(NewWorkTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double workHours))
+                {
+                    MessageBox.Show("Неверный формат рабочего времени, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!int.TryParse(NewProductivityTextBox.Text, out int productivityScore))
+                {
+                    MessageBox.Show("Неверный формат оценки продуктивности, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!int.TryParse(NewMoodTextBox.Text, out int moodScore))
+                {
+                    MessageBox.Show("Неверный формат оценки настроения, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!int.TryParse(NewStressTextBox.Text, out int stressLevel))
+                {
+                    MessageBox.Show("Неверный формат уровня стресса, поле должно быть заполнено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                SleepDataDto newSleepData = _slService.AddSleepData(respondentId,
+                                                                    sleepStartTime,
+                                                                    sleepEndTime,
+                                                                    totalSleepHours,
+                                                                    sleepQuality,
+                                                                    exerciseMinutes,
+                                                                    caffeineIntakeMg,
+                                                                    screenTime,
+                                                                    workHours,
+                                                                    productivityScore,
+                                                                    moodScore,
+                                                                    stressLevel);
+                if (newSleepData != null)
+                {
+                    MessageBox.Show($"Добавлена запись {newSleepData}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+            } catch (DbUpdateException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            }
 
         private void DeleteData_Click(object sender, RoutedEventArgs e)
         {

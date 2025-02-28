@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace sleepApp.Repository
 {
-    class RespondentRepository
+    public class RespondentRepository
     {
         private readonly string _login;
         private readonly string _password;
