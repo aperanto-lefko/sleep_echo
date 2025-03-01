@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sleepApp"
         mc:Ignorable="d"
-        Title="SleepEcho" Height="900" Width="1000" ResizeMode="NoResize"
+        Title="SleepEcho" Height="580" Width="800" ResizeMode="NoResize"
        
         Foreground="#FFFFFFFF">
     <!-- Height="580" Width="800" -->
@@ -191,9 +191,9 @@
                             <ColumnDefinition Width="400"/>
                             <ColumnDefinition Width="400"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Добавление нового пользователя" 
+                        <TextBlock Text="Добавление/обновление респондента" 
                                    FontSize="13" 
-                                   Margin="54,5,0,240" 
+                                   Margin="62,4,0,241" 
                                    Grid.Column="0"  
                                    HorizontalAlignment="Left"
                                    Style="{StaticResource HeaderTextStyle}"/>
@@ -217,15 +217,31 @@
                                 <RotateTransform Angle="-90"/>
                             </Button.RenderTransform>
                         </Button>
+                        <TextBlock Text="Обновление респондента" 
+         FontSize="13"
+         Style="{StaticResource HeaderTextStyle}" 
+         HorizontalAlignment="Left" 
+         Margin="95,8,0,237" Grid.Column="1"/>
+                        <TextBlock Text="ID респондента" Margin="19,42,0,202" HorizontalAlignment="Left" Style="{StaticResource TextStyle}" RenderTransformOrigin="0.612,-6.246" Grid.Column="1"/>
+                        <TextBox x:Name="UpdateRespondentIdTextBox" HorizontalAlignment="Left" Width="114" Margin="127,39,0,0" PreviewTextInput="NumberValidationTextBox" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top" Grid.Column="1"/>
+                        <Button Content="Найти" Click="FindRespondentForUpdate_Click" Margin="267,35,63,195" Style="{StaticResource ButtonStyle}" Height="34.8" Grid.Column="1"/>
+                        <TextBlock Text="Заполните поля для обновления" 
+         FontSize="13"
+         Style="{StaticResource HeaderTextStyle}" 
+         HorizontalAlignment="Left" 
+         Margin="87,73,0,172" Grid.Column="1"/>
+                        <Button Content="Обновить" Click="RespondentUpdate_Click" Margin="139,100,171,130" Style="{StaticResource ButtonStyle}" Grid.Column="1" Height="35"/>
+
+
                         <TextBlock Text="Удаление пользователя" 
                                     FontSize="13"
                                     Style="{StaticResource HeaderTextStyle}" 
                                    Grid.Column="1" 
                                    HorizontalAlignment="Left" 
-                                   Margin="106,5,0,241"/>
-                        <TextBlock Text="ID респондента" Margin="102,40,0,204" HorizontalAlignment="Left" Style="{StaticResource TextStyle}" Grid.Column="1"/>
-                        <TextBox x:Name="DeletedRespondentIdTextBox" Margin="200,37,140,202" Grid.Column="1" PreviewTextInput="NumberValidationTextBox" Style="{StaticResource TextBoxStyle}"/>
-                        <Button Content="Удалить" Click="DeleteRespondent_Click" Margin="106,82,140,155" Grid.Column="1" Style="{StaticResource ButtonStyle}"/>
+                                   Margin="134,148,0,98" RenderTransformOrigin="0.383,0.729"/>
+                        <TextBlock Text="ID респондента" Margin="104,181,0,63" HorizontalAlignment="Left" Style="{StaticResource TextStyle}" Grid.Column="1" RenderTransformOrigin="0.259,0.506"/>
+                        <TextBox x:Name="DeletedRespondentIdTextBox" Margin="222,178,118,0" Grid.Column="1" PreviewTextInput="NumberValidationTextBox" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top"/>
+                        <Button Content="Удалить" Click="DeleteRespondent_Click" Margin="145,214,165,14" Grid.Column="1" Style="{StaticResource ButtonStyle}" Width="90" Height="36"/>
                     </Grid>
                 </StackPanel>
 

@@ -12,6 +12,8 @@ namespace sleepApp.Dto
     {
         [Required(ErrorMessage = "Поле \"ID записи\" не должно быть пустым")]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Поле \"Дата\" не должно быть пустым")]
+        public DateOnly Date { get; set; }
         [Required(ErrorMessage = "Поле \"ID респондента\" не должно быть пустым")]
         [PositiveNumber(ErrorMessage = "Поле \"ID респондента\" должно быть положительным")]
         public int PersonId { get; set; }
@@ -48,6 +50,7 @@ namespace sleepApp.Dto
         [Range(1, 10, ErrorMessage = "Оценка уровня стресса должна быть в диапазоне от 1 до 10")]
         public int StressLevel { get; set; }
         public UpdateSleepDataRequest(int id,
+            DateOnly date,
             int personId,
             double sleepStartTime,
             double sleepEndTime,
@@ -61,8 +64,8 @@ namespace sleepApp.Dto
             int moodScore,
             int stressLevel)
         {
-
             this.Id= id;
+            this.Date = date;
             this.PersonId = personId;
             this.SleepStartTime = sleepStartTime;
             this.SleepEndTime = sleepEndTime;

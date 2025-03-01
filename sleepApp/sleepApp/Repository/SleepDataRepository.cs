@@ -47,7 +47,7 @@ namespace sleepApp.Repository
         {
             using (var context = new AppDbContext(_login, _password))
             {
-                var oldData = FindById(data.Id);
+                var oldData = context.SleepData.Find(data.Id);
                 if (oldData == null) {
                     return false;
                  }

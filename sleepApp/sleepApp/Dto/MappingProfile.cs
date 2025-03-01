@@ -8,11 +8,14 @@ using AutoMapper;
 
 namespace sleepApp.Dto
 {
-    public class MappingProfile: Profile
+    public class MappingProfile : Profile
     {
-        public MappingProfile() {
+        public MappingProfile()
+        {
             CreateMap<RespondentDto, Respondent>();
             CreateMap<Respondent, RespondentDto>();
+            CreateMap<UpdateRespondentRequest, Respondent>()
+              .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<SleepDataDto, SleepData>()
                 .ForMember(dest => dest.respondent, opt => opt.Ignore()); //не маппим respondent

@@ -125,6 +125,14 @@ namespace sleepApp
 
 
         }
+        private void FindRespondentForUpdate_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void RespondentUpdate_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 
 
         private void DeleteRespondent_Click(object sender, RoutedEventArgs e)
@@ -497,6 +505,7 @@ namespace sleepApp
             // Если все поля прошли валидацию, возвращаем кортеж с данными
             return (respondentId, slStartTime, slEndTime, slTotalTime, slQuality, exercise, coffee, screenTime, workTime, productivity, mood, stress);
         }
+
 
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
         {
