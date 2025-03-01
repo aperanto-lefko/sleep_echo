@@ -7,35 +7,17 @@ using System.Threading.Tasks;
 
 namespace sleepApp.Validation
 {
-    public class PositiveNumber:ValidationAttribute
+    public class PositiveNumber : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if (value is int intValue)
+            return value switch
             {
-                if (intValue > 0)
-                {
-                    return ValidationResult.Success;
-                }
-                else
-                {
-                    return new ValidationResult(ErrorMessage ?? "Число должно быть положительным");
-                }
-            }
-            else if (value is double doubleValue)
-            {
-                if (doubleValue > 0)
-                {
-                    return ValidationResult.Success;
-                }
-                else
-                {
-                    return new ValidationResult(ErrorMessage ?? "Число должно быть положительным");
-                }
-            }
-
-            // Если тип данных не int или double
-            return new ValidationResult("Недопустимый тип данных");
+                int intValue when intValue > 0 => ValidationResult.Success,
+                double doubleValue when doubleValue > 0 => ValidationResult.Success,
+                int or double => new ValidationResult(ErrorMessage ?? "Число должно быть положительным"), //Обрабатывает случай, когда значение является int или double, но не удовлетворяет условию > 0.
+                _ => new ValidationResult("Недопустимый тип данных")
+            };
         }
     }
 }

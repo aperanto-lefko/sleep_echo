@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using Npgsql;
+using System.Xml.Linq;
 
 namespace sleepApp
 {
@@ -46,57 +47,109 @@ namespace sleepApp
 
         private void GetAllUsersButton_Click(object sender, RoutedEventArgs e) //поиск всех пользователей
         {
-            _currentPage = 1;
-            _allRespondents = _rService.GetAllRespondents();
-            MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
-            LoadPage(_currentPage); //загружаем первую страницу
+            try
+            {
+                _currentPage = 1;
+                _allRespondents = _rService.GetAllRespondents();
+                MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
+                LoadPage(_currentPage); //загружаем первую страницу
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
 
+            }
         }
+
 
         private void GetUserByName_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                string name = RespondentLastNameTextBox.Text;
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    _allRespondents = _rService.GetRespondentByLastName(name);
+                    MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    _currentPage = 1;
+                    LoadPage(_currentPage);
+                }
+                else
+                {
+                    RespondentLastNameTextBox.BorderBrush = Brushes.Red;
+                    RespondentLastNameTextBox.BorderThickness = new Thickness(2);
+                    ResetTextBoxBorderAfterDelay(RespondentLastNameTextBox, 700);
+            }
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+       
+                private void AddRespondent_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                RespondentDto newResp = _rService.AddRespondent(
+                      NewRespondentFirstNameTextBox.Text,
+                      NewRespondentLastNameTextBox.Text,
+                      NewRespondentEmailTextBox.Text,
+                      NewRespondentGenderComboBox.Text,
+                      NewRespondentCountryTextBox.Text,
+                      int.Parse(NewRespondentAgeTextBox.Text));
+                if (newResp != null)
+                {
+                    MessageBox.Show($"Добавлен новый респондент {newResp}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                } 
+            }
+            catch (ValidationException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+           catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
 
-            string name = RespondentLastNameTextBox.Text;
-            if (name != null)
-            {
-                _allRespondents = _rService.GetRespondentByLastName(name);
-                MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                _currentPage = 1;
-                LoadPage(_currentPage);
             }
-            else
-            {
-                RespondentLastNameTextBox.BorderBrush = Brushes.Red;
-                RespondentLastNameTextBox.BorderThickness = new Thickness(2);
-            }
+           
         }
 
 
-        private void AddRespondent_Click(object sender, RoutedEventArgs e)
-        {
-            RespondentDto newResp = _rService.AddRespondent(
-                  NewRespondentFirstNameTextBox.Text,
-                  NewRespondentLastNameTextBox.Text,
-                  NewRespondentEmailTextBox.Text,
-                  NewRespondentGenderComboBox.Text,
-                  NewRespondentCountryTextBox.Text,
-                  int.Parse(NewRespondentAgeTextBox.Text));
-            if (newResp != null)
-            {
-                MessageBox.Show($"Добавлен новый респондент {newResp}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        } 
-
-        
 
 
         private void DeleteRespondent_Click(object sender, RoutedEventArgs e)
         {
-            int id = int.Parse(DeletedRespondentIdTextBox.Text);
-            if (_rService.RemoveRespondentById(id))
+            try
             {
-                MessageBox.Show($"Пользователь с id={id} удален", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (!string.IsNullOrWhiteSpace(DeletedRespondentIdTextBox.Text))
+                {
+                    int id = int.Parse(DeletedRespondentIdTextBox.Text);
+                    if (_rService.RemoveRespondentById(id))
+                    {
+                        MessageBox.Show($"Пользователь с id={id} удален", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                else
+                {
+                    DeletedRespondentIdTextBox.BorderBrush = Brushes.Red;
+                    DeletedRespondentIdTextBox.BorderThickness = new Thickness(2);
+                    ResetTextBoxBorderAfterDelay(DeletedRespondentIdTextBox, 700);
+                }
             }
+            catch (NotFoundException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
 
         private void GetAllDataButton_Click(object sender, RoutedEventArgs e)
@@ -129,6 +182,18 @@ namespace sleepApp
             catch (FormatException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (NotFoundException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (ValidationException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
 
@@ -197,6 +262,18 @@ namespace sleepApp
             var textBox = sender as TextBox;
             string newText = textBox.Text + e.Text;
             e.Handled = !int.TryParse(newText, out int number) || number < 1 || number > 10;
+        }
+        private void ResetTextBoxBorderAfterDelay(TextBox textBox, int milliSeconds) //сбрасывание цвета через опред.время
+        {
+            Task.Delay(milliSeconds).ContinueWith(_ => //создает задачу, которая завершится через указанное количество миллисекунд
+            //Это асинхронная операция, которая не блокирует основной поток приложения.
+            {
+                textBox.Dispatcher.Invoke(() => // используется для выполнения кода в потоке, который владеет объектом textBox
+                {
+                    textBox.BorderBrush = SystemColors.ControlDarkBrush;
+                    textBox.BorderThickness = new Thickness(1);
+                });
+            });
         }
 
     }

@@ -18,6 +18,7 @@ namespace sleepApp.Service
     public class SleepDataService
     {
         private readonly SleepDataRepository _sleepDataRepository;
+        private readonly RespodentService _rService;
         private readonly IMapper _mapper;
 
         public SleepDataService(string login, string password)
@@ -25,6 +26,7 @@ namespace sleepApp.Service
             _sleepDataRepository = new SleepDataRepository(login, password);
             var config = new MapperConfiguration(config => config.AddProfile<MappingProfile>());
             _mapper = config.CreateMapper();
+            _rService = new RespodentService(login, password);
         }
 
         public SleepDataDto AddSleepData(int personId,
@@ -40,38 +42,23 @@ namespace sleepApp.Service
                                       int moodScore,
                                       int stressLevel)
         {
-            try { 
-            SleepDataDto sleepDataDto = new SleepDataDto(personId,
-                                                         sleepStartTime,
-                                                         sleepEndTime,
-                                                         totalSleepHours,
-                                                         sleepQuality,
-                                                         exerciseMinutes,
-                                                         caffeineIntakeMg,
-                                                         screenTime,
-                                                         workHours,
-                                                         productivityScore,
-                                                         moodScore,
-                                                         stressLevel);
+          
+                _rService.GetRespondentById(personId);
+                SleepDataDto sleepDataDto = new SleepDataDto(personId,
+                                                             sleepStartTime,
+                                                             sleepEndTime,
+                                                             totalSleepHours,
+                                                             sleepQuality,
+                                                             exerciseMinutes,
+                                                             caffeineIntakeMg,
+                                                             screenTime,
+                                                             workHours,
+                                                             productivityScore,
+                                                             moodScore,
+                                                             stressLevel);
                 SleepData newSleepData = _mapper.Map<SleepData>(sleepDataDto);
                 return _mapper.Map<SleepDataDto>(_sleepDataRepository.AddSleepData(newSleepData));
-            }
-            catch (ValidationException e)
-            {
-                MessageBox.Show(e.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
-            catch (ArgumentException e)
-            {
-                MessageBox.Show(e.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
-            catch (DbUpdateException ex)
-            {
-                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
-
+       
         }
     }
 }

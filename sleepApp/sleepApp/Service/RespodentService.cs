@@ -30,28 +30,12 @@ namespace sleepApp.Service
 
         public List<Respondent> GetAllRespondents()
         {
-            try
-            {
-                return _respondentRepository.GetAllRespondents();
-            }
-            catch (DbUpdateException ex)
-            {
-                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
+            return _respondentRepository.GetAllRespondents();
         }
 
         public List<Respondent> GetRespondentByLastName(string name)
         {
-            try
-            {
-                return _respondentRepository.GetRespondentByLastName(name);
-            }
-            catch (DbUpdateException ex)
-            {
-                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
+            return _respondentRepository.GetRespondentByLastName(name);
         }
 
         public RespondentDto AddRespondent(string firstName,
@@ -61,119 +45,79 @@ namespace sleepApp.Service
                                                   string country,
                                                   int age)
         {
-            try
+            RespondentDto resp = GetNewRespondentDto(firstName,
+                                                lastName,
+                                                email,
+                                                gender,
+                                                country,
+                                                age);
+            if (resp != null)
             {
-                RespondentDto resp = GetNewRespondentDto(firstName,
-                                                          lastName,
-                                                          email,
-                                                          gender,
-                                                          country,
-                                                          age);
-                if (resp != null)
-                {
-                    Respondent newResp = _mapper.Map<Respondent>(resp);
-                    return _mapper.Map<RespondentDto>(_respondentRepository.AddRespondent(newResp));
-                }
-                else
-                {
-                    return null;
-                }
+                Respondent newResp = _mapper.Map<Respondent>(resp);
+                return _mapper.Map<RespondentDto>(_respondentRepository.AddRespondent(newResp));
             }
-            catch (DbUpdateException ex)
+            else
             {
-                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
+
         }
         public bool RemoveRespondentById(int id)
         {
             var respondent = GetRespondentById(id);
-
-            if (respondent == null)
-            {
-                return false;
-            }
             _respondentRepository.RemoveRespondent(respondent);
             return true;
-
-        }
-        public Respondent? GetRespondentById(int id)
-        {
-            /* try
-             {
-                 var respondent = _respondentRepository.FindById(id);
-
-                 if (respondent == null)
-                 {
-                     MessageBox.Show($"Пользователь с id={id} не найден", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                     return null;
-                 } else
-                 {
-                     return respondent;
-                 }
-             }
-             catch (DbUpdateException ex)
-             {
-                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                 return null;
-             }*/
-            return _respondentRepository.FindById(id);
         }
 
-    
-
-
-
-    public RespondentDto GetNewRespondentDto(string firstName,
-                                          string lastName,
-                                          string email,
-                                          string gender,
-                                          string country,
-                                          int age)
-    {
-        try
+        public Respondent GetRespondentById(int id)
         {
-            ValidationTextFields(
-                firstName,
-                lastName,
-                country);
-
-            return new RespondentDto(firstName,
-                lastName,
-                email,
-                gender,
-                country,
-                age);
+            return _respondentRepository.FindById(id) ??
+                throw new NotFoundException($"Пользователь с ID: {id} не найден");
         }
-        catch (ValidationException e)
-        {
-            MessageBox.Show(e.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
-            return null;
-        }
-        catch (ArgumentException e)
-        {
-            MessageBox.Show(e.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            return null;
-        }
-    }
 
-    private void ValidationTextFields(params string[] fields)
-    {
-        foreach (var field in fields)
 
+
+
+
+        public RespondentDto GetNewRespondentDto(string firstName,
+                                              string lastName,
+                                              string email,
+                                              string gender,
+                                              string country,
+                                              int age)
         {
-            if (ContainsDigit(field))
+            
+                ValidationTextFields(
+                    firstName,
+                    lastName,
+                    country);
+
+                return new RespondentDto(firstName,
+                    lastName,
+                    email,
+                    gender,
+                    country,
+                    age);
+         
+        }
+
+        private void ValidationTextFields(params string[] fields)
+        {
+            foreach (var field in fields)
+
             {
-                throw new ArgumentException("Текстовые поля не должны содержать цифр");
+                if (ContainsDigit(field))
+                {
+                    throw new ArgumentException("Текстовые поля не должны содержать цифр");
+                }
             }
         }
-    }
 
 
-    private bool ContainsDigit(string field)
-    {
-        return field.Any(char.IsDigit); //проверка содержит ли цифры
+        private bool ContainsDigit(string field)
+        {
+            return field.Any(char.IsDigit); //проверка содержит ли цифры
+        }
     }
-}
 }
 
