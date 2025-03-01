@@ -1,20 +1,17 @@
-﻿using System;
+﻿using sleepApp.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using sleepApp.Model;
-using sleepApp.Validation;
 
 namespace sleepApp.Dto
 {
-    public class SleepDataDto
+    public class UpdateSleepDataRequest
     {
+        [Required(ErrorMessage = "Поле \"ID записи\" не должно быть пустым")]
         public int Id { get; set; }
-
-        public DateOnly Date { get; set; }
         [Required(ErrorMessage = "Поле \"ID респондента\" не должно быть пустым")]
         [PositiveNumber(ErrorMessage = "Поле \"ID респондента\" должно быть положительным")]
         public int PersonId { get; set; }
@@ -50,7 +47,8 @@ namespace sleepApp.Dto
         [Required(ErrorMessage = "Поле \"Уровень стресса\" не должно быть пустым")]
         [Range(1, 10, ErrorMessage = "Оценка уровня стресса должна быть в диапазоне от 1 до 10")]
         public int StressLevel { get; set; }
-        public SleepDataDto(int personId,
+        public UpdateSleepDataRequest(int id,
+            int personId,
             double sleepStartTime,
             double sleepEndTime,
             double totalSleepHours,
@@ -64,7 +62,7 @@ namespace sleepApp.Dto
             int stressLevel)
         {
 
-            this.Date = DateOnly.FromDateTime(DateTime.Now);
+            this.Id= id;
             this.PersonId = personId;
             this.SleepStartTime = sleepStartTime;
             this.SleepEndTime = sleepEndTime;
@@ -80,7 +78,7 @@ namespace sleepApp.Dto
             Validate();
         }
 
-        public SleepDataDto() { }
+        public UpdateSleepDataRequest() { }
 
         public void Validate()
         {
@@ -93,10 +91,6 @@ namespace sleepApp.Dto
                 throw new ValidationException(string.Join("\n", errorMessages));
             }
 
-        }
-        public override string ToString()
-        {
-            return $"ID: {Id} для respondent ID: {PersonId}";
         }
     }
 }

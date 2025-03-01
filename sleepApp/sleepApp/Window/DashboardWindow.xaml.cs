@@ -30,7 +30,7 @@ namespace sleepApp
 
     public partial class DashboardWindow : Window
     {
-        
+
         private int _currentRespondentPage = 1; //текущая страница для respondent
         private int _currenSleepDataPage = 1;
         private List<Respondent> _allRespondents;
@@ -234,79 +234,26 @@ namespace sleepApp
             try
             {
 
-                if (!int.TryParse(NewRespondentIDTextBox.Text, out int respondentId))
+                var parsedData = ParseInputDataFields();
+                if (parsedData == null)
                 {
-                    HighlightTextBox(NewRespondentIDTextBox);
-                    return;
+                    return; // Если парсинг не удался, метод уже выделил поле красным
                 }
 
-                if (!double.TryParse(NewSlStartTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double slStartTime))
-                {
-                    HighlightTextBox(NewSlStartTimeTextBox);
-                    return;
-                }
+                // Извлекаем данные из кортежа
+                var (respondentId,
+                    slStartTime,
+                    slEndTime,
+                    slTotalTime,
+                    slQuality,
+                    exercise,
+                    coffee,
+                    screenTime,
+                    workTime,
+                    productivity,
+                    mood,
+                    stress) = parsedData.Value;
 
-                if (!double.TryParse(NewSlEndTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double slEndTime))
-                {
-                    HighlightTextBox(NewSlEndTimeTextBox);
-                    return;
-                }
-
-                if (!double.TryParse(NewSlTotalTimeTextBox.Text, out double slTotalTime))
-                {
-                    HighlightTextBox(NewSlTotalTimeTextBox);
-                    return;
-                }
-
-                if (!int.TryParse(NewSlQualityTextBox.Text, out int slQuality))
-                {
-                    HighlightTextBox(NewSlQualityTextBox);
-                    return;
-                }
-
-                if (!int.TryParse(NewExercciseTextBox.Text, out int exercise))
-                {
-                    HighlightTextBox(NewExercciseTextBox);
-                    return;
-                }
-
-                if (!int.TryParse(NewCoffeeTextBox.Text, out int coffee))
-                {
-                    HighlightTextBox(NewCoffeeTextBox);
-                    return;
-                }
-
-                if (!int.TryParse(NewScreenTimeTextBox.Text, out int screenTime))
-                {
-                    HighlightTextBox(NewScreenTimeTextBox);
-                    return;
-                }
-
-                if (!double.TryParse(NewWorkTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double workTime))
-                {
-                    HighlightTextBox(NewWorkTimeTextBox);
-                    return;
-                }
-
-                if (!int.TryParse(NewProductivityTextBox.Text, out int productivity))
-                {
-                    HighlightTextBox(NewProductivityTextBox);
-                    return;
-                }
-
-                if (!int.TryParse(NewMoodTextBox.Text, out int mood))
-                {
-                    HighlightTextBox(NewMoodTextBox);
-                    return;
-                }
-
-                if (!int.TryParse(NewStressTextBox.Text, out int stress))
-                {
-                    HighlightTextBox(NewStressTextBox);
-                    return;
-                }
-
-                // Если все поля прошли валидацию, создаем объект SleepDataDto
                 SleepDataDto newSleepData = _slService.AddSleepData(respondentId,
                                                                      slStartTime,
                                                                      slEndTime,
@@ -351,6 +298,9 @@ namespace sleepApp
                     if (_slService.RemoveSleepDataById(id))
                     {
                         MessageBox.Show($"Данные с id={id} удалены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    } else
+                    {
+                        MessageBox.Show("Данные не удалены", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 else
@@ -370,7 +320,182 @@ namespace sleepApp
         }
         private void FindDataForUpdate_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(UpdatedDataIdTextBox.Text))
+                {
+                    int id = int.Parse(UpdatedDataIdTextBox.Text);
+                    SleepData data = _slService.GetSleepDataById(id);
+                    NewRespondentIDTextBox.Text = data.PersonId.ToString().Trim();
+                    NewSlStartTimeTextBox.Text = data.SleepStartTime.ToString().Trim().Replace(",", ".");
+                    NewSlEndTimeTextBox.Text = data.SleepEndTime.ToString().Trim().Replace(",", ".");
+                    NewSlTotalTimeTextBox.Text = data.TotalSleepHours.ToString().Trim().Replace(",", ".");
+                    NewSlQualityTextBox.Text = data.SleepQuality.ToString().Trim();
+                    NewExercciseTextBox.Text = data.ExerciseMinutes.ToString().Trim();
+                    NewCoffeeTextBox.Text = data.CaffeineIntakeMg.ToString().Trim();
+                    NewScreenTimeTextBox.Text = data.ScreenTime.ToString().Trim();
+                    NewWorkTimeTextBox.Text = data.WorkHours.ToString().Trim().Replace(",", ".");
+                    NewProductivityTextBox.Text = data.ProductivityScore.ToString();
+                    NewMoodTextBox.Text = data.MoodScore.ToString().Trim();
+                    NewStressTextBox.Text = data.StressLevel.ToString().Trim();
 
+                }
+                else
+                {
+                    HighlightTextBox(UpdatedDataIdTextBox);
+                }
+            }
+            catch (NotFoundException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void DateUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int dataId;
+                if (!string.IsNullOrWhiteSpace(UpdatedDataIdTextBox.Text))
+                {
+                    dataId = int.Parse(UpdatedDataIdTextBox.Text);
+                }
+                else
+                {
+                    HighlightTextBox(UpdatedDataIdTextBox);
+                    return;
+                }
+                var parsedData = ParseInputDataFields();
+                if (parsedData == null)
+                {
+                    return; // Если парсинг не удался, метод уже выделил поле красным
+                }
+
+                // Извлекаем данные из кортежа
+                var (respondentId,
+                    slStartTime,
+                    slEndTime,
+                    slTotalTime,
+                    slQuality,
+                    exercise,
+                    coffee,
+                    screenTime,
+                    workTime,
+                    productivity,
+                    mood,
+                    stress) = parsedData.Value;
+
+                if (_slService.UpdateSleepData(dataId,
+                                                                     respondentId,
+                                                                     slStartTime,
+                                                                     slEndTime,
+                                                                     slTotalTime,
+                                                                     slQuality,
+                                                                     exercise,
+                                                                     coffee,
+                                                                     screenTime,
+                                                                     workTime,
+                                                                     productivity,
+                                                                     mood,
+                                                                     stress))
+                {
+                  
+                        MessageBox.Show($"Данные для записи id={dataId} успешно обновлены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    } else { 
+                       MessageBox.Show("Данные не обновлены", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            catch (NotFoundException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        
+
+        private (int respondentId, double slStartTime, double slEndTime, double slTotalTime, int slQuality,
+            int exercise, int coffee, int screenTime, double workTime, int productivity, int mood, int stress)? ParseInputDataFields()
+        {
+            if (!int.TryParse(NewRespondentIDTextBox.Text, out int respondentId))
+            {
+                HighlightTextBox(NewRespondentIDTextBox);
+                return null;
+            }
+
+            if (!double.TryParse(NewSlStartTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double slStartTime))
+            {
+                HighlightTextBox(NewSlStartTimeTextBox);
+                return null;
+            }
+
+            if (!double.TryParse(NewSlEndTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double slEndTime))
+            {
+                HighlightTextBox(NewSlEndTimeTextBox);
+                return null;
+            }
+
+            if (!double.TryParse(NewSlTotalTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double slTotalTime))
+            {
+                HighlightTextBox(NewSlTotalTimeTextBox);
+                return null;
+            }
+
+            if (!int.TryParse(NewSlQualityTextBox.Text, out int slQuality))
+            {
+                HighlightTextBox(NewSlQualityTextBox);
+                return null;
+            }
+
+            if (!int.TryParse(NewExercciseTextBox.Text, out int exercise))
+            {
+                HighlightTextBox(NewExercciseTextBox);
+                return null;
+            }
+
+            if (!int.TryParse(NewCoffeeTextBox.Text, out int coffee))
+            {
+                HighlightTextBox(NewCoffeeTextBox);
+                return null;
+            }
+
+            if (!int.TryParse(NewScreenTimeTextBox.Text, out int screenTime))
+            {
+                HighlightTextBox(NewScreenTimeTextBox);
+                return null;
+            }
+
+            if (!double.TryParse(NewWorkTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double workTime))
+            {
+                HighlightTextBox(NewWorkTimeTextBox);
+                return null;
+            }
+
+            if (!int.TryParse(NewProductivityTextBox.Text, out int productivity))
+            {
+                HighlightTextBox(NewProductivityTextBox);
+                return null;
+            }
+
+            if (!int.TryParse(NewMoodTextBox.Text, out int mood))
+            {
+                HighlightTextBox(NewMoodTextBox);
+                return null;
+            }
+
+            if (!int.TryParse(NewStressTextBox.Text, out int stress))
+            {
+                HighlightTextBox(NewStressTextBox);
+                return null;
+            }
+
+            // Если все поля прошли валидацию, возвращаем кортеж с данными
+            return (respondentId, slStartTime, slEndTime, slTotalTime, slQuality, exercise, coffee, screenTime, workTime, productivity, mood, stress);
         }
 
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
@@ -390,7 +515,7 @@ namespace sleepApp
         {
             PreviousPage(ref _currenSleepDataPage, _allSleepData, DataGrid, PageNumberText_data);
         }
-        
+
         private void LoadPage(IEnumerable<object> dataList, int page, DataGrid dataGrid, TextBlock pageNumberText)
         {
             var itemsForDisplay = dataList
@@ -402,7 +527,7 @@ namespace sleepApp
         }
         private void NextPage(ref int currentPage, IEnumerable<object> dataList, DataGrid dataGrid, TextBlock pageNumberText)
         {
-            if (currentPage < (dataList.Count()/_pageSize)+1)
+            if (currentPage < (dataList.Count() / _pageSize) + 1)
             {
                 currentPage++;
                 LoadPage(dataList, currentPage, dataGrid, pageNumberText);
@@ -410,7 +535,7 @@ namespace sleepApp
         }
         private void PreviousPage(ref int currentPage, IEnumerable<object> dataList, DataGrid dataGrid, TextBlock pageNumberText)
         {
-            if (currentPage>1)
+            if (currentPage > 1)
             {
                 currentPage--;
                 LoadPage(dataList, currentPage, dataGrid, pageNumberText);

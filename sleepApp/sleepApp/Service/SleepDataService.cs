@@ -61,12 +61,44 @@ namespace sleepApp.Service
                 return _mapper.Map<SleepDataDto>(_sleepDataRepository.AddSleepData(newSleepData));
        
         }
+        public bool UpdateSleepData(int dataId,
+                                      int personId,
+                                      double sleepStartTime,
+                                      double sleepEndTime,
+                                      double totalSleepHours,
+                                      int sleepQuality,
+                                      int exerciseMinutes,
+                                      int caffeineIntakeMg,
+                                      int screenTime,
+                                      double workHours,
+                                      int productivityScore,
+                                      int moodScore,
+                                      int stressLevel)
+        {
+            UpdateSleepDataRequest request = GetNewDataRequest(dataId,
+                                                             personId,
+                                                             sleepStartTime,
+                                                             sleepEndTime,
+                                                             totalSleepHours,
+                                                             sleepQuality,
+                                                             exerciseMinutes,
+                                                             caffeineIntakeMg,
+                                                             screenTime,
+                                                             workHours,
+                                                             productivityScore,
+                                                             moodScore,
+                                                             stressLevel);
+            SleepData updatedSleepData = _mapper.Map<SleepData>(request);
+
+            return _sleepDataRepository.UpdateSleepData(updatedSleepData);
+        }
+            
 
         public bool RemoveSleepDataById(int id)
         {
             var data = GetSleepDataById(id);
-            _sleepDataRepository.RemoveSleepData(data);
-            return true;
+            return _sleepDataRepository.RemoveSleepData(data);
+         
         }
 
         public SleepData GetSleepDataById(int id)
@@ -122,6 +154,35 @@ namespace sleepApp.Service
                                                                     moodEnd,
                                                                     stressStart,
                                                                     stressEnd));
+        }
+        private UpdateSleepDataRequest GetNewDataRequest(int dataId,
+                                      int personId,
+                                      double sleepStartTime,
+                                      double sleepEndTime,
+                                      double totalSleepHours,
+                                      int sleepQuality,
+                                      int exerciseMinutes,
+                                      int caffeineIntakeMg,
+                                      int screenTime,
+                                      double workHours,
+                                      int productivityScore,
+                                      int moodScore,
+                                      int stressLevel)
+        {
+            GetSleepDataById(dataId);
+            return new UpdateSleepDataRequest(dataId,
+                                              personId,
+                                              sleepStartTime,
+                                              sleepEndTime,
+                                              totalSleepHours,
+                                              sleepQuality,
+                                              exerciseMinutes,
+                                              caffeineIntakeMg,
+                                              screenTime,
+                                              workHours,
+                                              productivityScore,
+                                              moodScore,
+                                              stressLevel);
         }
 
     }

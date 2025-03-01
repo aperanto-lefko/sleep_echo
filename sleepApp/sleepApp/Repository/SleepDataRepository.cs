@@ -28,12 +28,12 @@ namespace sleepApp.Repository
                 return data;
             }
         }
-        public int RemoveSleepData(SleepData data)
+        public bool RemoveSleepData(SleepData data)
         {
             using (var context = new AppDbContext(_login, _password))
             {
                 context.SleepData.Remove(data);
-                return context.SaveChanges();
+                return context.SaveChanges()>0;
             }
         }
         public SleepData? FindById(int id)
@@ -41,6 +41,19 @@ namespace sleepApp.Repository
             using (var context = new AppDbContext(_login, _password))
             {
                 return context.SleepData.Find(id);
+            }
+        }
+        public bool UpdateSleepData(SleepData data)
+        {
+            using (var context = new AppDbContext(_login, _password))
+            {
+                var oldData = FindById(data.Id);
+                if (oldData == null) {
+                    return false;
+                 }
+                context.Entry(oldData).CurrentValues.SetValues(data); // Обновляем только измененные поля
+
+                return context.SaveChanges()>0;
             }
         }
         public List<SleepData> GetSleepDataWithParameters(int respondentId,
@@ -168,7 +181,7 @@ namespace sleepApp.Repository
                         query = query.Where(x => x.StressLevel <= stressEnd);
 
                     // Выполняем запрос и возвращаем результат
-                    return query.ToList(); //метод, который выполняет запрос и возвращает результаты в виде списка(List<SleepData>).
+                    return query.OrderBy(x=>x.Id).ToList(); //метод, который выполняет запрос и возвращает результаты в виде списка(List<SleepData>).
                 } else
                 {
                     var sleepData = context.SleepData.OrderBy(r => r.Id).ToList();

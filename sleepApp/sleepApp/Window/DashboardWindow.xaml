@@ -339,14 +339,14 @@
                             HorizontalAlignment="Left" 
                             Margin="721,527,0,290"/>
                     <TextBlock Text="ID записи" Margin="667,572,0,254" HorizontalAlignment="Left" Style="{StaticResource TextStyle}" RenderTransformOrigin="0.612,-6.246"/>
-                    <TextBox x:Name="UpdatedDataIdTextBox_Копировать" HorizontalAlignment="Left" Width="115" Margin="740,567,0,0" PreviewTextInput="NumberValidationTextBox" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top"/>
+                    <TextBox x:Name="UpdatedDataIdTextBox" HorizontalAlignment="Left" Width="115" Margin="740,567,0,0" PreviewTextInput="NumberValidationTextBox" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top"/>
                     <Button Content="Найти" Click="FindDataForUpdate_Click" Margin="868,561,52,248" Style="{StaticResource ButtonStyle}" Height="37"/>
                     <TextBlock Text="Заполните поля для обновления" 
                             FontSize="13"
                             Style="{StaticResource HeaderTextStyle}" 
                             HorizontalAlignment="Left" 
                             Margin="692,605,0,219"/>
-                    <Button Content="Обновить" Click="FindDataForUpdate_Click" Margin="733,634,149,175" Style="{StaticResource ButtonStyle}" Height="37"/>
+                    <Button Content="Обновить" Click="DateUpdate_Click" Margin="733,634,149,175" Style="{StaticResource ButtonStyle}" Height="37"/>
                     <TextBlock Text="формат: HH.MM (24 часа)" FontSize="8"  Margin="50,603,0,223" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
                     <TextBlock Text="формат: HH.MM (24 часа)" FontSize="8"  Margin="50,638,0,188" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
                     <TextBlock Text="формат: HH.MM " FontSize="8"  Margin="62,673,0,153" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
