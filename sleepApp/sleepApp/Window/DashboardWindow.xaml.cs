@@ -23,14 +23,18 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using Npgsql;
 using System.Xml.Linq;
+using static System.Diagnostics.Activity;
 
 namespace sleepApp
 {
 
     public partial class DashboardWindow : Window
     {
-        private List<Respondent> _allRespondents; //все пользователи из базы данных
-        private int _currentPage = 1; //текущая страница
+        
+        private int _currentRespondentPage = 1; //текущая страница для respondent
+        private int _currenSleepDataPage = 1;
+        private List<Respondent> _allRespondents;
+        private List<SleepDataDto> _allSleepData;
         private int _pageSize = 10; //количество записей на странице
         private readonly RespodentService _rService;
         private readonly SleepDataService _slService;
@@ -49,10 +53,10 @@ namespace sleepApp
         {
             try
             {
-                _currentPage = 1;
+                _currentRespondentPage = 1;
                 _allRespondents = _rService.GetAllRespondents();
                 MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
-                LoadPage(_currentPage); //загружаем первую страницу
+                LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText); //загружаем первую страницу
             }
             catch (DbUpdateException ex)
             {
@@ -71,8 +75,8 @@ namespace sleepApp
                 {
                     _allRespondents = _rService.GetRespondentByLastName(name);
                     MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                    _currentPage = 1;
-                    LoadPage(_currentPage);
+                    _currentRespondentPage = 1;
+                    LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText);
                 }
                 else
                 {
@@ -178,15 +182,35 @@ namespace sleepApp
                 int moodEnd = ParseIntOrNull(MoodTextBox_end.Text);
                 int stressStart = ParseIntOrNull(StressTextBox_start.Text);
                 int stressEnd = ParseIntOrNull(StressTextBox_end.Text);
-            
 
 
-                _currentPage = 1;
-            _allData = _slService.GetSleepDataWithParameters();
-            MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
-            LoadPage(_currentPage); //загружаем первую страницу
-
-        }
+                _currenSleepDataPage = 1;
+                _allSleepData = _slService.GetSleepDataWithParameters(respondentId,
+                                                                      slStartTimeStart,
+                                                                      slStartTimeEnd,
+                                                                      slEndTimeStart,
+                                                                      slEndTimeEnd,
+                                                                      slTotalTimeStart,
+                                                                      slTotalTimeEnd,
+                                                                      slQualityStart,
+                                                                      slQualityEnd,
+                                                                      exerciseStart,
+                                                                      exerciseEnd,
+                                                                      coffeeStart,
+                                                                      coffeeEnd,
+                                                                      screenTimeStart,
+                                                                      screenTimeEnd,
+                                                                      workTimeStart,
+                                                                      workTimeEnd,
+                                                                      productivityStart,
+                                                                      productivityEnd,
+                                                                      moodStart,
+                                                                      moodEnd,
+                                                                      stressStart,
+                                                                      stressEnd);
+                MessageBox.Show($"Загружено {_allSleepData.Count} записей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadPage(_allSleepData, _currenSleepDataPage, DataGrid, PageNumberText_data);
+            }
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -202,7 +226,7 @@ namespace sleepApp
         }
         private double ParseDoubleOrNull(string text)
         {
-            return string.IsNullOrWhiteSpace(text) ? 0 : double.Parse(text);
+            return string.IsNullOrWhiteSpace(text) ? 0 : double.Parse(text, NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
         private void CreateDataButton_Click(object sender, RoutedEventArgs e)
@@ -351,40 +375,52 @@ namespace sleepApp
 
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentPage > 1)
-            {
-                _currentPage--;
-                LoadPage(_currentPage);
-            }
+            PreviousPage(ref _currentRespondentPage, _allRespondents, UserDataGrid, PageNumberText);
         }
-
         private void NextPage_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentPage < (_allRespondents.Count / _pageSize) + 1)
-            {
-                _currentPage++;
-                LoadPage(_currentPage);
-            }
+            NextPage(ref _currentRespondentPage, _allRespondents, UserDataGrid, PageNumberText);
         }
 
+        private void NextPageData_Click(object sender, RoutedEventArgs e)
+        {
+            NextPage(ref _currenSleepDataPage, _allSleepData, DataGrid, PageNumberText_data);
+        }
+        private void PreviousPageData_Click(object sender, RoutedEventArgs e)
+        {
+            PreviousPage(ref _currenSleepDataPage, _allSleepData, DataGrid, PageNumberText_data);
+        }
+        
+        private void LoadPage(IEnumerable<object> dataList, int page, DataGrid dataGrid, TextBlock pageNumberText)
+        {
+            var itemsForDisplay = dataList
+                .Skip((page - 1) * _pageSize) //Пропускает указанное количество элементов
+                .Take(_pageSize) //Берет следующее количество элементов
+                .ToList();
+            dataGrid.ItemsSource = itemsForDisplay;
+            pageNumberText.Text = $"Страница {page}";
+        }
+        private void NextPage(ref int currentPage, IEnumerable<object> dataList, DataGrid dataGrid, TextBlock pageNumberText)
+        {
+            if (currentPage < (dataList.Count()/_pageSize)+1)
+            {
+                currentPage++;
+                LoadPage(dataList, currentPage, dataGrid, pageNumberText);
+            }
+        }
+        private void PreviousPage(ref int currentPage, IEnumerable<object> dataList, DataGrid dataGrid, TextBlock pageNumberText)
+        {
+            if (currentPage>1)
+            {
+                currentPage--;
+                LoadPage(dataList, currentPage, dataGrid, pageNumberText);
+            }
+        }
         private void DashBoardTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) //изменение размера окна при переходе на закладку
         {
             this.Width = DashBoardTabControl.SelectedIndex == 1 ? 1000 : 800;
             this.Height = DashBoardTabControl.SelectedIndex == 1 ? 900 : 580;
         }
-
-        private void LoadPage(int page)
-        {
-            var usersToDisplay = _allRespondents
-            .Skip((page - 1) * _pageSize) //Пропускает указанное количество элементов
-            .Take(_pageSize) //Берет следующее количество элементов
-            .ToList();
-
-            UserDataGrid.ItemsSource = usersToDisplay;
-            PageNumberText.Text = $"Страница {page}";
-
-        }
-
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !int.TryParse(e.Text, out _);

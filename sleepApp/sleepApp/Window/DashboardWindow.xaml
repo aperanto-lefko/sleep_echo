@@ -289,8 +289,12 @@
                         <TextBlock Text="-" FontSize="13"  Margin="870,164,0,662" HorizontalAlignment="Left"  />
                         <TextBox x:Name="StressTextBox_end" HorizontalAlignment="Left" Width="50" Margin="881,162,0,0" ToolTip="Самооценка уровня стресса 1...10" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top" PreviewTextInput="NumberOneTenValidation"  />
                     </Grid>
-                    <DataGrid x:Name="DataGrid" AutoGenerateColumns="True" Background="Transparent" Margin="17,259,17,335" Style="{StaticResource DataGridStyle}"/>
-
+                    <DataGrid x:Name="DataGrid" AutoGenerateColumns="True" Background="Transparent" Margin="17,259,17,371" Style="{StaticResource DataGridStyle}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,475,0,335">
+                        <Button Content="Предыдущая" Click="PreviousPageData_Click" Style="{StaticResource ButtonStyle}" Height="26"/>
+                        <TextBlock x:Name="PageNumberText_data" Text="Страница 1" VerticalAlignment="Center" Margin="5" Foreground="#FFFFFFFF"/>
+                        <Button Content="Следующая" Click="NextPageData_Click" Margin="5" Style="{StaticResource ButtonStyle}"/>
+                    </StackPanel>
 
                     <TextBlock Text="Создание/обновление записи" 
                          FontSize="13"
@@ -347,6 +351,11 @@
                     <TextBlock Text="формат: HH.MM (24 часа)" FontSize="8"  Margin="50,638,0,188" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
                     <TextBlock Text="формат: HH.MM " FontSize="8"  Margin="62,673,0,153" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
                     <TextBlock Text="формат: HH.MM " FontSize="8"  Margin="352,636,0,190" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
+                    <TextBlock Text="формат: HH.MM (24 часа)" FontSize="8"  Margin="35,92,0,734" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
+                    <TextBlock Text="формат: HH.MM (24 часа)" FontSize="8"  Margin="50,603,0,223" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
+                    <TextBlock Text="формат: HH.MM (24 часа)" FontSize="8"  Margin="37,138,0,688" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
+                    <TextBlock Text="формат: HH.MM " FontSize="8"  Margin="46,183,0,643" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
+                    <TextBlock Text="формат: HH.MM " FontSize="8"  Margin="646,56,0,770" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
 
 
 
