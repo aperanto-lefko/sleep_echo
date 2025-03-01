@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows;
 using sleepApp.Model;
 using Microsoft.EntityFrameworkCore;
+using sleepApp.ExceptionType;
 
 namespace sleepApp.Service
 {
@@ -60,5 +61,68 @@ namespace sleepApp.Service
                 return _mapper.Map<SleepDataDto>(_sleepDataRepository.AddSleepData(newSleepData));
        
         }
+
+        public bool RemoveSleepDataById(int id)
+        {
+            var data = GetSleepDataById(id);
+            _sleepDataRepository.RemoveSleepData(data);
+            return true;
+        }
+
+        public SleepData GetSleepDataById(int id)
+        {
+            return _sleepDataRepository.FindById(id) ??
+                throw new NotFoundException($"Данные с ID: {id} не найдены");
+        }
+
+        public List<SleepDataDto> GetSleepDataWithParameters(int respondentId,
+                                                            double slStartTimeStart,
+                                                            double slStartTimeEnd,
+                                                            double slEndTimeStart,
+                                                            double slEndTimeEnd,
+                                                            double slTotalTimeStart,
+                                                            double slTotalTimeEnd,
+                                                            int slQualityStart,
+                                                            int slQualityEnd,
+                                                            int exerciseStart,
+                                                            int exerciseEnd,
+                                                            int coffeeStart,
+                                                            int coffeeEnd,
+                                                            int screenTimeStart,
+                                                            int screenTimeEnd,
+                                                            double workTimeStart,
+                                                            double workTimeEnd,
+                                                            int productivityStart,
+                                                            int productivityEnd,
+                                                            int moodStart,
+                                                            int moodEnd,
+                                                            int stressStart,
+                                                            int stressEnd)
+        {
+            return _mapper.Map<List<SleepDataDto>>(_sleepDataRepository.GetSleepDataWithParameters(respondentId,
+                                                                    slStartTimeStart,
+                                                                    slStartTimeEnd,
+                                                                    slEndTimeStart,
+                                                                    slEndTimeEnd,
+                                                                    slTotalTimeStart,
+                                                                    slTotalTimeEnd,
+                                                                    slQualityStart,
+                                                                    slQualityEnd,
+                                                                    exerciseStart,
+                                                                    exerciseEnd,
+                                                                    coffeeStart,
+                                                                    coffeeEnd,
+                                                                    screenTimeStart,
+                                                                    screenTimeEnd,
+                                                                    workTimeStart,
+                                                                    workTimeEnd,
+                                                                    productivityStart,
+                                                                    productivityEnd,
+                                                                    moodStart,
+                                                                    moodEnd,
+                                                                    stressStart,
+                                                                    stressEnd));
+        }
+
     }
 }

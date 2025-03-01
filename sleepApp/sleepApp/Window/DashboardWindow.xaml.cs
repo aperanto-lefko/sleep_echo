@@ -76,18 +76,16 @@ namespace sleepApp
                 }
                 else
                 {
-                    RespondentLastNameTextBox.BorderBrush = Brushes.Red;
-                    RespondentLastNameTextBox.BorderThickness = new Thickness(2);
-                    ResetTextBoxBorderAfterDelay(RespondentLastNameTextBox, 700);
-            }
+                    HighlightTextBox(RespondentLastNameTextBox);
+                }
             }
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-       
-                private void AddRespondent_Click(object sender, RoutedEventArgs e)
+
+        private void AddRespondent_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -101,7 +99,7 @@ namespace sleepApp
                 if (newResp != null)
                 {
                     MessageBox.Show($"Добавлен новый респондент {newResp}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                } 
+                }
             }
             catch (ValidationException ex)
             {
@@ -111,15 +109,18 @@ namespace sleepApp
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-           catch (DbUpdateException ex)
+            catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
-           
+            catch (FormatException)
+            {
+                MessageBox.Show("Неправильный формат числа, поле не должно быть пустым", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+
         }
-
-
 
 
         private void DeleteRespondent_Click(object sender, RoutedEventArgs e)
@@ -136,9 +137,7 @@ namespace sleepApp
                 }
                 else
                 {
-                    DeletedRespondentIdTextBox.BorderBrush = Brushes.Red;
-                    DeletedRespondentIdTextBox.BorderThickness = new Thickness(2);
-                    ResetTextBoxBorderAfterDelay(DeletedRespondentIdTextBox, 700);
+                    HighlightTextBox(DeletedRespondentIdTextBox);
                 }
             }
             catch (NotFoundException ex)
@@ -154,34 +153,153 @@ namespace sleepApp
 
         private void GetAllDataButton_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                int respondentId = ParseIntOrNull(RespondentIDTextBox.Text);
+                double slStartTimeStart = ParseDoubleOrNull(SlStartTimeTextBox_start.Text);
+                double slStartTimeEnd = ParseDoubleOrNull(SlStartTimeTextBox_end.Text);
+                double slEndTimeStart = ParseDoubleOrNull(SlEndTimeTextBox_start.Text);
+                double slEndTimeEnd = ParseDoubleOrNull(SlEndTimeTextBox_start_end.Text);
+                double slTotalTimeStart = ParseDoubleOrNull(SlTotalTimeTextBox_start.Text);
+                double slTotalTimeEnd = ParseDoubleOrNull(SlTotalTimeTextBox_end.Text);
+                int slQualityStart = ParseIntOrNull(SlQualityTextBox_start.Text);
+                int slQualityEnd = ParseIntOrNull(SlQualityTextBox_end.Text);
+                int exerciseStart = ParseIntOrNull(ExercciseTextBox_start.Text);
+                int exerciseEnd = ParseIntOrNull(ExercciseTextBox_start_end.Text);
+                int coffeeStart = ParseIntOrNull(CoffeeTextBox_start.Text);
+                int coffeeEnd = ParseIntOrNull(CoffeeTextBox_end.Text);
+                int screenTimeStart = ParseIntOrNull(ScreenTimeTextBox_start.Text);
+                int screenTimeEnd = ParseIntOrNull(ScreenTimeTextBox_end.Text);
+                double workTimeStart = ParseDoubleOrNull(WorkTimeTextBox_start.Text);
+                double workTimeEnd = ParseDoubleOrNull(WorkTimeTextBox_end.Text);
+                int productivityStart = ParseIntOrNull(ProductivityTextBox_start.Text);
+                int productivityEnd = ParseIntOrNull(ProductivityTextBox_end.Text);
+                int moodStart = ParseIntOrNull(MoodTextBox_start.Text);
+                int moodEnd = ParseIntOrNull(MoodTextBox_end.Text);
+                int stressStart = ParseIntOrNull(StressTextBox_start.Text);
+                int stressEnd = ParseIntOrNull(StressTextBox_end.Text);
+            
 
+
+                _currentPage = 1;
+            _allData = _slService.GetSleepDataWithParameters();
+            MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
+            LoadPage(_currentPage); //загружаем первую страницу
+
+        }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Неправильный формат числа, поле не должно быть пустым", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private int ParseIntOrNull(string text)
+        {
+            return string.IsNullOrWhiteSpace(text) ? 0 : int.Parse(text);
+        }
+        private double ParseDoubleOrNull(string text)
+        {
+            return string.IsNullOrWhiteSpace(text) ? 0 : double.Parse(text);
         }
 
         private void CreateDataButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                SleepDataDto newSleepData = _slService.AddSleepData(int.Parse(NewRespondentIDTextBox.Text),
-                                                                       double.Parse(NewSlStartTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture), //чтобы считывать числа с точкой
-                                                                       double.Parse(NewSlEndTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture),
-                                                                       double.Parse(NewSlTotalTimeTextBox.Text),
-                                                                       int.Parse(NewSlQualityTextBox.Text),
-                                                                       int.Parse(NewExercciseTextBox.Text),
-                                                                       int.Parse(NewCoffeeTextBox.Text),
-                                                                       int.Parse(NewScreenTimeTextBox.Text),
-                                                                       double.Parse(NewWorkTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture),
-                                                                       int.Parse(NewProductivityTextBox.Text),
-                                                                       int.Parse(NewMoodTextBox.Text),
-                                                                       int.Parse(NewStressTextBox.Text));
+
+                if (!int.TryParse(NewRespondentIDTextBox.Text, out int respondentId))
+                {
+                    HighlightTextBox(NewRespondentIDTextBox);
+                    return;
+                }
+
+                if (!double.TryParse(NewSlStartTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double slStartTime))
+                {
+                    HighlightTextBox(NewSlStartTimeTextBox);
+                    return;
+                }
+
+                if (!double.TryParse(NewSlEndTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double slEndTime))
+                {
+                    HighlightTextBox(NewSlEndTimeTextBox);
+                    return;
+                }
+
+                if (!double.TryParse(NewSlTotalTimeTextBox.Text, out double slTotalTime))
+                {
+                    HighlightTextBox(NewSlTotalTimeTextBox);
+                    return;
+                }
+
+                if (!int.TryParse(NewSlQualityTextBox.Text, out int slQuality))
+                {
+                    HighlightTextBox(NewSlQualityTextBox);
+                    return;
+                }
+
+                if (!int.TryParse(NewExercciseTextBox.Text, out int exercise))
+                {
+                    HighlightTextBox(NewExercciseTextBox);
+                    return;
+                }
+
+                if (!int.TryParse(NewCoffeeTextBox.Text, out int coffee))
+                {
+                    HighlightTextBox(NewCoffeeTextBox);
+                    return;
+                }
+
+                if (!int.TryParse(NewScreenTimeTextBox.Text, out int screenTime))
+                {
+                    HighlightTextBox(NewScreenTimeTextBox);
+                    return;
+                }
+
+                if (!double.TryParse(NewWorkTimeTextBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double workTime))
+                {
+                    HighlightTextBox(NewWorkTimeTextBox);
+                    return;
+                }
+
+                if (!int.TryParse(NewProductivityTextBox.Text, out int productivity))
+                {
+                    HighlightTextBox(NewProductivityTextBox);
+                    return;
+                }
+
+                if (!int.TryParse(NewMoodTextBox.Text, out int mood))
+                {
+                    HighlightTextBox(NewMoodTextBox);
+                    return;
+                }
+
+                if (!int.TryParse(NewStressTextBox.Text, out int stress))
+                {
+                    HighlightTextBox(NewStressTextBox);
+                    return;
+                }
+
+                // Если все поля прошли валидацию, создаем объект SleepDataDto
+                SleepDataDto newSleepData = _slService.AddSleepData(respondentId,
+                                                                     slStartTime,
+                                                                     slEndTime,
+                                                                     slTotalTime,
+                                                                     slQuality,
+                                                                     exercise,
+                                                                     coffee,
+                                                                     screenTime,
+                                                                     workTime,
+                                                                     productivity,
+                                                                     mood,
+                                                                     stress);
+
                 if (newSleepData != null)
                 {
                     MessageBox.Show($"Добавлена запись {newSleepData}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-
-            }
-            catch (FormatException ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (NotFoundException ex)
             {
@@ -201,6 +319,29 @@ namespace sleepApp
 
         private void DeleteData_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(DeletedDataIdTextBox.Text))
+                {
+                    int id = int.Parse(DeletedDataIdTextBox.Text);
+                    if (_slService.RemoveSleepDataById(id))
+                    {
+                        MessageBox.Show($"Данные с id={id} удалены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                else
+                {
+                    HighlightTextBox(DeletedDataIdTextBox);
+                }
+            }
+            catch (NotFoundException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
         }
         private void FindDataForUpdate_Click(object sender, RoutedEventArgs e)
@@ -262,6 +403,13 @@ namespace sleepApp
             var textBox = sender as TextBox;
             string newText = textBox.Text + e.Text;
             e.Handled = !int.TryParse(newText, out int number) || number < 1 || number > 10;
+        }
+
+        private void HighlightTextBox(TextBox textBox)
+        {
+            textBox.BorderBrush = Brushes.Red;
+            textBox.BorderThickness = new Thickness(2);
+            ResetTextBoxBorderAfterDelay(textBox, 700);
         }
         private void ResetTextBoxBorderAfterDelay(TextBox textBox, int milliSeconds) //сбрасывание цвета через опред.время
         {
