@@ -93,13 +93,25 @@ namespace sleepApp
         {
             try
             {
-                RespondentDto newResp = _rService.AddRespondent(
-                      NewRespondentFirstNameTextBox.Text,
-                      NewRespondentLastNameTextBox.Text,
-                      NewRespondentEmailTextBox.Text,
-                      NewRespondentGenderComboBox.Text,
-                      NewRespondentCountryTextBox.Text,
-                      int.Parse(NewRespondentAgeTextBox.Text));
+                var parsedData = ParseInputRespondentFields();
+                if (parsedData == null)
+                {
+                    return; // Если парсинг не удался, метод уже выделил поле красным(null будет даже если одно из значений null)
+                }
+
+                // Извлекаем данные из кортежа
+                var (firstName,
+                     lastName,
+                     email,
+                     gender,
+                     country,
+                     age) = parsedData.Value;
+                RespondentDto newResp = _rService.AddRespondent( firstName,
+                                                                 lastName,
+                                                                 email,
+                                                                 gender,
+                                                                 country,
+                                                                 age);
                 if (newResp != null)
                 {
                     MessageBox.Show($"Добавлен новый респондент {newResp}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -125,10 +137,45 @@ namespace sleepApp
 
 
         }
-        /*private (string firsName, string lastName, string email, string gender, string country) ParseInputRespondentFields()
+        private (string firsName, string lastName, string email, string gender, string country, int age)? ParseInputRespondentFields()
         {
-           return null;
-        }*/
+           if(string.IsNullOrWhiteSpace(NewRespondentFirstNameTextBox.Text))
+            {
+                HighlightTextBox(NewRespondentFirstNameTextBox);
+                return null;
+            }
+           string firstname = NewRespondentFirstNameTextBox.Text;
+            if (string.IsNullOrWhiteSpace(NewRespondentLastNameTextBox.Text))
+            {
+                HighlightTextBox(NewRespondentLastNameTextBox);
+                return null;
+            }
+            string lastName = NewRespondentLastNameTextBox.Text;
+            if(string.IsNullOrWhiteSpace(NewRespondentEmailTextBox.Text))
+            {
+                HighlightTextBox(NewRespondentEmailTextBox);
+                return null;
+            }
+            string email = NewRespondentEmailTextBox.Text;
+            if(string.IsNullOrEmpty(NewRespondentGenderComboBox.Text))
+            {
+                HighlightTextBox(NewRespondentGenderComboBox);
+                return null;
+            }
+            string gender = NewRespondentGenderComboBox.Text;
+            if(string.IsNullOrWhiteSpace(NewRespondentCountryTextBox.Text))
+            {
+                HighlightTextBox(NewRespondentCountryTextBox);
+                return null;
+            }
+            string country = NewRespondentCountryTextBox.Text;
+            if (!int.TryParse(NewRespondentAgeTextBox.Text, out int age))
+            {
+                HighlightTextBox(NewRespondentAgeTextBox);
+                return null;
+            }
+            return (firstname,lastName,email,gender,country, age);
+        }
         private void FindRespondentForUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -175,7 +222,7 @@ namespace sleepApp
                 if (!string.IsNullOrWhiteSpace(DeletedRespondentIdTextBox.Text))
                 {
                     int id = int.Parse(DeletedRespondentIdTextBox.Text);
-                    MessageBoxResult result = MessageBox.Show($"Удаление респондента  с id {id} повлечет удаление статистических данных него",
+                    MessageBoxResult result = MessageBox.Show($"Удаление респондента  с id {id} повлечет удаление статистических данных на него",
                         "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.OK)
                     {
@@ -620,21 +667,22 @@ namespace sleepApp
             e.Handled = !int.TryParse(newText, out int number) || number < 1 || number > 10;
         }
 
-        private void HighlightTextBox(TextBox textBox)
+        private void HighlightTextBox(Control control)
         {
-            textBox.BorderBrush = Brushes.Red;
-            textBox.BorderThickness = new Thickness(2);
-            ResetTextBoxBorderAfterDelay(textBox, 700);
+            control.BorderBrush = Brushes.Red;
+            control.BorderThickness = new Thickness(2);
+            MessageBox.Show("Необходимо заполнить все поля", "Напоминание", MessageBoxButton.OK, MessageBoxImage.Warning);
+            ResetTextBoxBorderAfterDelay(control, 700);
         }
-        private void ResetTextBoxBorderAfterDelay(TextBox textBox, int milliSeconds) //сбрасывание цвета через опред.время
+        private void ResetTextBoxBorderAfterDelay(Control control, int milliSeconds) //сбрасывание цвета через опред.время
         {
             Task.Delay(milliSeconds).ContinueWith(_ => //создает задачу, которая завершится через указанное количество миллисекунд
             //Это асинхронная операция, которая не блокирует основной поток приложения.
             {
-                textBox.Dispatcher.Invoke(() => // используется для выполнения кода в потоке, который владеет объектом textBox
+                control.Dispatcher.Invoke(() => // используется для выполнения кода в потоке, который владеет объектом textBox
                 {
-                    textBox.BorderBrush = SystemColors.ControlDarkBrush;
-                    textBox.BorderThickness = new Thickness(1);
+                    control.BorderBrush = SystemColors.ControlDarkBrush;
+                    control.BorderThickness = new Thickness(1);
                 });
             });
         }
