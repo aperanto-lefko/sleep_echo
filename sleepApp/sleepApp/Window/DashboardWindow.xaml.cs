@@ -125,8 +125,41 @@ namespace sleepApp
 
 
         }
+        /*private (string firsName, string lastName, string email, string gender, string country) ParseInputRespondentFields()
+        {
+           return null;
+        }*/
         private void FindRespondentForUpdate_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(UpdateRespondentIdTextBox.Text))
+                {
+                    int id = int.Parse(UpdateRespondentIdTextBox.Text);
+                    Respondent resp = _rService.GetRespondentById(id);
+                    NewRespondentFirstNameTextBox.Text = resp.FirstName.ToString();
+                    NewRespondentLastNameTextBox.Text = resp.LastName.ToString();
+                    NewRespondentEmailTextBox.Text = resp.Email.ToString().Trim();
+                    NewRespondentGenderComboBox.SelectedItem = NewRespondentGenderComboBox.Items
+                        .Cast<ComboBoxItem>() //Преобразует элементы ComboBox в тип ComboBoxItem, чтобы можно было работать с их свойствами
+                        .FirstOrDefault(item => item.Content.ToString().Equals(resp.Gender, StringComparison.OrdinalIgnoreCase)); //сравнение без учета регистра
+                    NewRespondentAgeTextBox.Text = resp.Age.ToString().Trim();
+                    NewRespondentCountryTextBox.Text = resp.Country.ToString();
+                   
+                }
+                else
+                {
+                    HighlightTextBox(UpdateRespondentIdTextBox);
+                }
+            }
+            catch (NotFoundException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
         }
         private void RespondentUpdate_Click(object sender, RoutedEventArgs e)
@@ -142,9 +175,17 @@ namespace sleepApp
                 if (!string.IsNullOrWhiteSpace(DeletedRespondentIdTextBox.Text))
                 {
                     int id = int.Parse(DeletedRespondentIdTextBox.Text);
-                    if (_rService.RemoveRespondentById(id))
+                    MessageBoxResult result = MessageBox.Show($"Удаление респондента  с id {id} повлечет удаление статистических данных него",
+                        "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                    if (result == MessageBoxResult.OK)
                     {
-                        MessageBox.Show($"Пользователь с id={id} удален", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        if (_rService.RemoveRespondentById(id))
+                        {
+                            MessageBox.Show($"Респондент с id={id} и данные для него удалены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    } else
+                    {
+                        MessageBox.Show($"Удаление отменено", "Отмена", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 else
@@ -245,7 +286,7 @@ namespace sleepApp
                 var parsedData = ParseInputDataFields();
                 if (parsedData == null)
                 {
-                    return; // Если парсинг не удался, метод уже выделил поле красным
+                    return; // Если парсинг не удался, метод уже выделил поле красным(null будет даже если одно из значений null)
                 }
 
                 // Извлекаем данные из кортежа
@@ -419,6 +460,10 @@ namespace sleepApp
             catch (NotFoundException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (ValidationException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (DbUpdateException ex)
             {
