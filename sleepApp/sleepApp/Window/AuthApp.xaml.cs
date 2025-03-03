@@ -1,19 +1,8 @@
 ﻿using sleepApp.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace sleepApp
@@ -30,35 +19,39 @@ namespace sleepApp
             string login = LoginTextBox.Text; //логин из textBox
             string password = PasswordBox.Visibility == Visibility.Visible ? PasswordBox.Password : VisiblePasswordBox.Text; //пароль из PasswordBox
 
-            
-                using (var context = new AppDbContext(login, password))
+
+            using (var context = new AppDbContext(login, password))
+            {
+                try
                 {
-                    try
+                    // Проверяем подключение к базе данных
+                    bool isConnect = context.Database.CanConnect();
+                    if (isConnect)
                     {
-                        // Проверяем подключение к базе данных
-                        bool isConnect = context.Database.CanConnect();
-                        if (isConnect)
-                        {
-                            // Если подключение успешно, открываем DashboardWindow
-                            DashboardWindow dashBoardWindow = new DashboardWindow(login, password);
-                            dashBoardWindow.Show();
-                            this.Close();
-                        }
-                        else
-                        {
-                            HighlightIfError(LoginTextBox, true);
-                            HighlightIfError(PasswordBox, true);
-                            HighlightIfError(VisiblePasswordBox, true);
-                            MessageBox.Show($"Неверная пара логин/пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+                        // Если подключение успешно, открываем DashboardWindow
+                        DashboardWindow dashBoardWindow = new DashboardWindow(login, password);
+                        dashBoardWindow.Show();
+                        this.Close();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        MessageBox.Show($"Ошибка подключения к базе данных: {ex.Message}","Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        HighlightIfError(LoginTextBox, true);
+                        HighlightIfError(PasswordBox, true);
+                        HighlightIfError(VisiblePasswordBox, true);
+                        MessageBox.Show($"Неверная пара логин/пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
+                catch (DbUpdateException ex)
+                {
+                    MessageBox.Show($"Ошибка подключения к базе данных: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-                      
+        }
+
         private void HighlightIfError(Control control, bool isError) //подсветка в случае ошибки
         {
             control.BorderBrush = isError ? Brushes.Red : SystemColors.ControlDarkBrush; //цвет рамки

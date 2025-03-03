@@ -59,3 +59,6 @@ obj/
 *.suo
 *.sln.docstates
 
+# Игнорировать папку SleepAppInstaller
+SleepAppInstaller/
+

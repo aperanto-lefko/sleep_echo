@@ -1,30 +1,15 @@
 ﻿using sleepApp.Model;
 using sleepApp.Dto;
-using sleepApp.Repository;
 using sleepApp.Service;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using AutoMapper;
 using sleepApp.ExceptionType;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using Npgsql;
-using System.Xml.Linq;
-using static System.Diagnostics.Activity;
-using System.Reflection;
 using ClosedXML.Excel;
 
 namespace sleepApp
@@ -66,6 +51,10 @@ namespace sleepApp
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
 
@@ -96,6 +85,10 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -140,9 +133,9 @@ namespace sleepApp
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
-            catch (FormatException)
+            catch (Exception ex)
             {
-                MessageBox.Show("Неправильный формат числа, поле не должно быть пустым", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
 
@@ -178,6 +171,10 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
 
@@ -247,6 +244,10 @@ namespace sleepApp
             {
                 MessageBox.Show(ex.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
         }
 
@@ -284,6 +285,10 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
@@ -355,9 +360,9 @@ namespace sleepApp
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            catch (FormatException)
+            catch (Exception ex)
             {
-                MessageBox.Show("Неправильный формат числа, поле не должно быть пустым", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private int ParseIntOrNull(string text)
@@ -424,6 +429,10 @@ namespace sleepApp
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
 
         }
@@ -456,6 +465,10 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
@@ -493,6 +506,10 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void DateUpdate_Click(object sender, RoutedEventArgs e)
@@ -580,6 +597,10 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
