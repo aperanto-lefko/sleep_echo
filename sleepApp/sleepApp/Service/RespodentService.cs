@@ -8,10 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Eventing.Reader;
+using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Xml.Linq;
 
 namespace sleepApp.Service
@@ -68,6 +71,29 @@ namespace sleepApp.Service
             _respondentRepository.RemoveRespondent(respondent);
             return true;
         }
+        public bool UpdateRespondent(int id,
+                                     string firstName,
+                                     string lastName,
+                                     string email,
+                                     string gender,
+                                     string country,
+                                     int age)
+        {
+            var respondent = GetRespondentById(id);
+            ValidationTextFields(
+                    firstName,
+                    lastName,
+                    country);
+            UpdateRespondentRequest request = GetRespondentRequest(id,
+                                                                    firstName,
+                                                                    lastName,
+                                                                    email,
+                                                                    gender,
+                                                                    country,
+                                                                    age);
+            Respondent updatedRespondent = _mapper.Map<Respondent>(request);
+            return _respondentRepository.UpdateRespondent(updatedRespondent);
+        }
 
         public Respondent GetRespondentById(int id)
         {
@@ -75,31 +101,48 @@ namespace sleepApp.Service
                 throw new NotFoundException($"Пользователь с ID: {id} не найден");
         }
 
+        private UpdateRespondentRequest GetRespondentRequest(int id,
+                                                     string firstName,
+                                                     string lastName,
+                                                     string email,
+                                                     string gender,
+                                                     string country,
+                                                     int age)
+        {
+            return new UpdateRespondentRequest(id,
+                                               firstName,
+                                               lastName,
+                                               email,
+                                               gender,
+                                               country,
+                                               age);
+
+        }
 
 
 
-
-        public RespondentDto GetNewRespondentDto(string firstName,
+        private RespondentDto GetNewRespondentDto(string firstName,
                                               string lastName,
                                               string email,
                                               string gender,
                                               string country,
                                               int age)
         {
-            
-                ValidationTextFields(
-                    firstName,
-                    lastName,
-                    country);
 
-                return new RespondentDto(firstName,
-                    lastName,
-                    email,
-                    gender,
-                    country,
-                    age);
-         
+            ValidationTextFields(
+                firstName,
+                lastName,
+                country);
+
+            return new RespondentDto(firstName,
+                lastName,
+                email,
+                gender,
+                country,
+                age);
+
         }
+
 
         private void ValidationTextFields(params string[] fields)
         {

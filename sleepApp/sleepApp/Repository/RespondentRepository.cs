@@ -61,6 +61,19 @@ namespace sleepApp.Repository
                 return context.SaveChanges();
             }
         }
+        public bool UpdateRespondent(Respondent resp)
+        {
+            using (var context = new AppDbContext(_login, _password))
+            {
+                var oldRespondent = context.Respondents.Find(resp.Id);
+                if(oldRespondent == null)
+                {
+                    return false;
+                }
+                context.Entry(oldRespondent).CurrentValues.SetValues(resp);
+                return context.SaveChanges() > 0;
+            }
+        }
         public Respondent? FindById(int id)
         {
             using (var context = new AppDbContext(_login, _password))

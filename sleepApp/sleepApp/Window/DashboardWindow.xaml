@@ -404,25 +404,23 @@
                     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30,10,0,0" Grid.Row="1" Width="400" Grid.ColumnSpan="2" >
                         <TextBlock Text="Получение данных в зависимости от:" Style="{StaticResource UnderlinedHeaderTextStyle}"/>
                         <TextBlock Text=" "/>
-                        <TextBlock Text=" - пола" Style="{StaticResource BodyTextStyle}"/>
-                        <TextBlock Text=" - возраста" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - начала времени сна (24-часовой формат)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - окончания времени сна (24-часовой формат)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - общего количества сна (часы)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - самооценки качества сна (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
-                        <TextBlock Text=" - времени, затраченного на спортивные упражнения (минуты)" Style="{StaticResource BodyTextStyle}"/>
+                        <TextBlock Text=" - времени, затраченного на спортивные упражнения (мин)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - количества потребляемого кофеина (мг)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - времени, проведенного за использованием экранов перед сном (минуты)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - общего количества рабочих часов в день (часы)" Style="{StaticResource BodyTextStyle}"/>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="1" Width="400" Grid.Column="1">
                         <TextBlock Text="Предлагаемые данные:"  Style="{StaticResource UnderlinedHeaderTextStyle}"/>
-                        <TextBlock Text=" "/>
                         <TextBlock Text=" - самооценка производительности (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - самооценка настроения (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" - самооценка уровня стресса (шкала от 1 до 10)" Style="{StaticResource BodyTextStyle}"/>
                         <TextBlock Text=" "/>
                         <TextBlock Text="Возможность сохранения новых данных в таблицу"  Style="{StaticResource UnderlinedHeaderTextStyle}"/>
+                        <TextBlock Text=" "/>
                     </StackPanel>
 
                 </Grid>

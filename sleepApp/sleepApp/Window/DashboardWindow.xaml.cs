@@ -24,6 +24,7 @@ using System.Globalization;
 using Npgsql;
 using System.Xml.Linq;
 using static System.Diagnostics.Activity;
+using System.Reflection;
 
 namespace sleepApp
 {
@@ -137,45 +138,7 @@ namespace sleepApp
 
 
         }
-        private (string firsName, string lastName, string email, string gender, string country, int age)? ParseInputRespondentFields()
-        {
-           if(string.IsNullOrWhiteSpace(NewRespondentFirstNameTextBox.Text))
-            {
-                HighlightTextBox(NewRespondentFirstNameTextBox);
-                return null;
-            }
-           string firstname = NewRespondentFirstNameTextBox.Text;
-            if (string.IsNullOrWhiteSpace(NewRespondentLastNameTextBox.Text))
-            {
-                HighlightTextBox(NewRespondentLastNameTextBox);
-                return null;
-            }
-            string lastName = NewRespondentLastNameTextBox.Text;
-            if(string.IsNullOrWhiteSpace(NewRespondentEmailTextBox.Text))
-            {
-                HighlightTextBox(NewRespondentEmailTextBox);
-                return null;
-            }
-            string email = NewRespondentEmailTextBox.Text;
-            if(string.IsNullOrEmpty(NewRespondentGenderComboBox.Text))
-            {
-                HighlightTextBox(NewRespondentGenderComboBox);
-                return null;
-            }
-            string gender = NewRespondentGenderComboBox.Text;
-            if(string.IsNullOrWhiteSpace(NewRespondentCountryTextBox.Text))
-            {
-                HighlightTextBox(NewRespondentCountryTextBox);
-                return null;
-            }
-            string country = NewRespondentCountryTextBox.Text;
-            if (!int.TryParse(NewRespondentAgeTextBox.Text, out int age))
-            {
-                HighlightTextBox(NewRespondentAgeTextBox);
-                return null;
-            }
-            return (firstname,lastName,email,gender,country, age);
-        }
+      
         private void FindRespondentForUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -208,9 +171,72 @@ namespace sleepApp
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+
         }
         private void RespondentUpdate_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(UpdateRespondentIdTextBox.Text))
+                {
+                    int id = int.Parse(UpdateRespondentIdTextBox.Text);
+                    var parsedData = ParseInputRespondentFields();
+                    if (parsedData == null)
+                    {
+                        return;
+                    }
+
+                    var (firstName,
+                         lastName,
+                         email,
+                         gender,
+                         country,
+                         age) = parsedData.Value;
+                    MessageBoxResult result = MessageBox.Show($"Обновить данные для респондента с id:{id}:\n" +
+                        $"имя: {firstName},\n" +
+                        $"фамилия: {lastName},\n" +
+                        $"email: {email},\n" +
+                        $"gender: {gender},\n" +
+                        $"age: {age}?", "Обновление данных", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        if (_rService.UpdateRespondent(id,
+                                                    firstName,
+                                                    lastName,
+                                                    email,
+                                                    gender,
+                                                    country,
+                                                    age))
+                        {
+                            MessageBox.Show($"Данные для респондента id={id} успешно обновлены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Данные не обновлены", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    } else
+                    {
+                        return;
+                    }
+                }
+
+                else
+                {
+                    HighlightTextBox(UpdateRespondentIdTextBox);
+                }
+            }
+            catch (NotFoundException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (ValidationException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
         }
 
@@ -483,27 +509,47 @@ namespace sleepApp
                     productivity,
                     mood,
                     stress) = parsedData.Value;
-
-                if (_slService.UpdateSleepData(dataId,
-                                                                     respondentId,
-                                                                     slStartTime,
-                                                                     slEndTime,
-                                                                     slTotalTime,
-                                                                     slQuality,
-                                                                     exercise,
-                                                                     coffee,
-                                                                     screenTime,
-                                                                     workTime,
-                                                                     productivity,
-                                                                     mood,
-                                                                     stress))
+                MessageBoxResult result = MessageBox.Show($"Обновить данные с id {dataId} для респондента с id:{respondentId}:\n" +
+                       $"Время отхода ко сну: {slStartTime},\n" +
+                       $"Время пробуждения: {slEndTime},\n" +
+                       $"Общее время сна: {slTotalTime},\n" +
+                       $"Качество сна: {slQuality},\n" +
+                       $"Время для спорта: {exercise},\n" +
+                       $"Кофеин: {coffee},\n" +
+                       $"Время у экрана: {screenTime},\n" +
+                       $"Рабочее время: {workTime},\n" +
+                       $"Производительность: {productivity},\n" +
+                       $"Настроение: {mood},\n" +
+                       $"Уровень стресса: {stress}?", "Обновление данных", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.OK)
                 {
-                  
+                    if (_slService.UpdateSleepData(dataId,
+                                                                         respondentId,
+                                                                         slStartTime,
+                                                                         slEndTime,
+                                                                         slTotalTime,
+                                                                         slQuality,
+                                                                         exercise,
+                                                                         coffee,
+                                                                         screenTime,
+                                                                         workTime,
+                                                                         productivity,
+                                                                         mood,
+                                                                         stress))
+                    {
+
                         MessageBox.Show($"Данные для записи id={dataId} успешно обновлены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                    } else { 
-                       MessageBox.Show("Данные не обновлены", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Данные не обновлены", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
+                else
+                {
+                    return;
+                }
+            }
             catch (NotFoundException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -598,7 +644,45 @@ namespace sleepApp
             return (respondentId, slStartTime, slEndTime, slTotalTime, slQuality, exercise, coffee, screenTime, workTime, productivity, mood, stress);
         }
 
-
+        private (string firsName, string lastName, string email, string gender, string country, int age)? ParseInputRespondentFields()
+        {
+            if (string.IsNullOrWhiteSpace(NewRespondentFirstNameTextBox.Text))
+            {
+                HighlightTextBox(NewRespondentFirstNameTextBox);
+                return null;
+            }
+            string firstname = NewRespondentFirstNameTextBox.Text;
+            if (string.IsNullOrWhiteSpace(NewRespondentLastNameTextBox.Text))
+            {
+                HighlightTextBox(NewRespondentLastNameTextBox);
+                return null;
+            }
+            string lastName = NewRespondentLastNameTextBox.Text;
+            if (string.IsNullOrWhiteSpace(NewRespondentEmailTextBox.Text))
+            {
+                HighlightTextBox(NewRespondentEmailTextBox);
+                return null;
+            }
+            string email = NewRespondentEmailTextBox.Text;
+            if (string.IsNullOrEmpty(NewRespondentGenderComboBox.Text))
+            {
+                HighlightTextBox(NewRespondentGenderComboBox);
+                return null;
+            }
+            string gender = NewRespondentGenderComboBox.Text;
+            if (string.IsNullOrWhiteSpace(NewRespondentCountryTextBox.Text))
+            {
+                HighlightTextBox(NewRespondentCountryTextBox);
+                return null;
+            }
+            string country = NewRespondentCountryTextBox.Text;
+            if (!int.TryParse(NewRespondentAgeTextBox.Text, out int age))
+            {
+                HighlightTextBox(NewRespondentAgeTextBox);
+                return null;
+            }
+            return (firstname, lastName, email, gender, country, age);
+        }
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
         {
             PreviousPage(ref _currentRespondentPage, _allRespondents, UserDataGrid, PageNumberText);
@@ -671,7 +755,7 @@ namespace sleepApp
         {
             control.BorderBrush = Brushes.Red;
             control.BorderThickness = new Thickness(2);
-            MessageBox.Show("Необходимо заполнить все поля", "Напоминание", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Необходимо заполнить все поля", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
             ResetTextBoxBorderAfterDelay(control, 700);
         }
         private void ResetTextBoxBorderAfterDelay(Control control, int milliSeconds) //сбрасывание цвета через опред.время

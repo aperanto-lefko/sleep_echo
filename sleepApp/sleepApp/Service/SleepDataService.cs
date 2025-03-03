@@ -76,7 +76,7 @@ namespace sleepApp.Service
                                       int stressLevel)
         {
             SleepData oldData = GetSleepDataById(dataId);
-            UpdateSleepDataRequest request = GetNewDataRequest(dataId,
+            UpdateSleepDataRequest request = GetDataRequest(dataId,
                                                              oldData.Date, //оставляем дату неизменной
                                                              personId,
                                                              sleepStartTime,
@@ -157,7 +157,7 @@ namespace sleepApp.Service
                                                                     stressStart,
                                                                     stressEnd));
         }
-        private UpdateSleepDataRequest GetNewDataRequest(int dataId,
+        private UpdateSleepDataRequest GetDataRequest(int dataId,
                                       DateOnly date,
                                       int personId,
                                       double sleepStartTime,
