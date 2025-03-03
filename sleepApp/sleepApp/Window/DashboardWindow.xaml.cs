@@ -25,6 +25,7 @@ using Npgsql;
 using System.Xml.Linq;
 using static System.Diagnostics.Activity;
 using System.Reflection;
+using ClosedXML.Excel;
 
 namespace sleepApp
 {
@@ -58,6 +59,7 @@ namespace sleepApp
                 _allRespondents = _rService.GetAllRespondents();
                 MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
                 LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText); //загружаем первую страницу
+
             }
             catch (DbUpdateException ex)
             {
@@ -75,9 +77,16 @@ namespace sleepApp
                 if (!string.IsNullOrWhiteSpace(name))
                 {
                     _allRespondents = _rService.GetRespondentByLastName(name);
-                    MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                    _currentRespondentPage = 1;
-                    LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText);
+                    if (_allRespondents.Count == 0)
+                    {
+                        MessageBox.Show($"Респондентов с такими параметрами не найдено", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        _currentRespondentPage = 1;
+                        LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText);
+                    }
                 }
                 else
                 {
@@ -107,7 +116,7 @@ namespace sleepApp
                      gender,
                      country,
                      age) = parsedData.Value;
-                RespondentDto newResp = _rService.AddRespondent( firstName,
+                RespondentDto newResp = _rService.AddRespondent(firstName,
                                                                  lastName,
                                                                  email,
                                                                  gender,
@@ -138,7 +147,7 @@ namespace sleepApp
 
 
         }
-      
+
         private void FindRespondentForUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -155,7 +164,7 @@ namespace sleepApp
                         .FirstOrDefault(item => item.Content.ToString().Equals(resp.Gender, StringComparison.OrdinalIgnoreCase)); //сравнение без учета регистра
                     NewRespondentAgeTextBox.Text = resp.Age.ToString().Trim();
                     NewRespondentCountryTextBox.Text = resp.Country.ToString();
-                   
+
                 }
                 else
                 {
@@ -214,7 +223,8 @@ namespace sleepApp
                         {
                             MessageBox.Show("Данные не обновлены", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
-                    } else
+                    }
+                    else
                     {
                         return;
                     }
@@ -256,7 +266,8 @@ namespace sleepApp
                         {
                             MessageBox.Show($"Респондент с id={id} и данные для него удалены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
-                    } else
+                    }
+                    else
                     {
                         MessageBox.Show($"Удаление отменено", "Отмена", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
@@ -330,8 +341,15 @@ namespace sleepApp
                                                                       moodEnd,
                                                                       stressStart,
                                                                       stressEnd);
-                MessageBox.Show($"Загружено {_allSleepData.Count} записей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                LoadPage(_allSleepData, _currenSleepDataPage, DataGrid, PageNumberText_data);
+                if (_allSleepData.Count == 0)
+                {
+                    MessageBox.Show($"Данные с такими параметрами не найдены", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show($"Загружено {_allSleepData.Count} записей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    LoadPage(_allSleepData, _currenSleepDataPage, DataGrid, PageNumberText_data);
+                }
             }
             catch (DbUpdateException ex)
             {
@@ -420,7 +438,8 @@ namespace sleepApp
                     if (_slService.RemoveSleepDataById(id))
                     {
                         MessageBox.Show($"Данные с id={id} удалены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                    } else
+                    }
+                    else
                     {
                         MessageBox.Show("Данные не удалены", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
@@ -563,7 +582,7 @@ namespace sleepApp
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        
+
 
         private (int respondentId, double slStartTime, double slEndTime, double slTotalTime, int slQuality,
             int exercise, int coffee, int screenTime, double workTime, int productivity, int mood, int stress)? ParseInputDataFields()
@@ -770,6 +789,75 @@ namespace sleepApp
                 });
             });
         }
+        private void ExportDataButton_Click(object sender, RoutedEventArgs e)
+        {
+            ExportData(DataGrid, _allSleepData);
+        }
 
+        private void ExportData(DataGrid dataGrid, IEnumerable<object> dataList)
+        {
+            if (dataGrid.Items.Count == 0)
+            {
+                MessageBox.Show("Нет данных для экспорта.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            var saveDialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "Excel files (*.xlsx)|*.xlsx",
+                FileName = "Data.xlsx"
+            };
+            if (saveDialog.ShowDialog() == true)
+            {
+                ExportDataToExcel(dataList, saveDialog.FileName, DataGrid);
+            }
+        }
+        private void ExportDataToExcel(IEnumerable<object> dataList, string filePath, DataGrid dataGrid)
+        {
+            // Создаем новую книгу Excel с помощью библиотеки ClosedXML
+            using (var workBook = new XLWorkbook())
+            {
+                // Добавляем новый лист в книгу Excel 
+                var worksheet = workBook.Worksheets.Add("Data");
+
+                //Заголовки столбцов
+                for (int i = 0; i < dataGrid.Columns.Count; i++)
+                {
+                    worksheet.Cell(1, i + 1).Value = DataGrid.Columns[i].Header.ToString();
+                }
+
+                //Запись строк
+                int row = 2;
+                foreach(var item in dataList)
+                {
+                    // Приводим текущий элемент DataGrid к типу SleepData
+                    var data = item as SleepDataDto;
+                    if (data != null)
+                    {
+                        // в столбец 1, строку i+2 (первая строка занята заголовками)
+                        worksheet.Cell(row, 1).Value = data.Id;
+                        worksheet.Cell(row, 2).Value = data.Date.ToString();
+                        worksheet.Cell(row, 3).Value = data.PersonId;
+                        worksheet.Cell(row, 4).Value = data.SleepStartTime;
+                        worksheet.Cell(row, 5).Value = data.SleepEndTime;
+                        worksheet.Cell(row, 6).Value = data.TotalSleepHours;
+                        worksheet.Cell(row, 7).Value = data.SleepQuality;
+                        worksheet.Cell(row, 8).Value = data.ExerciseMinutes;
+                        worksheet.Cell(row, 9).Value = data.CaffeineIntakeMg;
+                        worksheet.Cell(row, 10).Value = data.ScreenTime;
+                        worksheet.Cell(row, 11).Value = data.WorkHours;
+                        worksheet.Cell(row, 12).Value = data.ProductivityScore;
+                        worksheet.Cell(row, 13).Value = data.MoodScore;
+                        worksheet.Cell(row, 14).Value = data.StressLevel;
+                        row++;
+                    }
+                   
+                  
+                }
+                worksheet.Columns().AdjustToContents(); //выравнивание столбцов по содержимому
+                workBook.SaveAs(filePath);
+            }
+            MessageBox.Show("Данные успешно экспортированы в Excel", "Экспорт завершен", MessageBoxButton.OK, MessageBoxImage.Information);
+
+        }
     }
 }
