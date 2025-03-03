@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using ClosedXML.Excel;
+using NLog;
 
 namespace sleepApp
 {
@@ -25,6 +26,7 @@ namespace sleepApp
         private int _pageSize = 10; //количество записей на странице
         private readonly RespodentService _rService;
         private readonly SleepDataService _slService;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 
 
@@ -33,7 +35,7 @@ namespace sleepApp
             InitializeComponent();
             _rService = new RespodentService(login, password);
             _slService = new SleepDataService(login, password);
-        }
+         }
 
 
         private void GetAllUsersButton_Click(object sender, RoutedEventArgs e) //поиск всех пользователей
@@ -43,17 +45,19 @@ namespace sleepApp
                 _currentRespondentPage = 1;
                 _allRespondents = _rService.GetAllRespondents();
                 MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
+                Logger.Info($"Загружено {_allRespondents.Count} пользователей");
                 LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText); //загружаем первую страницу
 
             }
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
         }
 
@@ -85,10 +89,12 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
         }
 
@@ -131,11 +137,13 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
 
 
@@ -171,10 +179,12 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
 
 
@@ -239,6 +249,7 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
             }
             catch (ValidationException ex)
             {
@@ -247,6 +258,7 @@ namespace sleepApp
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
 
         }
@@ -285,10 +297,12 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
 
         }
@@ -359,10 +373,12 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
         }
         private int ParseIntOrNull(string text)
@@ -428,10 +444,12 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
 
 
@@ -465,10 +483,12 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
 
         }
@@ -506,10 +526,12 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
         }
         private void DateUpdate_Click(object sender, RoutedEventArgs e)
@@ -597,10 +619,12 @@ namespace sleepApp
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
         }
 
@@ -878,6 +902,7 @@ namespace sleepApp
                 workBook.SaveAs(filePath);
             }
             MessageBox.Show("Данные успешно экспортированы в Excel", "Экспорт завершен", MessageBoxButton.OK, MessageBoxImage.Information);
+            Logger.Info($"Выгрузка данных в excel");
 
         }
     }

@@ -62,3 +62,9 @@ obj/
 # Игнорировать папку SleepAppInstaller
 SleepAppInstaller/
 
+# Игнорировать файл docker-compose.yml
+docker-compose.yml
+
+# Игнорировать файл с логами
+/logs
+
