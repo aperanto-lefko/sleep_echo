@@ -1,17 +1,8 @@
 ﻿using AutoMapper;
 using sleepApp.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using sleepApp.Dto;
 
-
-using System.ComponentModel.DataAnnotations;
-using System.Windows;
 using sleepApp.Model;
-using Microsoft.EntityFrameworkCore;
 using sleepApp.ExceptionType;
 
 namespace sleepApp.Service
@@ -22,12 +13,12 @@ namespace sleepApp.Service
         private readonly RespodentService _rService;
         private readonly IMapper _mapper;
 
-        public SleepDataService(string login, string password)
+        public SleepDataService(SleepDataRepository sleepDataRepository, RespodentService respondentService)
         {
-            _sleepDataRepository = new SleepDataRepository(login, password);
+            _sleepDataRepository = sleepDataRepository;
             var config = new MapperConfiguration(config => config.AddProfile<MappingProfile>());
             _mapper = config.CreateMapper();
-            _rService = new RespodentService(login, password);
+            _rService = respondentService;
         }
 
         public SleepDataDto AddSleepData(int personId,

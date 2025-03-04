@@ -13,73 +13,53 @@ namespace sleepApp.Repository
 {
     public class RespondentRepository
     {
-        private readonly string _login;
-        private readonly string _password;
+        private readonly AppDbContext _context;
 
-        public RespondentRepository(string login, string password)
+
+        public RespondentRepository(AppDbContext context)
         {
-            _login = login;
-            _password = password;
+            _context = context;
         }
 
         public List<Respondent> GetAllRespondents()
         {
-            
-                using (var context = new AppDbContext(_login, _password))
-                {
-                    var respondents = context.Respondents.OrderBy(r => r.Id).ToList();
-                    return respondents;
-                }
-            
+            var respondents = _context.Respondents.OrderBy(r => r.Id).ToList();
+            return respondents;
         }
 
         public List<Respondent> GetRespondentByLastName(string lastName)
         {
-            using (var context = new AppDbContext(_login, _password))
-            {
-                var respondents = context.Respondents
-                    .Where(r => r.LastName.ToLower().StartsWith(lastName.ToLower()))
-                    .ToList();
-                return respondents;
-            }
+            var respondents = _context.Respondents
+                             .Where(r => r.LastName.ToLower().StartsWith(lastName.ToLower()))
+                             .ToList();
+            return respondents;
         }
-       
+
         public Respondent AddRespondent(Respondent respondent)
         {
-            using (var context = new AppDbContext(_login, _password))
-            {
-                context.Respondents.Add(respondent);
-                context.SaveChanges();
-                return respondent;
-            }
+            _context.Respondents.Add(respondent);
+            _context.SaveChanges();
+            return respondent;
         }
         public int RemoveRespondent(Respondent respondent)
         {
-            using (var context = new AppDbContext(_login, _password))
-            {
-                context.Respondents.Remove(respondent);
-                return context.SaveChanges();
-            }
+            _context.Respondents.Remove(respondent);
+            return _context.SaveChanges();
         }
         public bool UpdateRespondent(Respondent resp)
         {
-            using (var context = new AppDbContext(_login, _password))
+            var oldRespondent = _context.Respondents.Find(resp.Id);
+            if (oldRespondent == null)
             {
-                var oldRespondent = context.Respondents.Find(resp.Id);
-                if(oldRespondent == null)
-                {
-                    return false;
-                }
-                context.Entry(oldRespondent).CurrentValues.SetValues(resp);
-                return context.SaveChanges() > 0;
+                return false;
             }
+            _context.Entry(oldRespondent).CurrentValues.SetValues(resp);
+            return _context.SaveChanges() > 0;
         }
         public Respondent? FindById(int id)
         {
-            using (var context = new AppDbContext(_login, _password))
-            {
-                return context.Respondents.Find(id);
-            }
+            return _context.Respondents.Find(id);
+
         }
     }
 }
