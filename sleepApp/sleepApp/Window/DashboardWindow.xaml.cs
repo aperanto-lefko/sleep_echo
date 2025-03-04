@@ -45,7 +45,7 @@ namespace sleepApp
                 _currentRespondentPage = 1;
                 _allRespondents = _rService.GetAllRespondents();
                 MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
-                Logger.Info($"Загружено {_allRespondents.Count} пользователей");
+                Logger.Info($"Успешная загрузка данных.Загружено {_allRespondents.Count} пользователей");
                 LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText); //загружаем первую страницу
 
             }
@@ -77,6 +77,7 @@ namespace sleepApp
                     else
                     {
                         MessageBox.Show($"Найдено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Logger.Info($"Успешная загрузка данных.Загружено {_allRespondents.Count} пользователей");
                         _currentRespondentPage = 1;
                         LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText);
                     }
@@ -124,15 +125,18 @@ namespace sleepApp
                 if (newResp != null)
                 {
                     MessageBox.Show($"Добавлен новый респондент {newResp}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Logger.Info($"Добавление нового респондента {newResp}");
                 }
             }
             catch (ValidationException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка валидации: {ex.InnerException}");
             }
             catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка валидации: {ex.InnerException}");
             }
             catch (DbUpdateException ex)
             {
@@ -175,6 +179,7 @@ namespace sleepApp
             catch (NotFoundException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Данные не найдены: {ex.InnerException}");
             }
             catch (DbUpdateException ex)
             {
@@ -225,6 +230,7 @@ namespace sleepApp
                                                     age))
                         {
                             MessageBox.Show($"Данные для респондента id={id} успешно обновлены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                            Logger.Info($"Обновление данных для респондента  с id {id} успешно");
                         }
                         else
                         {
@@ -245,6 +251,7 @@ namespace sleepApp
             catch (NotFoundException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Данные не найдены: {ex.InnerException}");
             }
             catch (DbUpdateException ex)
             {
@@ -254,6 +261,7 @@ namespace sleepApp
             catch (ValidationException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка валидации: {ex.InnerException}");
             }
             catch (Exception ex)
             {
@@ -278,6 +286,7 @@ namespace sleepApp
                         if (_rService.RemoveRespondentById(id))
                         {
                             MessageBox.Show($"Респондент с id={id} и данные для него удалены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                            Logger.Info($"Удаление респондента с id {id} успешно");
                         }
                     }
                     else
@@ -293,6 +302,7 @@ namespace sleepApp
             catch (NotFoundException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Данные не найдены: {ex.InnerException}");
             }
             catch (DbUpdateException ex)
             {
@@ -367,6 +377,7 @@ namespace sleepApp
                 else
                 {
                     MessageBox.Show($"Загружено {_allSleepData.Count} записей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Logger.Info($"Успешная загрузка данных.Загружено {_allSleepData.Count} записей");
                     LoadPage(_allSleepData, _currenSleepDataPage, DataGrid, PageNumberText_data);
                 }
             }
@@ -431,15 +442,18 @@ namespace sleepApp
                 if (newSleepData != null)
                 {
                     MessageBox.Show($"Добавлена запись {newSleepData}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Logger.Info($"Успешное добавление новой записи {newSleepData.Id}");
                 }
             }
             catch (NotFoundException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Данные не найдены: {ex.InnerException}");
             }
             catch (ValidationException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка валидации: {ex.InnerException}");
             }
             catch (DbUpdateException ex)
             {
@@ -465,6 +479,7 @@ namespace sleepApp
                     if (_slService.RemoveSleepDataById(id))
                     {
                         MessageBox.Show($"Данные с id={id} удалены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Logger.Info($"Успешное удаление записи {id}");
                     }
                     else
                     {
@@ -479,6 +494,7 @@ namespace sleepApp
             catch (NotFoundException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Данные не найдены: {ex.InnerException}");
             }
             catch (DbUpdateException ex)
             {
@@ -500,6 +516,7 @@ namespace sleepApp
                 {
                     int id = int.Parse(UpdatedDataIdTextBox.Text);
                     SleepData data = _slService.GetSleepDataById(id);
+                    Logger.Info($"Поиск данных по id {id}");
                     NewRespondentIDTextBox.Text = data.PersonId.ToString().Trim();
                     NewSlStartTimeTextBox.Text = data.SleepStartTime.ToString().Trim().Replace(",", ".");
                     NewSlEndTimeTextBox.Text = data.SleepEndTime.ToString().Trim().Replace(",", ".");
@@ -522,6 +539,7 @@ namespace sleepApp
             catch (NotFoundException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Данные не найдены: {ex.InnerException}");
             }
             catch (DbUpdateException ex)
             {
@@ -597,10 +615,12 @@ namespace sleepApp
                     {
 
                         MessageBox.Show($"Данные для записи id={dataId} успешно обновлены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Logger.Info($"Успешное обновление записи {dataId}");
                     }
                     else
                     {
                         MessageBox.Show("Данные не обновлены", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Logger.Info($"Данные не обновлены {dataId}");
                     }
                 }
                 else
@@ -611,10 +631,12 @@ namespace sleepApp
             catch (NotFoundException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Данные не найдены: {ex.InnerException}");
             }
             catch (ValidationException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.Info($"Ошибка валидации: {ex.InnerException}");
             }
             catch (DbUpdateException ex)
             {
