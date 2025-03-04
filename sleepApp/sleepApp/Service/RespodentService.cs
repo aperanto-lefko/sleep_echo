@@ -1,21 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using sleepApp.Dto;
 using sleepApp.ExceptionType;
 using sleepApp.Model;
 using sleepApp.Repository;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Eventing.Reader;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Xml.Linq;
+
 
 namespace sleepApp.Service
 {
@@ -24,9 +12,9 @@ namespace sleepApp.Service
         private readonly RespondentRepository _respondentRepository;
         private readonly IMapper _mapper;
 
-        public RespodentService(string login, string password)
+        public RespodentService(RespondentRepository respondentRepository)
         {
-            _respondentRepository = new RespondentRepository(login, password);
+            _respondentRepository = respondentRepository;
             var config = new MapperConfiguration(config => config.AddProfile<MappingProfile>());
             _mapper = config.CreateMapper();
         }

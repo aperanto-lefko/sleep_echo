@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
+using sleepApp.ServiceProvider;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace sleepApp
@@ -28,8 +30,10 @@ namespace sleepApp
                     bool isConnect = context.Database.CanConnect();
                     if (isConnect)
                     {
+                        //Настраиваем DI контейнер с полученными данными
+                        var serviceProvider = ServiceProviderFactory.ConfigureServices(login, password);
                         // Если подключение успешно, открываем DashboardWindow
-                        DashboardWindow dashBoardWindow = new DashboardWindow(login, password);
+                        DashboardWindow dashBoardWindow = serviceProvider.GetRequiredService<DashboardWindow>(); //получение 
                         dashBoardWindow.Show();
                         this.Close();
                     }

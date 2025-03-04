@@ -30,11 +30,11 @@ namespace sleepApp
 
 
 
-        public DashboardWindow(string login, string password)
+        public DashboardWindow(RespodentService respondentService, SleepDataService sleepDataService)
         {
             InitializeComponent();
-            _rService = new RespodentService(login, password);
-            _slService = new SleepDataService(login, password);
+            _rService = respondentService;
+            _slService = sleepDataService;
          }
 
 
@@ -73,6 +73,7 @@ namespace sleepApp
                     if (_allRespondents.Count == 0)
                     {
                         MessageBox.Show($"Респондентов с такими параметрами не найдено", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                        UserDataGrid.ItemsSource = null;
                     }
                     else
                     {
@@ -373,6 +374,7 @@ namespace sleepApp
                 if (_allSleepData.Count == 0)
                 {
                     MessageBox.Show($"Данные с такими параметрами не найдены", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                    DataGrid.ItemsSource = null;
                 }
                 else
                 {
