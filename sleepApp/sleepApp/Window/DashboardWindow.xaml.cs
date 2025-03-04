@@ -13,6 +13,7 @@ using System.Globalization;
 using ClosedXML.Excel;
 using NLog;
 
+
 namespace sleepApp
 {
 
@@ -650,6 +651,12 @@ namespace sleepApp
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
+        }
+
+        private void GraphButton_Click(object sender, RoutedEventArgs e)
+        {
+            var graphWindow = new GraphWindow(_allSleepData);
+            graphWindow.Show();
         }
 
 
