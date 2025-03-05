@@ -26,9 +26,14 @@ namespace sleepApp
 
             XAxisCombobox.ItemsSource = new List<string>
             {
+                "Время отхода ко сну HH.MM",
+                "Время пробуждения HH.MM",
+                "Общее время сна HH.MM",
+                "Качество сна (1-10)",
+                "Время для спорта (минуты)",
                 "Кофеин, мг",
-                "Рабочее время (часы)",
-                "Качество сна (1-10)"
+                "Время у экрана (минуты)",
+                "Рабочее время HH.MM"
             };
             YAxisCombobox.ItemsSource = new List<string>
             {
@@ -37,22 +42,14 @@ namespace sleepApp
                 "Продуктивность (1-10)"
             };
 
-          }
+        }
 
         private async void UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
 
             try
             {
-
-
-                // Проверяем, находимся ли мы в основном потоке
-                if (!Dispatcher.CheckAccess())
-                {
-                    Dispatcher.Invoke(UpdateGraph_Click, sender, e);
-                    return;
-                }
-
+             
                 if (XAxisCombobox.SelectedItem == null || YAxisCombobox.SelectedItem == null)
                 {
                     return;
@@ -82,23 +79,23 @@ namespace sleepApp
                 List<double> xValues = null;
                 List<double> yValues = null;
 
-              
-                    xValues = GetXValues(xAxisParam);
-                    yValues = GetYValues(yAxisParam);
+
+                xValues = GetXValues(xAxisParam);
+                yValues = GetYValues(yAxisParam);
 
 
-                    if (xValues == null || yValues == null || xValues.Count == 0 || yValues.Count == 0)
-                    {
-                        MessageBox.Show("Нет данных для отображения.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return;
-                    }
+                if (xValues == null || yValues == null || xValues.Count == 0 || yValues.Count == 0)
+                {
+                    MessageBox.Show("Нет данных для отображения.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                    // Упорядочиваем данные по X
-                    var combined = xValues.Zip(yValues, (x, y) => new { X = x, Y = y }).OrderBy(point => point.X).ToList();
-                    xValues = combined.Select(point => point.X).ToList();
-                    yValues = combined.Select(point => point.Y).ToList();
-                
-                
+                // Упорядочиваем данные по X
+                var combined = xValues.Zip(yValues, (x, y) => new { X = x, Y = y }).OrderBy(point => point.X).ToList();
+                xValues = combined.Select(point => point.X).ToList();
+                yValues = combined.Select(point => point.Y).ToList();
+
+
                 // Создаем новую серию
                 var lineSeries = new LineSeries
                 {
@@ -125,10 +122,10 @@ namespace sleepApp
                 DataChart.AxisX.Add(new Axis
                 {
                     Title = xAxisParam,
-                    LabelFormatter = value => value.ToString("N2"), // Форматирование значений
+                    LabelFormatter = value => value.ToString("N2"), // Форматирование значений Добавляет разделитель тысяч (например, 1,000 вместо 1000). Округляет число до 2 знаков после запятой.
                     MinValue = xValues.Min(), // Минимальное значение на оси X
                     MaxValue = xValues.Max(), // Максимальное значение на оси X
-                    Separator = new Separator { Step = 50 } // Шаг между значениями (настройте по необходимости)
+                    Separator = new Separator { Step = GetStepForAxis(xAxisParam) }
                 });
 
                 DataChart.AxisY.Clear();
@@ -136,9 +133,9 @@ namespace sleepApp
                 {
                     Title = yAxisParam,
                     LabelFormatter = value => value.ToString("N2"), // Форматирование значений
-                    MinValue = yValues.Min(), // Минимальное значение на оси Y
-                    MaxValue = yValues.Max(), // Максимальное значение на оси Y
-                    Separator = new Separator { Step = 1 } // Шаг между значениями (настройте по необходимости)
+                    MinValue = yValues.Min(), 
+                    MaxValue = yValues.Max(), 
+                    Separator = new Separator { Step = 1 } // Шаг между значениями 
                 });
             }
             catch (Exception ex)
@@ -146,16 +143,38 @@ namespace sleepApp
                 MessageBox.Show($"Ошибка при обновлении графика: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private double GetStepForAxis(string xAxisParam)
+        {
+            switch (xAxisParam)
+            {
+                case "Время отхода ко сну HH.MM": return 1;
+                case "Время пробуждения HH.MM": return 1;
+                case "Общее время сна HH.MM": return 1;
+                case "Рабочее время HH.MM": return 1;
+                case "Качество сна (1-10)": return 1;
+                case "Время для спорта (минуты)": return 10;
+                case "Кофеин, мг": return 20;
+                case "Время у экрана (минуты)": return 5;
+                default: return 5;
+            }
+        }
         // Метод для получения значений по оси X
         private List<double> GetXValues(string xAxisParam)
         {
             switch (xAxisParam)
             {
-                case "Кофеин, мг": return _sleepDataList.Select(x => (double)x.CaffeineIntakeMg).ToList();
-                case "Рабочее время (часы)": return _sleepDataList.Select(x => x.WorkHours).ToList();
+                case "Время отхода ко сну HH.MM": return _sleepDataList.Select(x => x.SleepStartTime).ToList();
+                case "Время пробуждения HH.MM": return _sleepDataList.Select(x => x.SleepEndTime).ToList();
+                case "Общее время сна HH.MM": return _sleepDataList.Select(x => x.TotalSleepHours).ToList();
                 case "Качество сна (1-10)": return _sleepDataList.Select(x => (double)x.SleepQuality).ToList();
+                case "Время для спорта (минуты)": return _sleepDataList.Select(x => (double)x.ExerciseMinutes).ToList();
+                case "Кофеин, мг": return _sleepDataList.Select(x => (double)x.CaffeineIntakeMg).ToList();
                 case "Время у экрана (минуты)": return _sleepDataList.Select(x => (double)x.ScreenTime).ToList();
+                case "Рабочее время HH.MM": return _sleepDataList.Select(x => x.WorkHours).ToList();
+
                 default: return new List<double>();
+
             }
         }
         private List<double> GetYValues(string yAxisParam)

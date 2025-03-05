@@ -375,7 +375,7 @@
                     <TextBlock Text="формат: HH.MM " FontSize="8"  Margin="46,183,0,643" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
                     <TextBlock Text="формат: HH.MM " FontSize="8"  Margin="646,56,0,770" HorizontalAlignment="Left" Width="Auto" Height="20.2"/>
                     <Button Content="Выгрузить в EXCEL" Click="ExportDataButton_Click" Margin="812,480,22,340" Style="{StaticResource ButtonStyle}" Height="26"/>
-                    <Button Content="Построить графики" Click="GraphButton_Click" Margin="25,480,809,340" Style="{StaticResource ButtonStyle}" Height="26"/>
+                    <Button Content="Построить график" Click="GraphButton_Click" Margin="25,480,809,340" Style="{StaticResource ButtonStyle}" Height="26"/>
 
 
 
