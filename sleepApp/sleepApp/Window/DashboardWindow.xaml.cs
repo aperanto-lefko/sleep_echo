@@ -23,7 +23,7 @@ namespace sleepApp
         private int _currentRespondentPage = 1; //текущая страница для respondent
         private int _currenSleepDataPage = 1;
         private List<Respondent> _allRespondents;
-        private List<SleepDataDto> _allSleepData;
+        public List<SleepDataDto> _allSleepData {  get; private set; }
         private int _pageSize = 10; //количество записей на странице
         private readonly RespodentService _rService;
         private readonly SleepDataService _slService;
@@ -48,7 +48,7 @@ namespace sleepApp
                 MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
                 Logger.Info($"Успешная загрузка данных.Загружено {_allRespondents.Count} пользователей");
                 LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText); //загружаем первую страницу
-
+                
             }
             catch (DbUpdateException ex)
             {

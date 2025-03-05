@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-        Title="Графики" Height="420" Width="625" ResizeMode="CanResize">
+        Title="SleepEchoGraph" Height="420" Width="625" ResizeMode="CanResize"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#4A90E2"/>
@@ -41,24 +42,23 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center" Margin="10">
-            <ComboBox x:Name="XAxisCombobox" Width="150" Margin="5" SelectionChanged="UpdateGraph"/>
-            <ComboBox x:Name="YAxisCombobox" Width="150" Margin="5" SelectionChanged="UpdateGraph"/>
-            <Button Content="Построить график" Click="UpdateGraph" Margin="5"/>
+            <ComboBox x:Name="XAxisCombobox" Width="150" Margin="5" SelectionChanged="UpdateGraph_Click" />
+            <ComboBox x:Name="YAxisCombobox" Width="150" Margin="5" SelectionChanged="UpdateGraph_Click" />
+            <Button Content="Построить график" Click="UpdateGraph_Click" Margin="5"/>
         </StackPanel>
         <!-- График -->
-        <lvc:CartesianChart x:Name="DataChart" Grid.Row="1" LegendLocation="Right">
+        <lvc:CartesianChart x:Name="DataChart"  Grid.Row="1" LegendLocation="Right">
             
             <!-- 
         CartesianChart - это элемент управления из библиотеки LiveCharts, который отображает двумерные графики.
         LegendLocation="Right" - размещает легенду графика справа.
     -->
-            <lvc:CartesianChart.Series>
+            <!--<lvc:CartesianChart.Series>
                 <lvc:LineSeries Title="График"
-                                Values="{Binding DataValues}"
                                 PointGeometrySize="5"
                                 StrokeThickness="2"  />
-            </lvc:CartesianChart.Series>
-
+            </lvc:CartesianChart.Series -->
+            <!-- Values="{Binding DataValues}" -->
             <!-- 
             LineSeries - представляет собой линейный график.
             Title="График" - заголовок серии, который отображается в легенде.

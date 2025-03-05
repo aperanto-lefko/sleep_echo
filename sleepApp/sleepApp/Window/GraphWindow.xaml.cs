@@ -1,19 +1,10 @@
 ﻿using LiveCharts;
+using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using sleepApp.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace sleepApp
 {
@@ -23,12 +14,13 @@ namespace sleepApp
     public partial class GraphWindow : Window
     {
         public SeriesCollection DataValues { get; set; }
-        private List<SleepDataDto> _sleepDataList;
+        public List<SleepDataDto> _sleepDataList;
         public GraphWindow(List<SleepDataDto> sleepDataList)
         {
             InitializeComponent();
             _sleepDataList = sleepDataList;
             //инициализация графика
+
             DataValues = new SeriesCollection();
             DataContext = this;
 
@@ -43,42 +35,116 @@ namespace sleepApp
                 "Стресс (1-10)",
                 "Продуктивность (1-10)"
             };
-            //значения по умолчанию
-            XAxisCombobox.SelectedIndex = 0;
-            YAxisCombobox.SelectedIndex = 0;
-        }
 
-        private void UpdateGraph(object sender, RoutedEventArgs e)
+          }
+
+        private void UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
-            if (XAxisCombobox.SelectedItem == null || YAxisCombobox.SelectedItem == null)
+           
+            try
             {
-                return;
+                // Проверяем, находимся ли мы в основном потоке
+                if (!Dispatcher.CheckAccess())
+                {
+                    Dispatcher.Invoke(UpdateGraph_Click, sender, e);
+                    return;
+                }
+
+                if (XAxisCombobox.SelectedItem == null || YAxisCombobox.SelectedItem == null)
+                {
+                    return;
+                }
+
+                string xAxisParam = XAxisCombobox.SelectedItem.ToString();
+                string yAxisParam = YAxisCombobox.SelectedItem.ToString();
+
+
+                var dataWindow = Application.Current.Windows.OfType<DashboardWindow>().FirstOrDefault(); //ищем открытое окно с данными
+
+                if (dataWindow != null)
+                {
+                    // Получаем данные из DataWindow
+                    _sleepDataList = dataWindow._allSleepData; //получаем данные из окна
+
+                    if (_sleepDataList == null || _sleepDataList.Count == 0)
+                    {
+                        MessageBox.Show("Нет данных для отображения.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Окно с данными не найдено.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                    List<double> xValues = GetXValues(xAxisParam);
+                List<double> yValues = GetYValues(yAxisParam);
+
+              
+                if (xValues == null || yValues == null || xValues.Count == 0 || yValues.Count == 0)
+                {
+                    MessageBox.Show("Нет данных для отображения.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Упорядочиваем данные по X
+                var combined = xValues.Zip(yValues, (x, y) => new { X = x, Y = y }).OrderBy(point => point.X).ToList();
+                xValues = combined.Select(point => point.X).ToList();
+                yValues = combined.Select(point => point.Y).ToList();
+
+                // Создаем новую серию
+                var lineSeries = new LineSeries
+                {
+                    Title = $"{yAxisParam} от {xAxisParam}",
+                    Values = new ChartValues<ObservablePoint>(), // Используем ObservablePoint для точек (X, Y)
+                    PointGeometrySize = 10,
+                    StrokeThickness = 2
+                };
+
+                // Добавляем точки (X, Y)
+                for (int i = 0; i < xValues.Count; i++)
+                {
+                    lineSeries.Values.Add(new ObservablePoint(xValues[i], yValues[i]));
+                }
+
+                // Очищаем старые серии (если нужно)
+                DataChart.Series.Clear();
+
+                // Добавляем новую серию в график
+                DataChart.Series.Add(lineSeries);
+
+                // Настраиваем оси
+                DataChart.AxisX.Clear();
+                DataChart.AxisX.Add(new Axis
+                {
+                    Title = xAxisParam,
+                    LabelFormatter = value => value.ToString("N2"), // Форматирование значений
+                    MinValue = xValues.Min(), // Минимальное значение на оси X
+                    MaxValue = xValues.Max(), // Максимальное значение на оси X
+                    Separator = new Separator { Step = 100 } // Шаг между значениями (настройте по необходимости)
+                });
+
+                DataChart.AxisY.Clear();
+                DataChart.AxisY.Add(new Axis
+                {
+                    Title = yAxisParam,
+                    LabelFormatter = value => value.ToString("N2"), // Форматирование значений
+                    MinValue = yValues.Min(), // Минимальное значение на оси Y
+                    MaxValue = yValues.Max(), // Максимальное значение на оси Y
+                    Separator = new Separator { Step = 1 } // Шаг между значениями (настройте по необходимости)
+                });
             }
-            DataValues.Clear();
-            string xAxisParam = XAxisCombobox.SelectedItem.ToString();
-            string yAxisParam = YAxisCombobox.SelectedItem.ToString();
-
-            List<double> xValues = GetXValues(xAxisParam);
-            List<double> yValues = GetYValues(yAxisParam);
-
-            DataValues.Add(new LineSeries
+            catch (Exception ex)
             {
-                Title = $"{yAxisParam} от {xAxisParam}",
-                Values = new ChartValues<double>(yValues),
-                PointGeometrySize = 10,
-                StrokeThickness = 2
-            });
-            DataChart.AxisX[0].Title = xAxisParam;
-            DataChart.AxisY[0].Title = yAxisParam;
-            DataChart.AxisX[0].Labels = xValues.ConvertAll(x => x.ToString());
-            DataChart.AxisY[0].Labels = yValues.ConvertAll(y => y.ToString());
+                MessageBox.Show($"Ошибка при обновлении графика: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         // Метод для получения значений по оси X
         private List<double> GetXValues(string xAxisParam)
         {
             switch (xAxisParam)
             {
-                case "Кофеин (мг)": return _sleepDataList.Select(x => (double)x.CaffeineIntakeMg).ToList();
+                case "Кофеин, мг": return _sleepDataList.Select(x => (double)x.CaffeineIntakeMg).ToList();
                 //case "Рабочее время (часы)": return _sleepDataList.Select(x => x.WorkHours).ToList();
                 case "Качество сна (1-10)": return _sleepDataList.Select(x => (double)x.SleepQuality).ToList();
                 //case "Время у экрана (минуты)": return _sleepDataList.Select(x => (double)x.ScreenTime).ToList();
@@ -96,4 +162,4 @@ namespace sleepApp
             }
         }
     }
-    }
+}
