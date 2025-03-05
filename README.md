@@ -44,6 +44,7 @@
 ![Работа с респондентами](/screen/respondents.png)
 ![Работа с данными](/screen/data.png)
 ![Справка](/screen/question.png)
+![Графики](/screen/graph.png)
 ![Данные в excel](/screen/excel.png)
 
 

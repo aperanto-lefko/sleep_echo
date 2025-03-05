@@ -655,8 +655,14 @@ namespace sleepApp
 
         private void GraphButton_Click(object sender, RoutedEventArgs e)
         {
+            MessageBoxResult result = MessageBox.Show($"Построение графиков для большого количества данных может занять продолжительное время", "Инфо", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            if(result == MessageBoxResult.Cancel)
+            {
+                return;
+            }
             var graphWindow = new GraphWindow(_allSleepData);
             graphWindow.Show();
+            Logger.Info($"Запрос на построение графиков");
         }
 
 

@@ -27,6 +27,7 @@ namespace sleepApp
             XAxisCombobox.ItemsSource = new List<string>
             {
                 "Кофеин, мг",
+                "Рабочее время (часы)",
                 "Качество сна (1-10)"
             };
             YAxisCombobox.ItemsSource = new List<string>
@@ -38,11 +39,13 @@ namespace sleepApp
 
           }
 
-        private void UpdateGraph_Click(object sender, RoutedEventArgs e)
+        private async void UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
-           
+
             try
             {
+
+
                 // Проверяем, находимся ли мы в основном потоке
                 if (!Dispatcher.CheckAccess())
                 {
@@ -76,22 +79,26 @@ namespace sleepApp
                 {
                     MessageBox.Show("Окно с данными не найдено.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-
-                    List<double> xValues = GetXValues(xAxisParam);
-                List<double> yValues = GetYValues(yAxisParam);
+                List<double> xValues = null;
+                List<double> yValues = null;
 
               
-                if (xValues == null || yValues == null || xValues.Count == 0 || yValues.Count == 0)
-                {
-                    MessageBox.Show("Нет данных для отображения.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+                    xValues = GetXValues(xAxisParam);
+                    yValues = GetYValues(yAxisParam);
 
-                // Упорядочиваем данные по X
-                var combined = xValues.Zip(yValues, (x, y) => new { X = x, Y = y }).OrderBy(point => point.X).ToList();
-                xValues = combined.Select(point => point.X).ToList();
-                yValues = combined.Select(point => point.Y).ToList();
 
+                    if (xValues == null || yValues == null || xValues.Count == 0 || yValues.Count == 0)
+                    {
+                        MessageBox.Show("Нет данных для отображения.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    // Упорядочиваем данные по X
+                    var combined = xValues.Zip(yValues, (x, y) => new { X = x, Y = y }).OrderBy(point => point.X).ToList();
+                    xValues = combined.Select(point => point.X).ToList();
+                    yValues = combined.Select(point => point.Y).ToList();
+                
+                
                 // Создаем новую серию
                 var lineSeries = new LineSeries
                 {
@@ -121,7 +128,7 @@ namespace sleepApp
                     LabelFormatter = value => value.ToString("N2"), // Форматирование значений
                     MinValue = xValues.Min(), // Минимальное значение на оси X
                     MaxValue = xValues.Max(), // Максимальное значение на оси X
-                    Separator = new Separator { Step = 100 } // Шаг между значениями (настройте по необходимости)
+                    Separator = new Separator { Step = 50 } // Шаг между значениями (настройте по необходимости)
                 });
 
                 DataChart.AxisY.Clear();
@@ -145,9 +152,9 @@ namespace sleepApp
             switch (xAxisParam)
             {
                 case "Кофеин, мг": return _sleepDataList.Select(x => (double)x.CaffeineIntakeMg).ToList();
-                //case "Рабочее время (часы)": return _sleepDataList.Select(x => x.WorkHours).ToList();
+                case "Рабочее время (часы)": return _sleepDataList.Select(x => x.WorkHours).ToList();
                 case "Качество сна (1-10)": return _sleepDataList.Select(x => (double)x.SleepQuality).ToList();
-                //case "Время у экрана (минуты)": return _sleepDataList.Select(x => (double)x.ScreenTime).ToList();
+                case "Время у экрана (минуты)": return _sleepDataList.Select(x => (double)x.ScreenTime).ToList();
                 default: return new List<double>();
             }
         }
