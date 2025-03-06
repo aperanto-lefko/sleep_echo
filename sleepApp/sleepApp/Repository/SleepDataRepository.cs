@@ -11,21 +11,25 @@ namespace sleepApp.Repository
         {
             _context = context;
         }
+
         public SleepData AddSleepData(SleepData data)
         {
             _context.SleepData.Add(data);
             _context.SaveChanges();
             return data;
         }
+
         public bool RemoveSleepData(SleepData data)
         {
             _context.SleepData.Remove(data);
             return _context.SaveChanges() > 0;
         }
+
         public SleepData? FindById(int id)
         {
             return _context.SleepData.Find(id);
         }
+
         public bool UpdateSleepData(SleepData data)
         {
             var oldData = _context.SleepData.Find(data.Id);
@@ -37,6 +41,7 @@ namespace sleepApp.Repository
 
             return _context.SaveChanges() > 0;
         }
+
         public List<SleepData> GetSleepDataWithParameters(int respondentId,
                                                            double slStartTimeStart,
                                                            double slStartTimeEnd,

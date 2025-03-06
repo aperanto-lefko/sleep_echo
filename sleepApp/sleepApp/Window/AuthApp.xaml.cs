@@ -124,6 +124,7 @@ namespace sleepApp
         {
             e.Handled = !int.TryParse(e.Text, out _);
         }
+
         private void ChangeColorTextBox_TextChanged(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;

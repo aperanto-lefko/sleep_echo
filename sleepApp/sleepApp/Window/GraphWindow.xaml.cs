@@ -1,5 +1,6 @@
 ﻿using LiveCharts;
 using LiveCharts.Defaults;
+using LiveCharts.Helpers;
 using LiveCharts.Wpf;
 using sleepApp.Dto;
 using System.Windows;
@@ -42,7 +43,7 @@ namespace sleepApp
             };
         }
 
-        private async void UpdateGraph_Click(object sender, RoutedEventArgs e)
+        private void UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -63,13 +64,13 @@ namespace sleepApp
 
                     if (_sleepDataList == null || _sleepDataList.Count == 0)
                     {
-                        MessageBox.Show("Нет данных для отображения.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("Нет данных для отображения", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Окно с данными не найдено.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Окно с данными не найдено", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 List<double> xValues = null;
                 List<double> yValues = null;
@@ -79,7 +80,7 @@ namespace sleepApp
 
                 if (xValues == null || yValues == null || xValues.Count == 0 || yValues.Count == 0)
                 {
-                    MessageBox.Show("Нет данных для отображения.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Нет данных для отображения", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -87,6 +88,25 @@ namespace sleepApp
                 var combined = xValues.Zip(yValues, (x, y) => new { X = x, Y = y }).OrderBy(point => point.X).ToList();
                 xValues = combined.Select(point => point.X).ToList();
                 yValues = combined.Select(point => point.Y).ToList();
+                
+                double minYValue = yValues.Min();
+                double maxYValue = yValues.Max();
+
+                if (minYValue == maxYValue) // Если все значения одинаковые
+                {
+
+                    MessageBox.Show("Недостаточно данных для отображения", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                double minXValue = xValues.Min();
+                double maxXValue = xValues.Max();
+
+                if (minXValue == maxXValue) // Если все значения одинаковые
+                {
+                    MessageBox.Show("Недостаточно данных для отображения", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
 
                 // Создаем новую серию
                 var lineSeries = new LineSeries
@@ -115,8 +135,8 @@ namespace sleepApp
                 {
                     Title = xAxisParam,
                     LabelFormatter = value => value.ToString("N2"), // Форматирование значений Добавляет разделитель тысяч (например, 1,000 вместо 1000). Округляет число до 2 знаков после запятой.
-                    MinValue = xValues.Min(), // Минимальное значение на оси X
-                    MaxValue = xValues.Max(), // Максимальное значение на оси X
+                    MinValue = minXValue, // Минимальное значение на оси X
+                    MaxValue = maxXValue, // Максимальное значение на оси X
                     Separator = new Separator { Step = GetStepForAxis(xAxisParam) }
                 });
 
@@ -125,16 +145,22 @@ namespace sleepApp
                 {
                     Title = yAxisParam,
                     LabelFormatter = value => value.ToString("N2"), // Форматирование значений
-                    MinValue = yValues.Min(),
-                    MaxValue = yValues.Max(),
+                    MinValue = minYValue,
+                    MaxValue = maxYValue,
                     Separator = new Separator { Step = 1 } // Шаг между значениями
                 });
+            }
+            catch (LiveChartsException ex)
+            {
+                MessageBox.Show($"Ошибка при обновлении графика: {ex.Message}, {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при обновлении графика: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            
         }
+
 
         private double GetStepForAxis(string xAxisParam)
         {

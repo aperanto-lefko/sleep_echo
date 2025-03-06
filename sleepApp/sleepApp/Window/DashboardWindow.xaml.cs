@@ -644,7 +644,7 @@ namespace sleepApp
             }
             else
             {
-                if (_allSleepData == null || _allSleepData.Count == 0)
+                if (_allSleepData == null || _allSleepData.Count == 0 )
                 {
                     MessageBox.Show("Нет данных для отображения.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;

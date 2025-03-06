@@ -109,7 +109,7 @@
   IsExpanded="False" Margin="10,193,10,-92" Grid.Row="1" Grid.RowSpan="2">
             <StackPanel>
                 <TextBlock Text="Порт:" FontSize="16" Width="300" Margin="0,10,0,0" />
-                <TextBox x:Name="PortTextBox" Text="5432" FontSize="16"  Height="25" HorizontalAlignment="Center" Margin="0,0,0,10" Background="#3E3E3E" Foreground="#999999" Width="300" TextChanged="ChangeColorTextBox_TextChanged" PreviewTextInput="NumberValidationTextBox"/>
+                <TextBox x:Name="PortTextBox" Text="5432" FontSize="16"  Height="25" HorizontalAlignment="Center" Margin="0,0,0,10" Background="#3E3E3E" Foreground="#999999" Width="300" TextChanged="ChangeColorTextBox_TextChanged" PreviewTextInput="NumberValidationTextBox" />
                 <TextBlock Text="База данных:" FontSize="16" Width="300" />
                 <TextBox x:Name="DatabaseTextBox" Text="sleep_productivity" FontSize="16" Height="25" Background="#3E3E3E" Foreground="#999999" Width="300" TextChanged="ChangeColorTextBox_TextChanged" />
                 <TextBlock Text="Сервер" FontSize="16" Width="300" Margin="0,10,0,0" />

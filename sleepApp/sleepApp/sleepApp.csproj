@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <PackageIcon></PackageIcon>
+    <ApplicationIcon>Resources\origami.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,8 +25,11 @@
     <None Remove="Resources\cubes_2.png" />
     <None Remove="Resources\duck.png" />
     <None Remove="Resources\feather.png" />
-    <None Remove="Resources\origami.png" />
     <None Remove="Resources\tile_background.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\origami.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,10 +44,10 @@
 
   <ItemGroup>
     <Resource Include="Resources\axiom.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\origami.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
@@ -52,6 +57,10 @@
     </None>
     <None Update="NLog.config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\origami.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 
