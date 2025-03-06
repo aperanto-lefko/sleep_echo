@@ -1,26 +1,22 @@
-﻿using sleepApp.Model;
+﻿using ClosedXML.Excel;
+using Microsoft.EntityFrameworkCore;
+using NLog;
 using sleepApp.Dto;
+using sleepApp.ExceptionType;
+using sleepApp.Model;
 using sleepApp.Service;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using sleepApp.ExceptionType;
-using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore;
-using System.Globalization;
-using ClosedXML.Excel;
-using NLog;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-
 
 namespace sleepApp
 {
-
     public partial class DashboardWindow : Window
     {
-
         private int _currentRespondentPage = 1; //текущая страница для respondent
         private int _currenSleepDataPage = 1;
         private List<Respondent> _allRespondents;
@@ -31,15 +27,12 @@ namespace sleepApp
         private static GraphWindow _graphWindow;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-
-
         public DashboardWindow(RespodentService respondentService, SleepDataService sleepDataService)
         {
             InitializeComponent();
             _rService = respondentService;
             _slService = sleepDataService;
         }
-
 
         private void GetAllUsersButton_Click(object sender, RoutedEventArgs e) //поиск всех пользователей
         {
@@ -50,7 +43,6 @@ namespace sleepApp
                 MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
                 Logger.Info($"Успешная загрузка данных.Загружено {_allRespondents.Count} пользователей");
                 LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText); //загружаем первую страницу
-
             }
             catch (DbUpdateException ex)
             {
@@ -63,7 +55,6 @@ namespace sleepApp
                 Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
         }
-
 
         private void GetUserByName_Click(object sender, RoutedEventArgs e)
         {
@@ -146,15 +137,12 @@ namespace sleepApp
             {
                 MessageBox.Show($"Ошибка обновления базы данных {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 Logger.Info($"Ошибка обновления базы данных {ex.InnerException}");
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
-
-
         }
 
         private void FindRespondentForUpdate_Click(object sender, RoutedEventArgs e)
@@ -173,7 +161,6 @@ namespace sleepApp
                         .FirstOrDefault(item => item.Content.ToString().Equals(resp.Gender, StringComparison.OrdinalIgnoreCase)); //сравнение без учета регистра
                     NewRespondentAgeTextBox.Text = resp.Age.ToString().Trim();
                     NewRespondentCountryTextBox.Text = resp.Country.ToString();
-
                 }
                 else
                 {
@@ -195,9 +182,8 @@ namespace sleepApp
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
-
-
         }
+
         private void RespondentUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -246,7 +232,6 @@ namespace sleepApp
                         return;
                     }
                 }
-
                 else
                 {
                     HighlightTextBox(UpdateRespondentIdTextBox);
@@ -272,9 +257,7 @@ namespace sleepApp
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
-
         }
-
 
         private void DeleteRespondent_Click(object sender, RoutedEventArgs e)
         {
@@ -318,7 +301,6 @@ namespace sleepApp
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
-
         }
 
         private void GetAllDataButton_Click(object sender, RoutedEventArgs e)
@@ -348,7 +330,6 @@ namespace sleepApp
                 int moodEnd = ParseIntOrNull(MoodTextBox_end.Text);
                 int stressStart = ParseIntOrNull(StressTextBox_start.Text);
                 int stressEnd = ParseIntOrNull(StressTextBox_end.Text);
-
 
                 _currenSleepDataPage = 1;
                 _allSleepData = _slService.GetSleepDataWithParameters(respondentId,
@@ -397,10 +378,12 @@ namespace sleepApp
                 Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
         }
+
         private int ParseIntOrNull(string text)
         {
             return string.IsNullOrWhiteSpace(text) ? 0 : int.Parse(text);
         }
+
         private double ParseDoubleOrNull(string text)
         {
             return string.IsNullOrWhiteSpace(text) ? 0 : double.Parse(text, NumberStyles.Any, CultureInfo.InvariantCulture);
@@ -410,7 +393,6 @@ namespace sleepApp
         {
             try
             {
-
                 var parsedData = ParseInputDataFields();
                 if (parsedData == null)
                 {
@@ -470,8 +452,6 @@ namespace sleepApp
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
-
-
         }
 
         private void DeleteData_Click(object sender, RoutedEventArgs e)
@@ -511,8 +491,8 @@ namespace sleepApp
                 MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
-
         }
+
         private void FindDataForUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -534,7 +514,6 @@ namespace sleepApp
                     NewProductivityTextBox.Text = data.ProductivityScore.ToString();
                     NewMoodTextBox.Text = data.MoodScore.ToString().Trim();
                     NewStressTextBox.Text = data.StressLevel.ToString().Trim();
-
                 }
                 else
                 {
@@ -557,6 +536,7 @@ namespace sleepApp
                 Logger.Info($"Непредвиденная ошибка: {ex.InnerException}");
             }
         }
+
         private void DateUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -574,7 +554,7 @@ namespace sleepApp
                 var parsedData = ParseInputDataFields();
                 if (parsedData == null)
                 {
-                    return; 
+                    return;
                 }
 
                 // Извлекаем данные из кортежа
@@ -618,7 +598,6 @@ namespace sleepApp
                                                                          mood,
                                                                          stress))
                     {
-
                         MessageBox.Show($"Данные для записи id={dataId} успешно обновлены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                         Logger.Info($"Успешное обновление записи {dataId}");
                     }
@@ -680,7 +659,6 @@ namespace sleepApp
                 Logger.Info($"Запрос на построение графиков");
             }
         }
-
 
         private (int respondentId, double slStartTime, double slEndTime, double slTotalTime, int slQuality,
             int exercise, int coffee, int screenTime, double workTime, int productivity, int mood, int stress)? ParseInputDataFields()
@@ -800,10 +778,12 @@ namespace sleepApp
             }
             return (firstname, lastName, email, gender, country, age);
         }
+
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
         {
             PreviousPage(ref _currentRespondentPage, _allRespondents, UserDataGrid, PageNumberText);
         }
+
         private void NextPage_Click(object sender, RoutedEventArgs e)
         {
             NextPage(ref _currentRespondentPage, _allRespondents, UserDataGrid, PageNumberText);
@@ -813,6 +793,7 @@ namespace sleepApp
         {
             NextPage(ref _currenSleepDataPage, _allSleepData, DataGrid, PageNumberText_data);
         }
+
         private void PreviousPageData_Click(object sender, RoutedEventArgs e)
         {
             PreviousPage(ref _currenSleepDataPage, _allSleepData, DataGrid, PageNumberText_data);
@@ -827,6 +808,7 @@ namespace sleepApp
             dataGrid.ItemsSource = itemsForDisplay;
             pageNumberText.Text = $"Страница {page}";
         }
+
         private void NextPage(ref int currentPage, IEnumerable<object> dataList, DataGrid dataGrid, TextBlock pageNumberText)
         {
             if (currentPage < (dataList.Count() / _pageSize) + 1)
@@ -835,6 +817,7 @@ namespace sleepApp
                 LoadPage(dataList, currentPage, dataGrid, pageNumberText);
             }
         }
+
         private void PreviousPage(ref int currentPage, IEnumerable<object> dataList, DataGrid dataGrid, TextBlock pageNumberText)
         {
             if (currentPage > 1)
@@ -843,11 +826,13 @@ namespace sleepApp
                 LoadPage(dataList, currentPage, dataGrid, pageNumberText);
             }
         }
+
         private void DashBoardTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) //изменение размера окна при переходе на закладку
         {
             this.Width = DashBoardTabControl.SelectedIndex == 1 ? 1000 : 800;
             this.Height = DashBoardTabControl.SelectedIndex == 1 ? 900 : 580;
         }
+
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !int.TryParse(e.Text, out _);
@@ -858,7 +843,7 @@ namespace sleepApp
             var textBox = sender as TextBox;
             string newText = textBox.Text + e.Text; //суммирует то, что уже есть в строке, с тем, что вводится
             Regex regex = new Regex(@"^([01]?[0-9]|2[0-3])(\.[0-5]?[0-9]?)?$");
-            e.Handled = !regex.IsMatch(newText) || (newText.Count(c => c == '.') > 1);   //дополнительно ограничение количества точек      
+            e.Handled = !regex.IsMatch(newText) || (newText.Count(c => c == '.') > 1);   //дополнительно ограничение количества точек
         }
 
         private void NumberOneTenValidation(object sender, TextCompositionEventArgs e)
@@ -875,6 +860,7 @@ namespace sleepApp
             MessageBox.Show("Необходимо заполнить все поля", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
             ResetTextBoxBorderAfterDelay(control, 700);
         }
+
         private void ResetTextBoxBorderAfterDelay(Control control, int milliSeconds) //сбрасывание цвета через опред.время
         {
             Task.Delay(milliSeconds).ContinueWith(_ => //создает задачу, которая завершится через указанное количество миллисекунд
@@ -887,6 +873,7 @@ namespace sleepApp
                 });
             });
         }
+
         private void ExportDataButton_Click(object sender, RoutedEventArgs e)
         {
             ExportData(DataGrid, _allSleepData);
@@ -909,12 +896,13 @@ namespace sleepApp
                 ExportDataToExcel(dataList, saveDialog.FileName, DataGrid);
             }
         }
+
         private void ExportDataToExcel(IEnumerable<object> dataList, string filePath, DataGrid dataGrid)
         {
             // Создаем новую книгу Excel с помощью библиотеки ClosedXML
             using (var workBook = new XLWorkbook())
             {
-                // Добавляем новый лист в книгу Excel 
+                // Добавляем новый лист в книгу Excel
                 var worksheet = workBook.Worksheets.Add("Data");
 
                 //Заголовки столбцов
@@ -948,15 +936,12 @@ namespace sleepApp
                         worksheet.Cell(row, 14).Value = data.StressLevel;
                         row++;
                     }
-
-
                 }
                 worksheet.Columns().AdjustToContents(); //выравнивание столбцов по содержимому
                 workBook.SaveAs(filePath);
             }
             MessageBox.Show("Данные успешно экспортированы в Excel", "Экспорт завершен", MessageBoxButton.OK, MessageBoxImage.Information);
             Logger.Info($"Выгрузка данных в excel");
-
         }
     }
 }

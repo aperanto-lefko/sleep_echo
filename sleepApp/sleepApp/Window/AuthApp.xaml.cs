@@ -43,7 +43,10 @@ namespace sleepApp
                     HighlightIfError(LoginTextBox, true);
                     HighlightIfError(PasswordBox, true);
                     HighlightIfError(VisiblePasswordBox, true);
-                    MessageBox.Show($"Неверная пара логин/пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    HighlightIfError(PortTextBox, true);
+                    HighlightIfError(DatabaseTextBox, true);
+                    HighlightIfError(HostTextBox, true);
+                    MessageBox.Show($"Неверные входные данные", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (DbUpdateException ex)
@@ -60,14 +63,20 @@ namespace sleepApp
         {
             control.BorderBrush = isError ? Brushes.Red : SystemColors.ControlDarkBrush; //цвет рамки
             control.BorderThickness = isError ? new Thickness(2) : new Thickness(1); //толщина
+            ResetTextBoxBorderAfterDelay(control, 700);
         }
 
-        private void ResetHighlight(object sender, RoutedEventArgs e) //обработчик чтобы сбросить красный цвет после ошибочного ввода
+        private void ResetTextBoxBorderAfterDelay(Control control, int milliSeconds) //сбрасывание цвета через опред.время
         {
-            if (sender is Control control)
+            Task.Delay(milliSeconds).ContinueWith(_ => //создает задачу, которая завершится через указанное количество миллисекунд
+            //Это асинхронная операция, которая не блокирует основной поток приложения.
             {
-                HighlightIfError(control, false);
-            }
+                control.Dispatcher.Invoke(() => // используется для выполнения кода в потоке, который владеет объектом textBox
+                {
+                    control.BorderBrush = SystemColors.ControlDarkBrush;
+                    control.BorderThickness = new Thickness(1);
+                });
+            });
         }
 
         private void TogglePasswordButton_Click(object sender, RoutedEventArgs e)
@@ -114,6 +123,11 @@ namespace sleepApp
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !int.TryParse(e.Text, out _);
+        }
+        private void ChangeColorTextBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            textBox.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#FFFFFFFF");
         }
     }
 }

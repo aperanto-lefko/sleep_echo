@@ -41,9 +41,6 @@
     <Resource Include="Resources\axiom.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\background.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\origami.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
