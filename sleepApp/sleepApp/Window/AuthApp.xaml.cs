@@ -99,7 +99,17 @@ namespace sleepApp
                 VisiblePasswordBox.Visibility = Visibility.Collapsed;
             }
         }
+        private void AdvancedSettingsExpander_Expanded(object sender, RoutedEventArgs e)
+        {
+            // Увеличиваем высоту окна при раскрытии Expander
+            this.Height = 500; // Новая высота окна
+        }
 
+        private void AdvancedSettingsExpander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            // Возвращаем исходную высоту окна при сворачивании Expander
+            this.Height = 340; // Исходная высота окна
+        }
 
     }
 }

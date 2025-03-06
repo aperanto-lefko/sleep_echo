@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using ClosedXML.Excel;
 using NLog;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
 namespace sleepApp
@@ -23,10 +24,11 @@ namespace sleepApp
         private int _currentRespondentPage = 1; //текущая страница для respondent
         private int _currenSleepDataPage = 1;
         private List<Respondent> _allRespondents;
-        public List<SleepDataDto> _allSleepData {  get; private set; }
+        public List<SleepDataDto> _allSleepData { get; private set; }
         private int _pageSize = 10; //количество записей на странице
         private readonly RespodentService _rService;
         private readonly SleepDataService _slService;
+        private static GraphWindow _graphWindow;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 
@@ -36,7 +38,7 @@ namespace sleepApp
             InitializeComponent();
             _rService = respondentService;
             _slService = sleepDataService;
-         }
+        }
 
 
         private void GetAllUsersButton_Click(object sender, RoutedEventArgs e) //поиск всех пользователей
@@ -48,7 +50,7 @@ namespace sleepApp
                 MessageBox.Show($"Загружено {_allRespondents.Count} пользователей.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information); // Отладочное сообщение
                 Logger.Info($"Успешная загрузка данных.Загружено {_allRespondents.Count} пользователей");
                 LoadPage(_allRespondents, _currentRespondentPage, UserDataGrid, PageNumberText); //загружаем первую страницу
-                
+
             }
             catch (DbUpdateException ex)
             {
@@ -655,14 +657,23 @@ namespace sleepApp
 
         private void GraphButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show($"Построение графиков для большого количества данных может занять продолжительное время", "Информация", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            if(result == MessageBoxResult.Cancel)
+            if (_graphWindow != null && _graphWindow.IsLoaded)
             {
-                return;
+                _graphWindow.Activate();
+                _graphWindow.Topmost = true;// Выводим на передний план
+                _graphWindow.Topmost = false;// Снимаем фокус с переднего плана, чтобы окно не оставалось всегда наверху
             }
-            var graphWindow = new GraphWindow(_allSleepData);
-            graphWindow.Show();
-            Logger.Info($"Запрос на построение графиков");
+            else
+            {
+                MessageBoxResult result = MessageBox.Show($"Построение графиков для большого количества данных может занять продолжительное время", "Информация", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                if (result == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+                _graphWindow = new GraphWindow(_allSleepData);
+                _graphWindow.Show();
+                Logger.Info($"Запрос на построение графиков");
+            }
         }
 
 
@@ -909,7 +920,7 @@ namespace sleepApp
 
                 //Запись строк
                 int row = 2;
-                foreach(var item in dataList)
+                foreach (var item in dataList)
                 {
                     // Приводим текущий элемент DataGrid к типу SleepData
                     var data = item as SleepDataDto;
@@ -932,8 +943,8 @@ namespace sleepApp
                         worksheet.Cell(row, 14).Value = data.StressLevel;
                         row++;
                     }
-                   
-                  
+
+
                 }
                 worksheet.Columns().AdjustToContents(); //выравнивание столбцов по содержимому
                 workBook.SaveAs(filePath);

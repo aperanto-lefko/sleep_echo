@@ -8,7 +8,7 @@
     
         Foreground="#FFFFFFFF"
         Title="SleepEcho" Height="340" Width="500" ResizeMode="NoResize">
-    
+
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#4A90E2"/>
@@ -43,50 +43,33 @@
 
     <Grid Grid.Row="1" HorizontalAlignment="Center" Width="500">
         <Grid.RowDefinitions>
-            <RowDefinition Height="109*"/>
-            <RowDefinition Height="325*"/>
+            <RowDefinition Height="37*"/>
+            <RowDefinition Height="125*"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Для Expander -->
         </Grid.RowDefinitions>
-            
-            
-        <!--
-            Grid — контейнер для размещения элементов.
-            Используется для организации интерфейса.
-        -->
-        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" Grid.RowSpan="2">
+
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" Height="50" Width="144">
             <TextBlock Text="SleepEcho"
                 FontSize ="30"
                        FontWeight="Bold"
                        HorizontalAlignment="Center"
                        Margin="0,0,0,10" />
-            
+
         </StackPanel>
 
 
-        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Width="300" Margin="0,22,0,0" Grid.Row="1">
-            <!--
-                StackPanel — контейнер, который располагает элементы вертикально или горизонтально.
-                - VerticalAlignment и HorizontalAlignment: Выравнивание по центру.
-               -->
-            <TextBlock Text="Логин:" FontSize="16" Height="20" Margin="0,0,0,5"/>
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Width="300" Margin="0,22,0,0" Grid.Row="1" Height="176">
+
+            <TextBlock Text="Логин:" FontSize="16" Height="20"/>
             <!--
                - Margin: Отступы (верх, право, низ, лево).
             -->
 
             <TextBox x:Name="LoginTextBox" FontSize="16" Height="25" Margin="0,0,0,5" GotFocus="ResetHighlight" Background="#3E3E3E" Foreground="#FFFFFFFF"/>
-            <!--
-                TextBox: Поле для ввода текста (логина).
-                - x:Name: Имя элемента для обращения в коде.
-                - FontSize: Размер шрифта.
-                - GotFocus обработчик событий нужен для сброса красного цвета
-            -->
-            <TextBlock Text="Пароль:" FontSize="16"  Margin="0,0,0,5" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <!-- Колонка для кнопки -->
-                    <!-- Колонка для PasswordBox и TextBox -->
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+            <TextBlock Text="Пароль:" FontSize="16" Height="24"/>
+            <Grid Height="49">
+
                 <PasswordBox x:Name="PasswordBox" 
                              FontSize="16" 
                              Margin="0,0,0,20" 
@@ -94,13 +77,9 @@
                              Width="265" 
                              GotFocus="ResetHighlight" 
                              HorizontalAlignment="Left"
-                             Grid.Column="0"
-                             Height="25"
+                               Height="25"
                              Background="#3E3E3E"
                              Foreground="#FFFFFFFF"/>
-
-
-                <!-- TextBox для отображения пароля -->
                 <TextBox x:Name="VisiblePasswordBox" 
                      FontSize="16" 
                      Margin="0,0,0,20" 
@@ -120,15 +99,26 @@
                         GotFocus="ResetHighlight"
                         Height="25" 
                         Style="{StaticResource ButtonStyle}"/>
-            </Grid>
 
-            <Button x:Name="LoginButton" Content="Войти" FontSize="16" Padding="2.5" Click="LoginButton_Click" Margin="0,0,0,10" Height="35" Style="{StaticResource ButtonStyle}"/>
-            <!--
-     - Content: Текст на кнопке.
-    - FontSize: Размер шрифта.
-    - Padding: Внутренние отступы.
-    - Click: Событие, вызываемое при нажатии на кнопку.
--->
+
+            </Grid>
+            <Button x:Name="LoginButton" Content="Войти" FontSize="16" Padding="2.5" Click="LoginButton_Click" Height="35" Style="{StaticResource ButtonStyle}"/>
         </StackPanel>
+        <Expander x:Name="AdvancedSettingsExpander" 
+  Header="Расширенные настройки" 
+  Expanded="AdvancedSettingsExpander_Expanded"
+  Collapsed="AdvancedSettingsExpander_Collapsed"
+  
+  Background="Transparent" 
+  Foreground="#FFFFFFFF"
+         
+  IsExpanded="False" Margin="10,203,10,-102" Grid.Row="1" Grid.RowSpan="2">
+            <StackPanel>
+                <TextBlock Text="Порт:" FontSize="16" Width="300"/>
+                <TextBox x:Name="PortTextBox" FontSize="16" Height="25" HorizontalAlignment="Center" Margin="0,0,0,10" Background="#3E3E3E" Foreground="#FFFFFFFF" Width="300"/>
+                <TextBlock Text="База данных:" FontSize="16" Width="300"/>
+                <TextBox x:Name="DatabaseTextBox" FontSize="16" Height="25" Margin="0,0,0,10" Background="#3E3E3E" Foreground="#FFFFFFFF" Width="300"/>
+            </StackPanel>
+        </Expander>
     </Grid>
 </Window>
