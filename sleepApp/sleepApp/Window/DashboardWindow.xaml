@@ -5,9 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sleepApp"
         mc:Ignorable="d"
-        Title="SleepEcho" Height="900" Width="1000" ResizeMode="NoResize"
-       
-        Foreground="#FFFFFFFF">
+        Title="SleepEcho" Height="900" Width="1000" ResizeMode="NoResize" Foreground="#FFFFFFFF" Icon="/Resources/origami.png">
     <!-- Height="580" Width="800" -->
 
     <!--Background="#2D2D2D" -->

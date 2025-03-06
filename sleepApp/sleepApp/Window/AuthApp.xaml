@@ -7,9 +7,11 @@
         mc:Ignorable="d"
     
         Foreground="#FFFFFFFF"
-        Title="SleepEcho" Height="340" Width="500" ResizeMode="NoResize">
-   
-        <Window.Resources>
+        Title="SleepEcho" Height="340" Width="500" ResizeMode="NoResize" Icon="/Resources/origami.png">
+    <!-- Укажите путь к PNG --> 
+
+
+    <Window.Resources>
             <Style x:Key="ButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="#4A90E2"/>
                 <Setter Property="Foreground" Value="#FFFFFFFF"/>

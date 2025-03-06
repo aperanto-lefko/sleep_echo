@@ -17,9 +17,13 @@
     <None Remove="Resources\background2.jpg" />
     <None Remove="Resources\background_2.png" />
     <None Remove="Resources\back_2.png" />
+    <None Remove="Resources\bird.png" />
     <None Remove="Resources\birds.png" />
     <None Remove="Resources\cubes.png" />
     <None Remove="Resources\cubes_2.png" />
+    <None Remove="Resources\duck.png" />
+    <None Remove="Resources\feather.png" />
+    <None Remove="Resources\origami.png" />
     <None Remove="Resources\tile_background.png" />
   </ItemGroup>
 
@@ -38,6 +42,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\origami.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
