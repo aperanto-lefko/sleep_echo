@@ -20,7 +20,6 @@ namespace sleepApp
             InitializeComponent();
             _sleepDataList = sleepDataList;
             //инициализация графика
-
             DataValues = new SeriesCollection();
             DataContext = this;
 
@@ -88,13 +87,12 @@ namespace sleepApp
                 var combined = xValues.Zip(yValues, (x, y) => new { X = x, Y = y }).OrderBy(point => point.X).ToList();
                 xValues = combined.Select(point => point.X).ToList();
                 yValues = combined.Select(point => point.Y).ToList();
-                
+
                 double minYValue = yValues.Min();
                 double maxYValue = yValues.Max();
 
                 if (minYValue == maxYValue) // Если все значения одинаковые
                 {
-
                     MessageBox.Show("Недостаточно данных для отображения", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
@@ -102,7 +100,7 @@ namespace sleepApp
                 double minXValue = xValues.Min();
                 double maxXValue = xValues.Max();
 
-                if (minXValue == maxXValue) // Если все значения одинаковые
+                if (minXValue == maxXValue)
                 {
                     MessageBox.Show("Недостаточно данных для отображения", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
@@ -158,9 +156,7 @@ namespace sleepApp
             {
                 MessageBox.Show($"Ошибка при обновлении графика: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            
         }
-
 
         private double GetStepForAxis(string xAxisParam)
         {
