@@ -40,12 +40,32 @@
 
 ## Интерфейс
 
-![Стартовое окно](/screen/start_1.png)
-![Стартовое окно](/screen/start_2.png)
-![Работа с респондентами](/screen/respondents.png)
-![Работа с данными](/screen/data.png)
-![Справка](/screen/question.png)
-![Графики](/screen/graph.png)
-![Данные в excel](/screen/excel.png)
+<div align="center">
+  <img src="/screen/start_1.png" alt="Стартовое окно" />
+</div>
+
+<div align="center">
+  <img src="/screen/start_2.png" alt="Стартовое окно" />
+</div>
+
+<div align="center">
+  <img src="/screen/respondents.png" alt="Работа с респондентами" />
+</div>
+
+<div align="center">
+  <img src="/screen/data.png" alt="Работа с данными" />
+</div>
+
+<div align="center">
+  <img src="/screen/graph.png" alt="Графики" />
+</div>
+
+<div align="center">
+  <img src="/screen/question.png" alt="Справка" />
+</div>
+
+<div align="center">
+  <img src="/screen/excel.png" alt="Данные в excel" />
+</div>
 
 
