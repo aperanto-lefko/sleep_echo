@@ -40,7 +40,8 @@
 
 ## Интерфейс
 
-![Стартовое окно](/screen/start.png)
+![Стартовое окно](/screen/start_1.png)
+![Стартовое окно](/screen/start_2.png)
 ![Работа с респондентами](/screen/respondents.png)
 ![Работа с данными](/screen/data.png)
 ![Справка](/screen/question.png)

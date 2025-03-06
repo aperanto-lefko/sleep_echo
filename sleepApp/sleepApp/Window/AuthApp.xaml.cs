@@ -5,6 +5,7 @@ using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 using sleepApp.ServiceProvider;
 using Microsoft.Extensions.DependencyInjection;
+using System.Windows.Input;
 
 
 namespace sleepApp
@@ -20,20 +21,22 @@ namespace sleepApp
         {
             string login = LoginTextBox.Text; //логин из textBox
             string password = PasswordBox.Visibility == Visibility.Visible ? PasswordBox.Password : VisiblePasswordBox.Text; //пароль из PasswordBox
+            string port =PortTextBox.Text;
+            string dataBase = DatabaseTextBox.Text;
+            string host = HostTextBox.Text;
 
-
-            using (var context = new AppDbContext(login, password))
-            {
+           
                 try
                 {
-                    // Проверяем подключение к базе данных
-                    bool isConnect = context.Database.CanConnect();
+                //Настраиваем DI контейнер с полученными данными
+                var serviceProvider = ServiceProviderFactory.ConfigureServices(login, password, port, dataBase, host);
+                var context = serviceProvider.GetRequiredService<AppDbContext>(); 
+                // Проверяем подключение к базе данных
+                bool isConnect = context.Database.CanConnect();
                     if (isConnect)
                     {
-                        //Настраиваем DI контейнер с полученными данными
-                        var serviceProvider = ServiceProviderFactory.ConfigureServices(login, password);
-                        // Если подключение успешно, открываем DashboardWindow
-                        DashboardWindow dashBoardWindow = serviceProvider.GetRequiredService<DashboardWindow>(); //получение 
+                       // Если подключение успешно, открываем DashboardWindow
+                        DashboardWindow dashBoardWindow = serviceProvider.GetRequiredService<DashboardWindow>(); 
                         dashBoardWindow.Show();
                         this.Close();
                     }
@@ -53,7 +56,7 @@ namespace sleepApp
                 {
                     MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
+            
         }
 
         private void HighlightIfError(Control control, bool isError) //подсветка в случае ошибки
@@ -102,7 +105,7 @@ namespace sleepApp
         private void AdvancedSettingsExpander_Expanded(object sender, RoutedEventArgs e)
         {
             // Увеличиваем высоту окна при раскрытии Expander
-            this.Height = 500; // Новая высота окна
+            this.Height = 520; // Новая высота окна
         }
 
         private void AdvancedSettingsExpander_Collapsed(object sender, RoutedEventArgs e)
@@ -110,6 +113,9 @@ namespace sleepApp
             // Возвращаем исходную высоту окна при сворачивании Expander
             this.Height = 340; // Исходная высота окна
         }
-
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !int.TryParse(e.Text, out _);
+        }
     }
 }

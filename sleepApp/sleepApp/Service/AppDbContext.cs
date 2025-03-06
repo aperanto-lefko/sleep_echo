@@ -16,12 +16,15 @@ namespace sleepApp.Service
         public DbSet<SleepData> SleepData { get; set; }
         //DbSet<T> — это коллекция сущностей (записей) в контексте базы данных. Он представляет таблицу в базе данных.
         private readonly string _connectionString;
-        public AppDbContext(string userName, string password)
+        public AppDbContext(string userName, string password, string port, string dataBase, string host)
         {
             var connectionStringTemp = ConfigurationManager.ConnectionStrings["SleepProductivityDB"].ConnectionString;
             _connectionString = connectionStringTemp
                 .Replace("{username}", userName)
-                .Replace("{password}", password);
+                .Replace("{password}", password)
+                .Replace("{port}", port)
+                .Replace("{dataBase}", dataBase)
+                .Replace("{host}", host);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
