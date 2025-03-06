@@ -66,9 +66,9 @@ SleepAppInstaller/
 docker-compose.yml
 
 # Игнорировать файл с логами
-/logs
+logs/
 
 # Игнорировать папку с установщиком
-/SleepAppInst
+SleepAppInst/
 
 
