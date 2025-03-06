@@ -1,20 +1,11 @@
 ﻿using sleepApp.Model;
 using sleepApp.Service;
-using sleepApp.ExceptionType;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Npgsql;
 
 namespace sleepApp.Repository
 {
     public class RespondentRepository
     {
         private readonly AppDbContext _context;
-
 
         public RespondentRepository(AppDbContext context)
         {
@@ -41,11 +32,13 @@ namespace sleepApp.Repository
             _context.SaveChanges();
             return respondent;
         }
+
         public int RemoveRespondent(Respondent respondent)
         {
             _context.Respondents.Remove(respondent);
             return _context.SaveChanges();
         }
+
         public bool UpdateRespondent(Respondent resp)
         {
             var oldRespondent = _context.Respondents.Find(resp.Id);
@@ -56,11 +49,10 @@ namespace sleepApp.Repository
             _context.Entry(oldRespondent).CurrentValues.SetValues(resp);
             return _context.SaveChanges() > 0;
         }
+
         public Respondent? FindById(int id)
         {
             return _context.Respondents.Find(id);
-
         }
     }
 }
-

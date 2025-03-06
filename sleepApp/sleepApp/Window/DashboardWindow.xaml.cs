@@ -574,7 +574,7 @@ namespace sleepApp
                 var parsedData = ParseInputDataFields();
                 if (parsedData == null)
                 {
-                    return; // Если парсинг не удался, метод уже выделил поле красным
+                    return; 
                 }
 
                 // Извлекаем данные из кортежа
@@ -665,6 +665,11 @@ namespace sleepApp
             }
             else
             {
+                if (_allSleepData == null || _allSleepData.Count == 0)
+                {
+                    MessageBox.Show("Нет данных для отображения.", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 MessageBoxResult result = MessageBox.Show($"Построение графиков для большого количества данных может занять продолжительное время", "Информация", MessageBoxButton.OKCancel, MessageBoxImage.Information);
                 if (result == MessageBoxResult.Cancel)
                 {

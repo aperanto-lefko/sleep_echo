@@ -1,10 +1,5 @@
 ﻿using sleepApp.Validation;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace sleepApp.Dto
 {
@@ -12,43 +7,57 @@ namespace sleepApp.Dto
     {
         [Required(ErrorMessage = "Поле \"ID записи\" не должно быть пустым")]
         public int Id { get; set; }
+
         [Required(ErrorMessage = "Поле \"Дата\" не должно быть пустым")]
         public DateOnly Date { get; set; }
+
         [Required(ErrorMessage = "Поле \"ID респондента\" не должно быть пустым")]
         [PositiveNumber(ErrorMessage = "Поле \"ID респондента\" должно быть положительным")]
         public int PersonId { get; set; }
+
         [Required(ErrorMessage = "Поле \"Время отхода ко сну\" не должно быть пустым")]
         [PositiveNumber(ErrorMessage = "Поле \"Время отхода ко сну\" должно быть положительным")]
         public double SleepStartTime { get; set; }
+
         [PositiveNumber(ErrorMessage = "Поле \"Время пробуждения\" должно быть положительным")]
         [Required(ErrorMessage = "Поле \"Время пробуждения\" не должно быть пустым")]
         public double SleepEndTime { get; set; }
+
         [PositiveNumber(ErrorMessage = "Поле \"Общее время сна\" должно быть положительным")]
         [Required(ErrorMessage = "Поле \"Общее время сна\" не должно быть пустым")]
         public double TotalSleepHours { get; set; }
+
         [Required(ErrorMessage = "Поле \"Качество сна\" не должно быть пустым")]
         [Range(1, 10, ErrorMessage = "Оценка качества сна должна быть в диапазоне от 1 до 10")]
         public int SleepQuality { get; set; }
+
         [Required(ErrorMessage = "Поле \"Время для спорта\" не должно быть пустым")]
         [PositiveNumber(ErrorMessage = "Поле \"Время для спорта\" должно быть положительным")]
         public int ExerciseMinutes { get; set; }
+
         [PositiveNumber(ErrorMessage = "Поле \"Кофеин\" должно быть положительным")]
         [Required(ErrorMessage = "Поле \"Кофеин\" не должно быть пустым")]
         public int CaffeineIntakeMg { get; set; }
+
         [Required(ErrorMessage = "Поле \"Время у экрана\" не должно быть пустым")]
         [PositiveNumber(ErrorMessage = "Поле \"Время у экрана\" должно быть положительным")]
         public int ScreenTime { get; set; }
+
         [Required(ErrorMessage = "Поле \"Рабочее время\" не должно быть пустым")]
         public double WorkHours { get; set; }
+
         [Required(ErrorMessage = "Поле \"Производительность\" не должно быть пустым")]
         [Range(1, 10, ErrorMessage = "Оценка производительности должна быть в диапазоне от 1 до 10")]
         public int ProductivityScore { get; set; }
+
         [Required(ErrorMessage = "Поле \"Настроение\" не должно быть пустым")]
         [Range(1, 10, ErrorMessage = "Оценка настроения должна быть в диапазоне от 1 до 10")]
         public int MoodScore { get; set; }
+
         [Required(ErrorMessage = "Поле \"Уровень стресса\" не должно быть пустым")]
         [Range(1, 10, ErrorMessage = "Оценка уровня стресса должна быть в диапазоне от 1 до 10")]
         public int StressLevel { get; set; }
+
         public UpdateSleepDataRequest(int id,
             DateOnly date,
             int personId,
@@ -64,7 +73,7 @@ namespace sleepApp.Dto
             int moodScore,
             int stressLevel)
         {
-            this.Id= id;
+            this.Id = id;
             this.Date = date;
             this.PersonId = personId;
             this.SleepStartTime = sleepStartTime;
@@ -81,7 +90,8 @@ namespace sleepApp.Dto
             Validate();
         }
 
-        public UpdateSleepDataRequest() { }
+        public UpdateSleepDataRequest()
+        { }
 
         public void Validate()
         {
@@ -93,7 +103,6 @@ namespace sleepApp.Dto
                 var errorMessages = results.Select(r => r.ErrorMessage);
                 throw new ValidationException(string.Join("\n", errorMessages));
             }
-
         }
     }
 }

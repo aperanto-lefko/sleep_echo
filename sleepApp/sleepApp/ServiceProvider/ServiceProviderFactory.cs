@@ -1,12 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using sleepApp.Repository;
 using sleepApp.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace sleepApp.ServiceProvider
 {

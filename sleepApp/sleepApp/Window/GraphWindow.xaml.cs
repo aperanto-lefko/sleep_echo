@@ -2,9 +2,7 @@
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using sleepApp.Dto;
-using System.Diagnostics;
 using System.Windows;
-
 
 namespace sleepApp
 {
@@ -15,6 +13,7 @@ namespace sleepApp
     {
         public SeriesCollection DataValues { get; set; }
         public List<SleepDataDto> _sleepDataList;
+
         public GraphWindow(List<SleepDataDto> sleepDataList)
         {
             InitializeComponent();
@@ -41,15 +40,12 @@ namespace sleepApp
                 "Стресс (1-10)",
                 "Продуктивность (1-10)"
             };
-
         }
 
         private async void UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
-
             try
             {
-             
                 if (XAxisCombobox.SelectedItem == null || YAxisCombobox.SelectedItem == null)
                 {
                     return;
@@ -57,7 +53,6 @@ namespace sleepApp
 
                 string xAxisParam = XAxisCombobox.SelectedItem.ToString();
                 string yAxisParam = YAxisCombobox.SelectedItem.ToString();
-
 
                 var dataWindow = Application.Current.Windows.OfType<DashboardWindow>().FirstOrDefault(); //ищем открытое окно с данными
 
@@ -79,10 +74,8 @@ namespace sleepApp
                 List<double> xValues = null;
                 List<double> yValues = null;
 
-
                 xValues = GetXValues(xAxisParam);
                 yValues = GetYValues(yAxisParam);
-
 
                 if (xValues == null || yValues == null || xValues.Count == 0 || yValues.Count == 0)
                 {
@@ -94,7 +87,6 @@ namespace sleepApp
                 var combined = xValues.Zip(yValues, (x, y) => new { X = x, Y = y }).OrderBy(point => point.X).ToList();
                 xValues = combined.Select(point => point.X).ToList();
                 yValues = combined.Select(point => point.Y).ToList();
-
 
                 // Создаем новую серию
                 var lineSeries = new LineSeries
@@ -133,9 +125,9 @@ namespace sleepApp
                 {
                     Title = yAxisParam,
                     LabelFormatter = value => value.ToString("N2"), // Форматирование значений
-                    MinValue = yValues.Min(), 
-                    MaxValue = yValues.Max(), 
-                    Separator = new Separator { Step = 1 } // Шаг между значениями 
+                    MinValue = yValues.Min(),
+                    MaxValue = yValues.Max(),
+                    Separator = new Separator { Step = 1 } // Шаг между значениями
                 });
             }
             catch (Exception ex)
@@ -159,6 +151,7 @@ namespace sleepApp
                 default: return 5;
             }
         }
+
         // Метод для получения значений по оси X
         private List<double> GetXValues(string xAxisParam)
         {
@@ -174,9 +167,9 @@ namespace sleepApp
                 case "Рабочее время HH.MM": return _sleepDataList.Select(x => x.WorkHours).ToList();
 
                 default: return new List<double>();
-
             }
         }
+
         private List<double> GetYValues(string yAxisParam)
         {
             switch (yAxisParam)

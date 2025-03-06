@@ -1,10 +1,5 @@
-﻿using sleepApp.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using sleepApp.Model;
 
 namespace sleepApp.Dto
 {
@@ -27,7 +22,7 @@ namespace sleepApp.Dto
                                                                                                     * src: исходный объект
                                                                                                     dest: целевой объект
                                                                                                     srcMember: значение поля в исходном объекте.
-                                                                                                    Условие srcMember != null означает, что поле будет обновлено только если 
+                                                                                                    Условие srcMember != null означает, что поле будет обновлено только если
                                                                                                     значение в исходном объекте не равно null.
                                                                                                     srcMember != default - для числовых 0, для ссылочный null
                                                                                                     */

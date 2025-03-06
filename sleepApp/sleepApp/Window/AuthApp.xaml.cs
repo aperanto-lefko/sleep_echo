@@ -1,12 +1,11 @@
-﻿using sleepApp.Service;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using sleepApp.Service;
+using sleepApp.ServiceProvider;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using Microsoft.EntityFrameworkCore;
-using sleepApp.ServiceProvider;
-using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Input;
-
+using System.Windows.Media;
 
 namespace sleepApp
 {
@@ -21,50 +20,46 @@ namespace sleepApp
         {
             string login = LoginTextBox.Text; //логин из textBox
             string password = PasswordBox.Visibility == Visibility.Visible ? PasswordBox.Password : VisiblePasswordBox.Text; //пароль из PasswordBox
-            string port =PortTextBox.Text;
+            string port = PortTextBox.Text;
             string dataBase = DatabaseTextBox.Text;
             string host = HostTextBox.Text;
 
-           
-                try
-                {
+            try
+            {
                 //Настраиваем DI контейнер с полученными данными
                 var serviceProvider = ServiceProviderFactory.ConfigureServices(login, password, port, dataBase, host);
-                var context = serviceProvider.GetRequiredService<AppDbContext>(); 
+                var context = serviceProvider.GetRequiredService<AppDbContext>();
                 // Проверяем подключение к базе данных
                 bool isConnect = context.Database.CanConnect();
-                    if (isConnect)
-                    {
-                       // Если подключение успешно, открываем DashboardWindow
-                        DashboardWindow dashBoardWindow = serviceProvider.GetRequiredService<DashboardWindow>(); 
-                        dashBoardWindow.Show();
-                        this.Close();
-                    }
-                    else
-                    {
-                        HighlightIfError(LoginTextBox, true);
-                        HighlightIfError(PasswordBox, true);
-                        HighlightIfError(VisiblePasswordBox, true);
-                        MessageBox.Show($"Неверная пара логин/пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-                catch (DbUpdateException ex)
+                if (isConnect)
                 {
-                    MessageBox.Show($"Ошибка подключения к базе данных: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    // Если подключение успешно, открываем DashboardWindow
+                    DashboardWindow dashBoardWindow = serviceProvider.GetRequiredService<DashboardWindow>();
+                    dashBoardWindow.Show();
+                    this.Close();
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    HighlightIfError(LoginTextBox, true);
+                    HighlightIfError(PasswordBox, true);
+                    HighlightIfError(VisiblePasswordBox, true);
+                    MessageBox.Show($"Неверная пара логин/пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"Ошибка подключения к базе данных: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка: {ex.InnerException}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void HighlightIfError(Control control, bool isError) //подсветка в случае ошибки
         {
             control.BorderBrush = isError ? Brushes.Red : SystemColors.ControlDarkBrush; //цвет рамки
             control.BorderThickness = isError ? new Thickness(2) : new Thickness(1); //толщина
-
-
         }
 
         private void ResetHighlight(object sender, RoutedEventArgs e) //обработчик чтобы сбросить красный цвет после ошибочного ввода
@@ -74,6 +69,7 @@ namespace sleepApp
                 HighlightIfError(control, false);
             }
         }
+
         private void TogglePasswordButton_Click(object sender, RoutedEventArgs e)
         {
             HighlightIfError(PasswordBox, false);
@@ -102,6 +98,7 @@ namespace sleepApp
                 VisiblePasswordBox.Visibility = Visibility.Collapsed;
             }
         }
+
         private void AdvancedSettingsExpander_Expanded(object sender, RoutedEventArgs e)
         {
             // Увеличиваем высоту окна при раскрытии Expander
@@ -113,6 +110,7 @@ namespace sleepApp
             // Возвращаем исходную высоту окна при сворачивании Expander
             this.Height = 340; // Исходная высота окна
         }
+
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !int.TryParse(e.Text, out _);

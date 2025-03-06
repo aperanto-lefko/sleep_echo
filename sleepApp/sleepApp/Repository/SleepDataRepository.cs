@@ -1,11 +1,5 @@
-﻿using sleepApp.Dto;
-using sleepApp.Model;
+﻿using sleepApp.Model;
 using sleepApp.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace sleepApp.Repository
 {
@@ -25,14 +19,12 @@ namespace sleepApp.Repository
         }
         public bool RemoveSleepData(SleepData data)
         {
-
             _context.SleepData.Remove(data);
             return _context.SaveChanges() > 0;
         }
         public SleepData? FindById(int id)
         {
             return _context.SleepData.Find(id);
-
         }
         public bool UpdateSleepData(SleepData data)
         {
@@ -69,7 +61,6 @@ namespace sleepApp.Repository
                                                            int stressStart,
                                                            int stressEnd)
         {
-
             bool allParametersEmpty = respondentId == 0 &&
                         slStartTimeStart == 0 && slStartTimeEnd == 0 &&
                         slEndTimeStart == 0 && slEndTimeEnd == 0 &&
@@ -85,8 +76,8 @@ namespace sleepApp.Repository
             if (!allParametersEmpty)
             {
                 var query = _context.SleepData.AsQueryable(); //AsQueryable() — преобразует DbSet<SleepData> в IQueryable<SleepData>.
-                                                             //Это позволяет строить запросы с использованием LINQ, которые будут
-                                                             //преобразованы в SQL и выполнены на стороне базы данных.
+                                                              //Это позволяет строить запросы с использованием LINQ, которые будут
+                                                              //преобразованы в SQL и выполнены на стороне базы данных.
 
                 if (respondentId > 0)
                     query = query.Where(x => x.PersonId == respondentId);
@@ -178,5 +169,4 @@ namespace sleepApp.Repository
             }
         }
     }
-
 }

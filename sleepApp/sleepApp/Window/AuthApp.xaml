@@ -5,124 +5,119 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:sleepApp"
         mc:Ignorable="d"
-    
+
         Foreground="#FFFFFFFF"
         Title="SleepEcho" Height="340" Width="500" ResizeMode="NoResize" Icon="/Resources/origami.png">
-    <!-- Укажите путь к PNG --> 
-
+    <!-- Укажите путь к PNG -->
 
     <Window.Resources>
-            <Style x:Key="ButtonStyle" TargetType="Button">
-                <Setter Property="Background" Value="#4A90E2"/>
-                <Setter Property="Foreground" Value="#FFFFFFFF"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border Name="Border" 
-                 Background="{TemplateBinding Background}" 
-                 BorderBrush="{TemplateBinding BorderBrush}" 
-                 BorderThickness="{TemplateBinding BorderThickness}" 
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4A90E2" />
+            <Setter Property="Foreground" Value="#FFFFFFFF" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="Border"
+                 Background="{TemplateBinding Background}"
+                 BorderBrush="{TemplateBinding BorderBrush}"
+                 BorderThickness="{TemplateBinding BorderThickness}"
                  CornerRadius="2">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <!-- Триггер при наведении -->
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#3E7AC5"/>
-                                    <!-- Темнее основной цвет -->
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </Window.Resources>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Триггер при наведении -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3E7AC5" />
+                                <!-- Темнее основной цвет -->
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
-        <!--Background="#2D2D2D" -->
-        <Window.Background>
-            <ImageBrush ImageSource="pack://application:,,,/Resources/axiom.png" Stretch="UniformToFill"/>
-        </Window.Background>
+    <!--Background="#2D2D2D" -->
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Resources/axiom.png" Stretch="UniformToFill" />
+    </Window.Background>
 
-        <Grid Grid.Row="1" HorizontalAlignment="Center" Width="500">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
-                <RowDefinition Height="180"/>
-                <RowDefinition Height="Auto"/>
-                <!-- Для Expander -->
-            </Grid.RowDefinitions>
+    <Grid Grid.Row="1" HorizontalAlignment="Center" Width="500">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="180" />
+            <RowDefinition Height="Auto" />
+            <!-- Для Expander -->
+        </Grid.RowDefinitions>
 
-            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" Height="50" Width="144">
-                <TextBlock Text="SleepEcho"
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" Height="50" Width="144">
+            <TextBlock Text="SleepEcho"
                 FontSize ="30"
                        FontWeight="Bold"
                        HorizontalAlignment="Center"
                        Margin="0,0,0,10" />
+        </StackPanel>
 
-            </StackPanel>
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Width="300" Margin="2" Grid.Row="1" Height="176">
 
-
-            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Width="300" Margin="2" Grid.Row="1" Height="176">
-
-                <TextBlock Text="Логин:" FontSize="16" Height="20"/>
-                <!--
+            <TextBlock Text="Логин:" FontSize="16" Height="20" />
+            <!--
                - Margin: Отступы (верх, право, низ, лево).
             -->
 
-                <TextBox x:Name="LoginTextBox" FontSize="16" Height="25" Margin="0,0,0,5" GotFocus="ResetHighlight" Background="#3E3E3E" Foreground="#FFFFFFFF"/>
-                <TextBlock Text="Пароль:" FontSize="16" Height="21"/>
-                <Grid Height="49">
+            <TextBox x:Name="LoginTextBox" FontSize="16" Height="25" Margin="0,0,0,5" GotFocus="ResetHighlight" Background="#3E3E3E" Foreground="#FFFFFFFF" />
+            <TextBlock Text="Пароль:" FontSize="16" Height="21" />
+            <Grid Height="49">
 
-                    <PasswordBox x:Name="PasswordBox" 
-                             FontSize="16" 
-                             Margin="0,0,0,20" 
+                <PasswordBox x:Name="PasswordBox"
+                             FontSize="16"
+                             Margin="0,0,0,20"
                              Visibility="Visible"
-                             Width="265" 
-                             GotFocus="ResetHighlight" 
+                             Width="265"
+                             GotFocus="ResetHighlight"
                              HorizontalAlignment="Left"
                                Height="25"
                              Background="#3E3E3E"
-                             Foreground="#FFFFFFFF"/>
-                    <TextBox x:Name="VisiblePasswordBox" 
-                     FontSize="16" 
-                     Margin="0,0,0,20" 
+                             Foreground="#FFFFFFFF" />
+                <TextBox x:Name="VisiblePasswordBox"
+                     FontSize="16"
+                     Margin="0,0,0,20"
                      Visibility="Collapsed"
                       HorizontalAlignment="Left"
-                      GotFocus="ResetHighlight" 
-                      Grid.Column="0" 
+                      GotFocus="ResetHighlight"
+                      Grid.Column="0"
                          Width="265"
                          Height="25"
                           Background="#3E3E3E"
-                         Foreground="#FFFFFFFF"/>
-                    <Button x:Name="TogglePasswordButton" 
-                        Content="👁️" 
+                         Foreground="#FFFFFFFF" />
+                <Button x:Name="TogglePasswordButton"
+                        Content="👁️"
                         Click="TogglePasswordButton_Click"
                         Grid.Column="0"
                         Margin="265,0,0,20"
                         GotFocus="ResetHighlight"
-                        Height="25" 
-                        Style="{StaticResource ButtonStyle}"/>
-
-
-                </Grid>
-                <Button x:Name="LoginButton" Content="Войти" FontSize="16" Padding="2.5" Click="LoginButton_Click" Height="35" Style="{StaticResource ButtonStyle}"/>
-            </StackPanel>
-            <Expander x:Name="AdvancedSettingsExpander" 
-  Header="Расширенные настройки" 
+                        Height="25"
+                        Style="{StaticResource ButtonStyle}" />
+            </Grid>
+            <Button x:Name="LoginButton" Content="Войти" FontSize="16" Padding="2.5" Click="LoginButton_Click" Height="35" Style="{StaticResource ButtonStyle}" />
+        </StackPanel>
+        <Expander x:Name="AdvancedSettingsExpander"
+  Header="Расширенные настройки"
   Expanded="AdvancedSettingsExpander_Expanded"
   Collapsed="AdvancedSettingsExpander_Collapsed"
-  
-  Background="Transparent" 
+
+  Background="Transparent"
   Foreground="#FFFFFFFF"
-         
+
   IsExpanded="False" Margin="10,193,10,-92" Grid.Row="1" Grid.RowSpan="2">
-                <StackPanel>
-                <TextBlock Text="Порт:" FontSize="16" Width="300" Margin="0,10,0,0"/>
-                <TextBox x:Name="PortTextBox" Text="5432" FontSize="16"  Height="25" HorizontalAlignment="Center" Margin="0,0,0,10" Background="#3E3E3E" Foreground="#FFFFFFFF" Width="300" PreviewTextInput="NumberValidationTextBox"/>
-                <TextBlock Text="База данных:" FontSize="16" Width="300"/>
-                <TextBox x:Name="DatabaseTextBox" Text="sleep_productivity" FontSize="16" Height="25" Background="#3E3E3E" Foreground="#FFFFFFFF" Width="300"/>
-                <TextBlock Text="Сервер" FontSize="16" Width="300" Margin="0,10,0,0"/>
-                <TextBox x:Name="HostTextBox" Text="185.221.215.14" FontSize="16" Height="25" Background="#3E3E3E" Foreground="#FFFFFFFF" Width="300"/>
+            <StackPanel>
+                <TextBlock Text="Порт:" FontSize="16" Width="300" Margin="0,10,0,0" />
+                <TextBox x:Name="PortTextBox" Text="5432" FontSize="16"  Height="25" HorizontalAlignment="Center" Margin="0,0,0,10" Background="#3E3E3E" Foreground="#FFFFFFFF" Width="300" PreviewTextInput="NumberValidationTextBox" />
+                <TextBlock Text="База данных:" FontSize="16" Width="300" />
+                <TextBox x:Name="DatabaseTextBox" Text="sleep_productivity" FontSize="16" Height="25" Background="#3E3E3E" Foreground="#FFFFFFFF" Width="300" />
+                <TextBlock Text="Сервер" FontSize="16" Width="300" Margin="0,10,0,0" />
+                <TextBox x:Name="HostTextBox" Text="185.221.215.14" FontSize="16" Height="25" Background="#3E3E3E" Foreground="#FFFFFFFF" Width="300" />
             </StackPanel>
-            </Expander>
-        </Grid>
-   </Window>
+        </Expander>
+    </Grid>
+</Window>

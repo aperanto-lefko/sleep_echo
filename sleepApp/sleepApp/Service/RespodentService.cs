@@ -4,7 +4,6 @@ using sleepApp.ExceptionType;
 using sleepApp.Model;
 using sleepApp.Repository;
 
-
 namespace sleepApp.Service
 {
     public class RespodentService
@@ -51,14 +50,15 @@ namespace sleepApp.Service
             {
                 return null;
             }
-
         }
+
         public bool RemoveRespondentById(int id)
         {
             var respondent = GetRespondentById(id);
             _respondentRepository.RemoveRespondent(respondent);
             return true;
         }
+
         public bool UpdateRespondent(int id,
                                      string firstName,
                                      string lastName,
@@ -104,10 +104,7 @@ namespace sleepApp.Service
                                                gender,
                                                country,
                                                age);
-
         }
-
-
 
         private RespondentDto GetNewRespondentDto(string firstName,
                                               string lastName,
@@ -116,7 +113,6 @@ namespace sleepApp.Service
                                               string country,
                                               int age)
         {
-
             ValidationTextFields(
                 firstName,
                 lastName,
@@ -128,9 +124,7 @@ namespace sleepApp.Service
                 gender,
                 country,
                 age);
-
         }
-
 
         private void ValidationTextFields(params string[] fields)
         {
@@ -144,11 +138,9 @@ namespace sleepApp.Service
             }
         }
 
-
         private bool ContainsDigit(string field)
         {
             return field.Any(char.IsDigit); //проверка содержит ли цифры
         }
     }
 }
-

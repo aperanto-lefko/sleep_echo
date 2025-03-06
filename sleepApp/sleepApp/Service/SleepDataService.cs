@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using sleepApp.Repository;
 using sleepApp.Dto;
-
-using sleepApp.Model;
 using sleepApp.ExceptionType;
+using sleepApp.Model;
+using sleepApp.Repository;
 
 namespace sleepApp.Service
 {
@@ -34,24 +33,23 @@ namespace sleepApp.Service
                                       int moodScore,
                                       int stressLevel)
         {
-          
-                _rService.GetRespondentById(personId);
-                SleepDataDto sleepDataDto = new SleepDataDto(personId,
-                                                             sleepStartTime,
-                                                             sleepEndTime,
-                                                             totalSleepHours,
-                                                             sleepQuality,
-                                                             exerciseMinutes,
-                                                             caffeineIntakeMg,
-                                                             screenTime,
-                                                             workHours,
-                                                             productivityScore,
-                                                             moodScore,
-                                                             stressLevel);
-                SleepData newSleepData = _mapper.Map<SleepData>(sleepDataDto);
-                return _mapper.Map<SleepDataDto>(_sleepDataRepository.AddSleepData(newSleepData));
-       
+            _rService.GetRespondentById(personId);
+            SleepDataDto sleepDataDto = new SleepDataDto(personId,
+                                                         sleepStartTime,
+                                                         sleepEndTime,
+                                                         totalSleepHours,
+                                                         sleepQuality,
+                                                         exerciseMinutes,
+                                                         caffeineIntakeMg,
+                                                         screenTime,
+                                                         workHours,
+                                                         productivityScore,
+                                                         moodScore,
+                                                         stressLevel);
+            SleepData newSleepData = _mapper.Map<SleepData>(sleepDataDto);
+            return _mapper.Map<SleepDataDto>(_sleepDataRepository.AddSleepData(newSleepData));
         }
+
         public bool UpdateSleepData(int dataId,
                                       int personId,
                                       double sleepStartTime,
@@ -85,13 +83,11 @@ namespace sleepApp.Service
 
             return _sleepDataRepository.UpdateSleepData(updatedSleepData);
         }
-            
 
         public bool RemoveSleepDataById(int id)
         {
             var data = GetSleepDataById(id);
             return _sleepDataRepository.RemoveSleepData(data);
-         
         }
 
         public SleepData GetSleepDataById(int id)
@@ -148,6 +144,7 @@ namespace sleepApp.Service
                                                                     stressStart,
                                                                     stressEnd));
         }
+
         private UpdateSleepDataRequest GetDataRequest(int dataId,
                                       DateOnly date,
                                       int personId,
@@ -163,8 +160,7 @@ namespace sleepApp.Service
                                       int moodScore,
                                       int stressLevel)
         {
-            
-            return new UpdateSleepDataRequest(dataId, 
+            return new UpdateSleepDataRequest(dataId,
                                               date,
                                               personId,
                                               sleepStartTime,
@@ -179,6 +175,5 @@ namespace sleepApp.Service
                                               moodScore,
                                               stressLevel);
         }
-
     }
 }

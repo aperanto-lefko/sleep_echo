@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:sleepApp"
              StartupUri="Window/AuthApp.xaml">
     <Application.Resources>
-         
     </Application.Resources>
 </Application>

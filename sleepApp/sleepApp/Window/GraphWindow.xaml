@@ -5,91 +5,89 @@
         Title="SleepEchoGraph" Height="500" Width="700" ResizeMode="CanResize"  Icon="/Resources/origami.png"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <!-- все привязки данных будут искать свойства в коде окна  -->
-       <Window.Resources>
-            <Style x:Key="ButtonStyle" TargetType="Button">
-                <Setter Property="Background" Value="#4A90E2"/>
-                <Setter Property="Foreground" Value="#FFFFFFFF"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border Name="Border" 
-              Background="{TemplateBinding Background}" 
-              BorderBrush="{TemplateBinding BorderBrush}" 
-              BorderThickness="{TemplateBinding BorderThickness}" 
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4A90E2" />
+            <Setter Property="Foreground" Value="#FFFFFFFF" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="Border"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
               CornerRadius="2">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <!-- Триггер при наведении -->
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#3E7AC5"/>
-                                    <!-- Темнее основной цвет -->
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="15"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Триггер при наведении -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3E7AC5" />
+                                <!-- Темнее основной цвет -->
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15" />
 
-                <Setter Property="TextWrapping" Value="Wrap"/>
-                <Setter Property="HorizontalAlignment" Value="Center"/>
-                <Setter Property="Margin" Value="10"/>
-                <Setter Property="Foreground" Value="#FFFFFFFF"/>
-            </Style>
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Foreground" Value="#FFFFFFFF" />
+        </Style>
 
-            <!-- Стиль для основного текста -->
-            <Style x:Key="BodyTextStyle" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="13"/>
+        <!-- Стиль для основного текста -->
+        <Style x:Key="BodyTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
 
-                <Setter Property="TextWrapping" Value="Wrap"/>
-                <Setter Property="Foreground" Value="#FFFFFFFF"/>
-            </Style>
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="#FFFFFFFF" />
+        </Style>
 
-            <Style x:Key="TextStyle" TargetType="TextBlock">
-                <Setter Property="Foreground" Value="#FFFFFFFF"/>
-                <Setter Property="FontSize" Value="13"/>
-                <Setter Property="Width" Value="Auto"/>
-                <Setter Property="Height" Value="20"/>
-            </Style>
-        </Window.Resources>
+        <Style x:Key="TextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FFFFFFFF" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="Height" Value="20" />
+        </Style>
+    </Window.Resources>
 
-        <!--Background="#2D2D2D" -->
-        <Window.Background>
-            <ImageBrush ImageSource="pack://application:,,,/Resources/axiom.png" Stretch="UniformToFill"/>
-        </Window.Background>
+    <!--Background="#2D2D2D" -->
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Resources/axiom.png" Stretch="UniformToFill" />
+    </Window.Background>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" MinHeight="69"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="69" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,10" Width="Auto" Height="40">
-                <TextBlock Text="Выберите данные" VerticalAlignment="Center" Style="{StaticResource TextStyle}" />
-                <ComboBox x:Name="XAxisCombobox" Width="199.9" Margin="5" VerticalAlignment="Center" SelectionChanged="UpdateGraph_Click" Height="24" />
-                <ComboBox x:Name="YAxisCombobox" Width="200" Margin="5" VerticalAlignment="Center" SelectionChanged="UpdateGraph_Click" Height="24" />
-                <Button Content="Обновить график" Click="UpdateGraph_Click" Margin="5" Style="{StaticResource ButtonStyle}" Width="114"/>
-            </StackPanel>
-            <!-- График -->
-            <lvc:CartesianChart x:Name="DataChart"  Grid.Row="1" LegendLocation="Bottom" Margin="10,10,10,10" >
-                <lvc:CartesianChart.ChartLegend>
-                    <lvc:DefaultLegend Foreground="#FFFFFFFF" FontSize="14" />
-                    <!-- Настройка цвета и размера текста -->
-                </lvc:CartesianChart.ChartLegend>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,10" Width="Auto" Height="40">
+            <TextBlock Text="Выберите данные" VerticalAlignment="Center" Style="{StaticResource TextStyle}" />
+            <ComboBox x:Name="XAxisCombobox" Width="199.9" Margin="5" VerticalAlignment="Center" SelectionChanged="UpdateGraph_Click" Height="24" />
+            <ComboBox x:Name="YAxisCombobox" Width="200" Margin="5" VerticalAlignment="Center" SelectionChanged="UpdateGraph_Click" Height="24" />
+            <Button Content="Обновить график" Click="UpdateGraph_Click" Margin="5" Style="{StaticResource ButtonStyle}" Width="114" />
+        </StackPanel>
+        <!-- График -->
+        <lvc:CartesianChart x:Name="DataChart"  Grid.Row="1" LegendLocation="Bottom" Margin="10,10,10,10">
+            <lvc:CartesianChart.ChartLegend>
+                <lvc:DefaultLegend Foreground="#FFFFFFFF" FontSize="14" />
+                <!-- Настройка цвета и размера текста -->
+            </lvc:CartesianChart.ChartLegend>
 
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Title="Параметр X" MinValue="0" MaxValue="10" />
-                </lvc:CartesianChart.AxisX>
-                <!-- 
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Title="Параметр X" MinValue="0" MaxValue="10" />
+            </lvc:CartesianChart.AxisX>
+            <!--
             AxisX - настройки для оси X (горизонтальной оси).
         -->
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Параметр Y" MinValue="0" MaxValue="10"/>
-                </lvc:CartesianChart.AxisY>
-
-            </lvc:CartesianChart>
-        </Grid>
-    
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis Title="Параметр Y" MinValue="0" MaxValue="10" />
+            </lvc:CartesianChart.AxisY>
+        </lvc:CartesianChart>
+    </Grid>
 </Window>
