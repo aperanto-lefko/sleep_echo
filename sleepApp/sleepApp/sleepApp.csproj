@@ -29,7 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\origami.ico" />
+    <Resource Include="Resources\origami.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
