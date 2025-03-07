@@ -3,6 +3,7 @@ using sleepApp.Dto;
 using sleepApp.ExceptionType;
 using sleepApp.Model;
 using sleepApp.Repository;
+using System.Transactions;
 
 namespace sleepApp.Service
 {
@@ -11,6 +12,7 @@ namespace sleepApp.Service
         private readonly SleepDataRepository _sleepDataRepository;
         private readonly RespodentService _rService;
         private readonly IMapper _mapper;
+        private readonly TransactionOptions _transactionOptions;
 
         public SleepDataService(SleepDataRepository sleepDataRepository, RespodentService respondentService)
         {
@@ -18,6 +20,11 @@ namespace sleepApp.Service
             var config = new MapperConfiguration(config => config.AddProfile<MappingProfile>());
             _mapper = config.CreateMapper();
             _rService = respondentService;
+            _transactionOptions = new TransactionOptions
+            {
+                IsolationLevel = IsolationLevel.RepeatableRead,
+                Timeout = TimeSpan.FromSeconds(30)
+            };
         }
 
         public SleepDataDto AddSleepData(int personId,
@@ -64,24 +71,32 @@ namespace sleepApp.Service
                                       int moodScore,
                                       int stressLevel)
         {
-            SleepData oldData = GetSleepDataById(dataId);
-            UpdateSleepDataRequest request = GetDataRequest(dataId,
-                                                             oldData.Date, //оставляем дату неизменной
-                                                             personId,
-                                                             sleepStartTime,
-                                                             sleepEndTime,
-                                                             totalSleepHours,
-                                                             sleepQuality,
-                                                             exerciseMinutes,
-                                                             caffeineIntakeMg,
-                                                             screenTime,
-                                                             workHours,
-                                                             productivityScore,
-                                                             moodScore,
-                                                             stressLevel);
-            SleepData updatedSleepData = _mapper.Map<SleepData>(request);
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, _transactionOptions))
+            {
+                SleepData oldData = GetSleepDataById(dataId);
+                UpdateSleepDataRequest request = GetDataRequest(dataId,
+                                                                 oldData.Date, //оставляем дату неизменной
+                                                                 personId,
+                                                                 sleepStartTime,
+                                                                 sleepEndTime,
+                                                                 totalSleepHours,
+                                                                 sleepQuality,
+                                                                 exerciseMinutes,
+                                                                 caffeineIntakeMg,
+                                                                 screenTime,
+                                                                 workHours,
+                                                                 productivityScore,
+                                                                 moodScore,
+                                                                 stressLevel);
+                SleepData updatedSleepData = _mapper.Map<SleepData>(request);
 
-            return _sleepDataRepository.UpdateSleepData(updatedSleepData);
+                bool isUpdated =  _sleepDataRepository.UpdateSleepData(updatedSleepData);
+                if (isUpdated)
+                {
+                    scope.Complete(); //фиксация транзакции
+                }
+                return isUpdated;
+            }
         }
 
         public bool RemoveSleepDataById(int id)

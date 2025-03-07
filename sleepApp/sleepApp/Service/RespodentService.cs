@@ -3,6 +3,8 @@ using sleepApp.Dto;
 using sleepApp.ExceptionType;
 using sleepApp.Model;
 using sleepApp.Repository;
+using System.Linq.Expressions;
+using System.Transactions;
 
 namespace sleepApp.Service
 {
@@ -10,12 +12,19 @@ namespace sleepApp.Service
     {
         private readonly RespondentRepository _respondentRepository;
         private readonly IMapper _mapper;
+        private readonly TransactionOptions _transactionOptions;
 
         public RespodentService(RespondentRepository respondentRepository)
         {
             _respondentRepository = respondentRepository;
             var config = new MapperConfiguration(config => config.AddProfile<MappingProfile>());
             _mapper = config.CreateMapper();
+            _transactionOptions = new TransactionOptions
+            {
+                IsolationLevel = IsolationLevel.RepeatableRead,
+                Timeout = TimeSpan.FromSeconds(30)
+            };
+
         }
 
         public List<Respondent> GetAllRespondents()
@@ -67,20 +76,29 @@ namespace sleepApp.Service
                                      string country,
                                      int age)
         {
-            var respondent = GetRespondentById(id);
-            ValidationTextFields(
-                    firstName,
-                    lastName,
-                    country);
-            UpdateRespondentRequest request = GetRespondentRequest(id,
-                                                                    firstName,
-                                                                    lastName,
-                                                                    email,
-                                                                    gender,
-                                                                    country,
-                                                                    age);
-            Respondent updatedRespondent = _mapper.Map<Respondent>(request);
-            return _respondentRepository.UpdateRespondent(updatedRespondent);
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, _transactionOptions))
+            {
+                var respondent = GetRespondentById(id);
+                ValidationTextFields(
+                        firstName,
+                        lastName,
+                        country);
+                UpdateRespondentRequest request = GetRespondentRequest(id,
+                                                                        firstName,
+                                                                        lastName,
+                                                                        email,
+                                                                        gender,
+                                                                        country,
+                                                                        age);
+                Respondent updatedRespondent = _mapper.Map<Respondent>(request);
+                bool isUpdated = _respondentRepository.UpdateRespondent(updatedRespondent);
+                if (isUpdated)
+                {
+                    scope.Complete(); //фиксация транзакции
+                }
+                return isUpdated;
+
+            }
         }
 
         public Respondent GetRespondentById(int id)

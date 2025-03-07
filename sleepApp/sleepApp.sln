@@ -5,8 +5,6 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sleepApp", "sleepApp\sleepApp.csproj", "{2BC2BB44-738B-4E5F-8568-4634CB8D8283}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SleepAppInst", "SleepAppInst\SleepAppInst.vdproj", "{FFB1B08A-4CB0-4D85-A2D9-F06C2E2221DE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,8 +15,6 @@ Global
 		{2BC2BB44-738B-4E5F-8568-4634CB8D8283}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BC2BB44-738B-4E5F-8568-4634CB8D8283}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BC2BB44-738B-4E5F-8568-4634CB8D8283}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFB1B08A-4CB0-4D85-A2D9-F06C2E2221DE}.Debug|Any CPU.ActiveCfg = Debug
-		{FFB1B08A-4CB0-4D85-A2D9-F06C2E2221DE}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
